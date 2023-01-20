@@ -19,7 +19,8 @@ import {
 const initialState = { 
     dons: [],
     result: '',
-    isAuthenticated: null
+    isAuthenticated: null,
+    emails: ""
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
@@ -41,7 +42,9 @@ export default function(state = initialState, action) {
         case DONORS_SUCCESS:
             return {
                 ...state,
-                dons: payload
+                dons: payload,
+                emails: payload.map((don)=> `${don.Email}`)
+                //emails: JSON.stringify(payload.map((don)=> `${don.Email};`)).replace('["', "").replace('"]', "").replaceAll('","', "")
             }
 
         case DONORS_FAIL:
@@ -53,7 +56,9 @@ export default function(state = initialState, action) {
         case DONOR_SEARCH_SUCCESS:
             return{
                 ...state,
-                dons: payload
+                dons: payload,
+                emails: payload.map((don)=> `${don.Email}`)
+                //emails: JSON.stringify(payload.map((don)=> `${don.Email}; `)).replace('["', "").replace('"]', "").replaceAll('","', "")
             }
             
         case DONOR_SEARCH_FAIL:

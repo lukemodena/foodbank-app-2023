@@ -11,10 +11,13 @@ import { EditCollectionModal } from "./EditCollModal";
 import { AddParticipationModal } from "../Participation/AddParticipationModal";
 import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 import { SuccessModal } from "../common/SuccessModal";
+import { WriteEmail } from '../Email/EmailModal';
+
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
-import { getDonors } from "../../actions/donors";
+import { getDonors, searchDonors } from "../../actions/donors";
 import { addParticipant, getCurrentParticipants } from "../../actions/participation";
+import { sendEmail } from '../../actions/email';
 
 const Collection = ({ 
     getCollections, 
@@ -24,17 +27,16 @@ const Collection = ({
     addCollectionPhoto, 
     checkStatusEdit, 
     deleteCollectionsMulti, 
-    addWholesale, 
     getWholesale, 
     editWholesale, 
     getDonors, 
-    addParticipant, 
+    searchDonors,
     getCurrentParticipants,
+    sendEmail,
     colls,
     dons,
-    total,
-    whol,
-    pars
+    emails,
+    whol
 }) => {
 
     // Set Default States
@@ -113,6 +115,7 @@ const Collection = ({
     const [editModalShow, setEditModalShow] = useState(false);
     const [addParticipationShow, setAddParticipationShow] = useState(false);
     const [editWholesaleShow, setEditWholesaleShow] = useState(false);
+    const [emailModalShow, setEmailModalShow] = useState(false);
     const [successModalShow, setSuccessModalShow] = useState(false);
     const [successDeleteModalShow, setSuccessDeleteModalShow] = useState(false);
 
@@ -133,6 +136,11 @@ const Collection = ({
 
     const editWholesaleClose = () => {
         setEditWholesaleShow(false);
+        setRefresh("YES");
+    };
+
+    const emailModalClose = () => {
+        setEmailModalShow(false);
         setRefresh("YES");
     };
 
@@ -161,6 +169,8 @@ const Collection = ({
     const [whoremainder, setWhoremainder] = useState(null);
     const [whoreceipt, setWhoreceipt] = useState(null);
     const [donors, setDons] = useState([]);
+    const [emaillist, setEmailList] = useState([]);
+    const [foodlist, setFoodList] = useState("");
     const [type, setType] = useState(null);
     const [isAdd, setIsAdd] = useState(null);
     const [reqStatus, setReqStatus] = useState(null);
@@ -342,10 +352,11 @@ const Collection = ({
 
     // Get Wholesale
 
-    const handleGetWholesale = (collid) => {
+    const handleGetWholesale = (collid, donorType) => {
         let collId = collid
-        getWholesale(collId)
-        getDonors()
+        let donSearch = ""
+        getWholesale(collId);
+        searchDonors(donorType, donSearch);
     };
 
     // Edit Wholesale
@@ -418,6 +429,7 @@ const Collection = ({
                     onClick={()=>setAddModalShow(true)}>
                         <BsPlusLg className="date-addButton-Icon"/>
                     </Button>
+
                     <AddCollectionModal show={addModalShow}
                     onHide={addModalClose}/>
                 </Row>
@@ -457,7 +469,7 @@ const Collection = ({
                                 {(size.width > 760) &&<td>{coll.CollectionID}</td>}
                                 <td>
                                     
-                                    <Dropdown onToggle={() => handleGetWholesale(coll.CollectionID)}>
+                                    <Dropdown onToggle={() => handleGetWholesale(coll.CollectionID, coll.Type)}>
                                         <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                                             ...
                                         </Dropdown.Toggle>
@@ -483,7 +495,7 @@ const Collection = ({
                                                 }
                                             }
                                             >
-                                                    Edit
+                                                Edit
                                             </Dropdown.Item>
                                             <EditCollectionModal show={editModalShow}
                                             onHide={editModalClose}
@@ -504,6 +516,41 @@ const Collection = ({
                                             isAdd={isAdd}
                                             />
 
+                                            {/* Prepare Email */}
+
+                                            <Dropdown.Item 
+                                            onClick={()=>
+                                                {
+                                                    setEmailModalShow(true);
+                                                    setColldate(coll.CollectionDate);
+                                                    setColltotalweight(coll.TotalWeight);
+                                                    setCollphoto(coll.CollectionPhoto);
+                                                    setEmailList(emails);
+                                                    setFoodList("[ENTER TARGETED FOODLIST HERE]")
+                                                    setSuccessModalShow(false);
+                                                    setReqStatus(`Collection on ${coll.CollectionDate} saved`);
+                                                    setType("collection");
+                                                    setIsAdd(false)
+                                                }
+                                            }
+                                            >
+                                                Prepare Email
+                                            </Dropdown.Item>
+                                            <WriteEmail show={emailModalShow}
+                                            onHide={emailModalClose}
+                                            send={sendEmail}
+                                            colldate={colldate}
+                                            colltotalweight={colltotalweight}
+                                            collphoto={collphoto}
+                                            emaillist={emaillist}
+                                            foodlist={foodlist}
+                                            successModalShow={successModalShow}
+                                            successModalClose={successModalClose}
+                                            reqStatus={reqStatus}
+                                            type={type}
+                                            isAdd={isAdd}
+                                            />
+
                                             {/* Delete Collection */}
 
                                             <Dropdown.Item
@@ -517,6 +564,8 @@ const Collection = ({
                                             >
                                                 Delete
                                             </Dropdown.Item>
+    
+                                            {/* Manage Collection Cash Donations */}
 
                                             <Dropdown.Item onClick={() => {
                                                 setEditWholesaleShow(true);
@@ -548,6 +597,8 @@ const Collection = ({
                                             type={type}
                                             isAdd={isAdd}
                                             />
+
+                                            {/* Manage Collection Participants  */}
 
                                             <Dropdown.Item onClick={() =>{ 
                                                 setAddParticipationShow(true);
@@ -597,9 +648,10 @@ const mapStateToProps = (state) => ({
     colls: state.collections.colls,
     whol: state.wholesale.whol,
     dons: state.donors.dons,
+    emails: state.donors.emails,
     pars: state.participants.pars,
     result: state.collections.result,
     total: state.collections.total
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, addParticipant, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti})(Collection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, searchDonors, addParticipant, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti, sendEmail})(Collection)

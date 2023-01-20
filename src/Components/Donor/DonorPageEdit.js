@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { BsPlusLg, BsXCircle } from "react-icons/bs";
+import { BsPlusLg, BsXCircle, BsEnvelope } from "react-icons/bs";
 import useWindowSize from '../common/useWindow';
 import dayjs from 'dayjs';
 
@@ -20,6 +20,7 @@ import { getCurrentParticipants } from '../../actions/participation';
 
 const DonorPage = ({ 
     dons, 
+    emails,
     partresult, 
     statusCol, 
     whol, 
@@ -318,6 +319,12 @@ const DonorPage = ({
                     onClick={()=> {setAddModalShow(true);}}>
                         <BsPlusLg className="addButton-Icon"/>
                     </Button>
+                    
+                    <Button variant="secondary" className="emailButton"
+                    href={`mailto:${emails}?subject=${encodeURIComponent("test subject") || ''}&body=${encodeURIComponent("test body") || ''}`}>
+                        <BsEnvelope className="emailButton-Icon"/>
+                    </Button>
+
                     <AddDonorModal show={addModalShow}
                     onHide={addModalClose}/>
 
@@ -532,6 +539,7 @@ const DonorPage = ({
 
 const mapStateToProps = (state) => ({
     dons: state.donors.dons,
+    emails: state.donors.emails,
     partresult: state.participants.partresult,
     statusCol: state.collections.statusCol,
     whol: state.wholesale.whol

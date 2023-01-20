@@ -5,6 +5,7 @@ import donors from './donors';
 import collections from './collections';
 import wholesale from './wholesale';
 import participants from './participants';
+import email from './email';
 
 export default combineReducers({
     auth,
@@ -12,4 +13,5 @@ export default combineReducers({
     collections,
     wholesale,
     participants,
+    email,
 });
