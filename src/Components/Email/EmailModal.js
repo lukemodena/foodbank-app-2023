@@ -153,7 +153,7 @@ export function WriteEmail(props) {
         let subjectSend = e.target.Subject.value;
         let bodySend = e.target.Body.value;
         // let emailList = emaillist;
-        let emailList = ['lukefrankel@hotmail.co.uk', 'luke@modena-consulting.co.uk', 'jsp.foodcollection@gmail.com'];
+        let emailList = ['lukefrankel@hotmail.co.uk', 'luke@modena-consulting.co.uk', 'jsp.foodcollection@gmail.com, nickcook00@gmail.com'];
 
         console.log(subjectSend, bodySend, emailList);
         send(subjectSend, bodySend, emailList);

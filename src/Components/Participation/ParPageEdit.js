@@ -18,7 +18,7 @@ import { getWholesale } from '../../actions/wholesale';
 
 // PARTICIPANTS PAGE //
 
-const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, getDonors, getWholesale, whol, statusCol}) => {
+const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveCollection, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, getDonors, getWholesale, whol, statusCol}) => {
     
     // Set Default States
     
@@ -72,6 +72,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipan
     // Handle Data Request (Initial + Refresh)
 
     useEffect(() => {
+        getActiveCollection()
         getCollections(null);
         getDonors();
         setRefresh("NO");
