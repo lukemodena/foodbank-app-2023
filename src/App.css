@@ -569,11 +569,11 @@
   }
 
   .date-searchBarInput-end {
-    transform: translate(19.75px, 0px);
+    transform: translate(-23.75px, 0px);
   }
 
   .date-searchBarSubmit {
-    transform: translate(107px, 0px);
+    transform: translate(120.25px, 0px);
   }
 
   .addButton {

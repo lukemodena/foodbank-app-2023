@@ -152,7 +152,7 @@ export class AddDonorForm extends Component{
                         <Form.Label>Donor Type</Form.Label>
                         <Form.Select aria-label="DonorType">
                             <option>Please select donor type...</option>
-                            <option value="1">1 Month</option>
+                            <option value="1">1 Month (Both)</option>
                             <option value="3">3 Months</option>
                             <option value="0">Other</option>
                         </Form.Select>

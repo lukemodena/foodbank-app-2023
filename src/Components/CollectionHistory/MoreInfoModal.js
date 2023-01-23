@@ -65,9 +65,11 @@ export function MoreInformationModal(props) {
                         <Col sm={6}>
                             <Form>
                                 <Form.Group>
-                                    <Button variant="outline-secondary" className="editButton">
-                                        <BsDownload className="editButton-Icon"/>
-                                    </Button>
+                                    <a href={`${process.env.REACT_APP_API}media/photos/${collphoto}`} target="_blank" download>
+                                        <Button variant="outline-secondary" className="editButton">
+                                            <BsDownload className="editButton-Icon"/>
+                                        </Button>
+                                    </a>
                                 </Form.Group>
                             </Form>
                         </Col>

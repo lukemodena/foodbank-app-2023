@@ -45,7 +45,7 @@ const DonorPage = ({
         },
         {
             key: 1,
-            type: "Monthly",
+            type: "Monthly (Both)",
             value: "1",
             filter: "Monthly Contacts"
         },
@@ -263,7 +263,7 @@ const DonorPage = ({
         let donorType = inputValue;
 
         if (donorType === "1") {
-            let type = "Monthly";
+            let type = "Monthly (Both)";
             return type
         } else if (donorType === "3") {
             let type = "3 Months";
@@ -272,7 +272,7 @@ const DonorPage = ({
             let type = "Other";
             return type
         } else if (donorType === "1v") {
-            let type = "Monthly (+ Volunteer)";
+            let type = "Monthly/Both (+ Volunteer)";
             return type
         } else if (donorType === "3v") {
             let type = "3 Months (+ Volunteer)";
