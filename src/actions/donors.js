@@ -143,7 +143,7 @@ export const searchDonors = (monthType, searchInput) => async dispatch => {
 
 // ADD DONOR
 
-export const addDonor = (fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone) => async dispatch => {
+export const addDonor = (fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -162,6 +162,7 @@ export const addDonor = (fullName, firstName, lastName, email, address1, address
             "Email": `${email}`,
             "Address1": `${address1}`,
             "Address2": `${address2}`,
+            "Address3": `${address3}`,
             "PostCode": `${postCode}`,
             "DonorType": `${donorType}`,
             "Notes": `${notes}`,
@@ -190,7 +191,7 @@ export const addDonor = (fullName, firstName, lastName, email, address1, address
 
 // EDIT DONOR
 
-export const editDonor = (donorId, fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone, involveNo) => async dispatch => {
+export const editDonor = (donorId, fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone, involveNo) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -209,6 +210,7 @@ export const editDonor = (donorId, fullName, firstName, lastName, email, address
             "Email": `${email}`,
             "Address1": `${address1}`,
             "Address2": `${address2}`,
+            "Address3": `${address3}`,
             "PostCode": `${postCode}`,
             "DonorType": `${donorType}`,
             "Notes": `${notes}`,

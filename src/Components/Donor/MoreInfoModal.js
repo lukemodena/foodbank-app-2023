@@ -10,6 +10,7 @@ export function InfoDonorModal(props){
         donemail,
         donaddress1,
         donaddress2,
+        donaddress3,
         donpostcode,
         donnotes,
         dondonortype,
@@ -42,7 +43,8 @@ export function InfoDonorModal(props){
                                     <strong>{donfullname}</strong> <br />
                                     Address: <br />
                                     <strong>{donaddress1} <br />
-                                    {donaddress2} <br />
+                                    {donaddress2} <br />                                    
+                                    {donaddress3} <br />
                                     {donpostcode}</strong> <br />
                                     Email: <br />
                                     <strong>{donemail}</strong> <br />

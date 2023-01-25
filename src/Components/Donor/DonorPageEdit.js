@@ -141,7 +141,8 @@ const DonorPage = ({
     const [donlastname, setDonlastname] = useState(null);
     const [donemail, setDonemail] = useState(null);
     const [donaddress1, setDonaddress1] = useState(null);
-    const [donaddress2, setDonaddress2] = useState(`${process.env.REACT_APP_API}media/photos/anonymous.png`);
+    const [donaddress2, setDonaddress2] = useState(null);
+    const [donaddress3, setDonaddress3] = useState(null);
     const [donpostcode, setDonpostcode] = useState(null);
     const [dondonortype, setDondonortype] = useState(null);
     const [donnotes, setDonnotes] = useState(null);
@@ -224,13 +225,14 @@ const DonorPage = ({
         let email = e.target.Email.value;
         let address1 = e.target.Address1.value;
         let address2 = e.target.Address2.value;
+        let address3 = e.target.Address3.value;
         let postCode = e.target.PostCode.value.toUpperCase();
         let donorType = `${e.target.DonorType.value}${e.target.Volunteer.value}`;
         let notes = e.target.Notes.value;
         let phone = e.target.Phone.value;
         let involveNo = e.target.InvolveNo.value;
 
-        editDonor(donorId, fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone, involveNo);
+        editDonor(donorId, fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone, involveNo);
         setSuccessModalShow(true);
     };
 
@@ -363,6 +365,7 @@ const DonorPage = ({
                             {(size.width <= 760) &&<th>Address</th>}
                             {(size.width > 760) &&<th>Address 1</th>}
                             {(size.width > 760) &&<th>Address 2</th>}
+                            {(size.width > 760) &&<th>Address 3</th>}
                             {(size.width > 760) &&<th>Postcode</th>}
                             {(size.width > 760) &&<th>Type</th>}
                             {(size.width > 760) &&<th>Notes</th>}
@@ -393,6 +396,7 @@ const DonorPage = ({
                                                 setDonemail(don.Email);
                                                 setDonaddress1(don.Address1);
                                                 setDonaddress2(don.Address2);
+                                                setDonaddress3(don.Address3);
                                                 setDonpostcode(don.PostCode);
                                                 setDondonortype(handleDonorType(don.DonorType));
                                                 setDonnotes(don.Notes);
@@ -409,6 +413,7 @@ const DonorPage = ({
                                         donemail={donemail}
                                         donaddress1={donaddress1}
                                         donaddress2={donaddress2}
+                                        donaddress3={donaddress3}
                                         donpostcode={donpostcode}
                                         dondonortype={dondonortype}
                                         donnotes={donnotes}
@@ -426,6 +431,7 @@ const DonorPage = ({
                                                 setDonemail(don.Email);
                                                 setDonaddress1(don.Address1);
                                                 setDonaddress2(don.Address2);
+                                                setDonaddress3(don.Address3);
                                                 setDonpostcode(don.PostCode);
                                                 setDondonortype(don.DonorType);
                                                 setDonnotes(don.Notes);
@@ -450,6 +456,7 @@ const DonorPage = ({
                                         donemail={donemail}
                                         donaddress1={donaddress1}
                                         donaddress2={donaddress2}
+                                        donaddress3={donaddress3}
                                         donpostcode={donpostcode}
                                         dondonortype={dondonortype}
                                         donnotes={donnotes}
@@ -519,10 +526,12 @@ const DonorPage = ({
                                 {(size.width <= 760) &&<td>
                                         {don.Address1} <br />
                                         {don.Address2} <br />
+                                        {don.Address3}
                                         {don.PostCode}
                                 </td>}
                                 {(size.width > 760) &&<td>{don.Address1}</td>}
                                 {(size.width > 760) &&<td>{don.Address2}</td>}
+                                {(size.width > 760) &&<td>{don.Address3}</td>}
                                 {(size.width > 760) &&<td>{don.PostCode}</td>}
                                 {(size.width > 760) &&<td>{handleDonorType(don.DonorType)}</td>}
                                 {(size.width > 760) &&<td>{don.Notes}</td>}

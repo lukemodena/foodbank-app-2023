@@ -19,6 +19,7 @@ export class AddDonorForm extends Component{
             Email:"",
             Address1:"",
             Address2:"",
+            Address3:"",
             PostCode:"",
             Notes:"N/A",
             Phone:"",
@@ -79,7 +80,8 @@ export class AddDonorForm extends Component{
         let lastName = e.target.LastName.value;
         let email = e.target.Email.value;
         let address1 = e.target.Address1.value;
-        let address2 = e.target.Address2.value;
+        let address2 = e.target.Address3.value;
+        let address3 = e.target.Address2.value;
         let postCode = e.target.PostCode.value.toUpperCase();
         let donorType = `${e.target.DonorType.value}${this.state.isVolunteer}`;
         let notes = e.target.Notes.value;
@@ -88,7 +90,7 @@ export class AddDonorForm extends Component{
 
         console.log(donorType)
 
-        this.props.addDonor(fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone);
+        this.props.addDonor(fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone);
 
         let response = `${fullName} added`
 
@@ -99,6 +101,7 @@ export class AddDonorForm extends Component{
             Email:"",
             Address1:"",
             Address2:"",
+            Address3:"",
             PostCode:"",
             Notes:"N/A",
             Phone:"",
@@ -143,6 +146,10 @@ export class AddDonorForm extends Component{
                     <Form.Group controlId='Address2'>
                         <Form.Label>Address Line 2</Form.Label>
                         <Form.Control type='text' name='Address2' placeholder='Enter address line 2...' onChange={this.onChange} value={this.state.Address2}/>
+                    </Form.Group>
+                    <Form.Group controlId='Address3'>
+                        <Form.Label>Address Line 2</Form.Label>
+                        <Form.Control type='text' name='Address3' placeholder='Enter address line 3...' onChange={this.onChange} value={this.state.Address3}/>
                     </Form.Group>
                     <Form.Group controlId='PostCode'>
                         <Form.Label>Postal Code</Form.Label>

@@ -17,6 +17,7 @@ export function EditDonorModal(props) {
         donemail,
         donaddress1,
         donaddress2,
+        donaddress3,
         donpostcode,
         dondonortype,
         donnotes,
@@ -79,6 +80,10 @@ export function EditDonorModal(props) {
                                 <Form.Group controlId='Address2'>
                                     <Form.Label>Address Line 2</Form.Label>
                                     <Form.Control type='text' name='Address2' placeholder='Enter address line 2...' defaultValue={donaddress2} />
+                                </Form.Group>
+                                <Form.Group controlId='Address3'>
+                                    <Form.Label>Address Line 3</Form.Label>
+                                    <Form.Control type='text' name='Address3' placeholder='Enter address line 3...' defaultValue={donaddress3} />
                                 </Form.Group>
                                 <Form.Group controlId='PostCode'>
                                     <Form.Label>Postal Code</Form.Label>
