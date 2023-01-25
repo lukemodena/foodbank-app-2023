@@ -148,7 +148,7 @@ export class AddDonorForm extends Component{
                         <Form.Control type='text' name='Address2' placeholder='Enter address line 2...' onChange={this.onChange} value={this.state.Address2}/>
                     </Form.Group>
                     <Form.Group controlId='Address3'>
-                        <Form.Label>Address Line 2</Form.Label>
+                        <Form.Label>Address Line 3</Form.Label>
                         <Form.Control type='text' name='Address3' placeholder='Enter address line 3...' onChange={this.onChange} value={this.state.Address3}/>
                     </Form.Group>
                     <Form.Group controlId='PostCode'>
