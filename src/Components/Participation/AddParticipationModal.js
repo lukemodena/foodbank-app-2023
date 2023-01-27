@@ -48,13 +48,14 @@ export function AddParticipationModal(props){
         let DonationType = e.target.DonationType.value;
         let TotalDonated = totalDonatedVal;
         let DropOffTime = value;
+        let Notes = e.target.ParticipationNotes.value;
         let WholesaleID = e.target.WholesaleID.value;
 
         setValue('N/A'); 
         setDonationTypeVal(''); 
         setTotalDonatedVal('0'); 
         setPaymentRecievedVal('false');
-        addpart(CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, WholesaleID);
+        addpart(CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, Notes, WholesaleID);
     }
 
 
@@ -138,6 +139,11 @@ export function AddParticipationModal(props){
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
                                     </Form.Select>}
+                                </Form.Group>
+
+                                <Form.Group controlId='ParticipationNotes'>
+                                    <Form.Label>Participation Notes</Form.Label>
+                                    <Form.Control type='text' name='ParticipationNotes' placeholder='ParticipationNotes' />
                                 </Form.Group>
                             
                                 <Form.Group style={{paddingTop: "25px"}}>

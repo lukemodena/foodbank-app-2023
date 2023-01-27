@@ -1,12 +1,5 @@
 import React from 'react';
-import {Modal, Button, Row, Col, Form, Dropdown} from 'react-bootstrap';
-
-import dayjs from 'dayjs';
-import { TextField } from '@mui/material';
-import Stack from '@mui/material/Stack';
-import { LocalizationProvider } from '@mui/x-date-pickers/';
-import { TimePicker } from '@mui/x-date-pickers/';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {Modal, Button, Row, Col, Form} from 'react-bootstrap';
 
 import { SuccessModal } from '../common/SuccessModal';
 
@@ -30,6 +23,7 @@ export function EditParticipationModal(props){
         pardontype,
         partotdon,
         partime,
+        parnotes,
         parrec,
         value,
         donationTypeVal,
@@ -45,8 +39,7 @@ export function EditParticipationModal(props){
         type,
         isAdd
     } = props
-    
-    
+
     const changeTime = (e) => {
         let inputValue = e.target.value
         handleChange(inputValue);
@@ -79,12 +72,13 @@ export function EditParticipationModal(props){
         let originalTotalDonated = e.target.OriginalTotalDonated.value;
         let TotalDonated = totalDonatedVal;
         let DropOffTime = value;
+        let Notes = e.target.ParticipationNotes.value;
         let WholesaleID = e.target.WholesaleID.value;
 
         let DonationChange = parseFloat(TotalDonated) - parseFloat(originalTotalDonated)
-        //console.log(CollectionID, DonorID, ParticipantID, PaymentRecieved, "DonType:", DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID);
+        //console.log(CollectionID, DonorID, ParticipantID, PaymentRecieved, "DonType:", DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID);
 
-        editpart(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID);
+        editpart(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID);
     }
 
 
@@ -142,7 +136,7 @@ export function EditParticipationModal(props){
                                 <Form.Group controlId='DropOffTime'>
                                     {(donationTypeVal === '1' || donationTypeVal ===  '4') &&<Form.Label>Drop-Off Time</Form.Label>}
                                     {(donationTypeVal === '1' || donationTypeVal ===  '4') &&
-                                        <Form.Select aria-label="DropOffTime" required name='DropOffTime' placeholder='DropOffTime' onChange={changeTime} defaultValue={partime}>
+                                        <Form.Select aria-label="DropOffTime" required name='DropOffTime' onChange={changeTime} placeholder='DropOffTime' defaultValue={partime}>
                                             <option value="N/A">Please specify...</option>
                                             <option value="07:00-08:00">07:00-08:00</option>
                                             <option value="08:00-09:00">08:00-09:00</option>
@@ -169,6 +163,11 @@ export function EditParticipationModal(props){
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
                                     </Form.Select>}
+                                </Form.Group>
+
+                                <Form.Group controlId='ParticipationNotes'>
+                                    <Form.Label>Participation Notes</Form.Label>
+                                    <Form.Control type='text' name='ParticipationNotes' placeholder='ParticipationNotes' defaultValue={parnotes} />
                                 </Form.Group>
                             
                                 <Form.Group style={{paddingTop: "25px"}}>

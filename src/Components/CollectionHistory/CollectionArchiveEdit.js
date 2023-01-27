@@ -4,10 +4,12 @@ import { BsXCircle } from "react-icons/bs";
 import SearchBar from "./SearchBar";
 import { connect } from 'react-redux';
 import useWindowSize from "../common/useWindow";
-import dayjs from 'dayjs';
 
 import { SuccessModal } from "../common/SuccessModal";
 import { MoreInformationModal } from "./MoreInfoModal";
+import { handleCollectionDate } from "../common/dateFuncs";
+import { handleCollectionType } from "../common/typeFuncs";
+import { monthOptions } from "../common/miscObjects"; 
 
 import { getCollections, searchCollections, deleteCollection, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
 import { getWholesale } from "../../actions/wholesale";
@@ -30,31 +32,9 @@ const CollectionArchive = ({
     // Set Default States
     const size = useWindowSize(); 
     const [refresh, setRefresh] = useState(null);
-    const [monthOptions, setMonthOptions] = useState([
-        {
-            key: 0,
-            type: "All",
-            value: "0",
-            filter: "All"
-        },
-        {
-            key: 1,
-            type: "1 Month",
-            value: "1",
-            filter: "1 Month Collections"
-        },
-        {
-            key: 2,
-            type: "3 Months",
-            value: "3",
-            filter: "3 Months Collections"
-        }
-    ]);
     
     const [monthFilter, setMonthFilter] = useState("Select Collection");
     const [monthValue, setMonthValue] = useState("");
-    const [totalWeight, setTotalWeight] = useState(null);
-    const [totalCost, setTotalCost] = useState(null);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [isChecked, setIsChecked] = useState([]);
@@ -64,10 +44,6 @@ const CollectionArchive = ({
     useEffect(() => {
         let status = 'ARCHIVED';
         getCollections(status);
-        const totalw = colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
-        const totalc = colls.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 );
-        setTotalWeight(totalw);
-        setTotalCost(totalc);
         setRefresh("NO");
       }, []);
 
@@ -76,10 +52,6 @@ const CollectionArchive = ({
         if (refresh === "YES"){
             let status = 'ARCHIVED';
             getCollections(status);
-            const totalw = colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
-            const totalc = colls.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 );
-            setTotalWeight(totalw);
-            setTotalCost(totalc);
             setStartDate("");
             setEndDate("");
             setMonthValue("");
@@ -88,10 +60,6 @@ const CollectionArchive = ({
         } else if (refresh === null) {
             let status = 'ARCHIVED';
             getCollections(status);
-            const totalw = colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
-            const totalc = colls.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 );
-            setTotalWeight(totalw);
-            setTotalCost(totalc);
             setStartDate("");
             setEndDate("");
             setMonthValue("");
@@ -146,20 +114,12 @@ const CollectionArchive = ({
 
         if (monthType === "0") {
             getCollections(status);
-            const totalw = colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
-            const totalc = colls.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 );
-            setTotalWeight(totalw);
-            setTotalCost(totalc);
             setMonthValue(monthType);
             setMonthFilter(filter);
         } else {
             let searchInputStart = startDate;
             let searchInputEnd = endDate;
             searchCollections(monthType, searchInputStart, searchInputEnd);
-            const totalw = colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
-            const totalc = colls.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 );
-            setTotalWeight(totalw);
-            setTotalCost(totalc);
             setMonthValue(monthType);
             setMonthFilter(filter);
         }
@@ -219,29 +179,6 @@ const CollectionArchive = ({
                 setSuccessDeleteModalShow(true);
             }
         }
-    };
-
-    // Collection Type
-
-    const handleCollectionType = (inputValue) => {
-        let collectionType = inputValue;
-
-        if (collectionType === "1") {
-            let type = "1 Month"
-            return type
-        } else if (collectionType === "3") {
-            let type = "3 Months"
-            return type
-        }
-    };
-
-    // Collection Date
-
-    const handleCollectionDate = (inputValue) => {
-        let dateFormat = dayjs(`${inputValue} T00:00:00`);
-        let collectionDate = Intl.DateTimeFormat('en-GB', {  month: "short", day: "numeric", year: "numeric" }).format(dateFormat);
-
-        return collectionDate
     };
 
     // Get Wholesale

@@ -12,6 +12,9 @@ import { AddParticipationModal } from "../Participation/AddParticipationModal";
 import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 import { SuccessModal } from "../common/SuccessModal";
 import { WriteEmail } from '../Email/EmailModal';
+import { handleCollectionDate } from '../common/dateFuncs';
+import { handleCollectionType } from '../common/typeFuncs';
+import { monthOptions } from '../common/miscObjects';
 
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
@@ -42,26 +45,7 @@ const Collection = ({
     // Set Default States
     const size = useWindowSize(); 
     const [refresh, setRefresh] = useState(null);
-    const [monthOptions, setMonthOptions] = useState([
-        {
-            key: 0,
-            type: "All",
-            value: "0",
-            filter: "All"
-        },
-        {
-            key: 1,
-            type: "Monthly",
-            value: "1",
-            filter: "Monthly Collections"
-        },
-        {
-            key: 2,
-            type: "3 Months",
-            value: "3",
-            filter: "3 Months Collections"
-        }
-    ]);
+    
     const [photo, setPhoto] = useState({
         photofilename: "anonymous.png",
         imagesrc: `${process.env.REACT_APP_API}media/photos/anonymous.png`,
@@ -70,7 +54,6 @@ const Collection = ({
     
     const [monthFilter, setMonthFilter] = useState("Select Collection");
     const [monthValue, setMonthValue] = useState("");
-    const [collTotalWeight, setCollTotalWeight] = useState(null);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [isChecked, setIsChecked] = useState([]);
@@ -80,8 +63,6 @@ const Collection = ({
     useEffect(() => {
         let status = 'PLANNED,ACTIVE';
         getCollections(status);
-        const total = colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
-        setCollTotalWeight(total);
         setRefresh("NO");
       }, []);
 
@@ -90,8 +71,6 @@ const Collection = ({
         if (refresh === "YES"){
             let status = 'PLANNED,ACTIVE';
             getCollections(status);
-            const total = colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
-            setCollTotalWeight(total);
             setStartDate("");
             setEndDate("");
             setMonthValue("");
@@ -100,8 +79,6 @@ const Collection = ({
         } else if (refresh === null) {
             let status = 'PLANNED,ACTIVE';
             getCollections(status);
-            const total = colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
-            setCollTotalWeight(total);
             setStartDate("");
             setEndDate("");
             setMonthValue("");
@@ -160,7 +137,6 @@ const Collection = ({
     const [colltotalweight, setColltotalweight] = useState(null);
     const [colltotalcost, setColltotalcost] = useState(null);
     const [collphoto, setCollphoto] = useState(null);
-    const [collphotourl, setCollphotourl] = useState(`${process.env.REACT_APP_API}media/photos/anonymous.png`);
     const [collspreadsheet, setCollspreadsheet] = useState(null);
     const [collstatus, setCollstatus] = useState(null);
     const [whoid, setWhoid] = useState(null);
@@ -183,21 +159,17 @@ const Collection = ({
         if (monthType === "0") {
             let status = 'PLANNED,ACTIVE';
             getCollections(status);
-            const total = colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
 
             setMonthValue(monthType);
             setMonthFilter(filter);
-            setCollTotalWeight(total);
         } else {
             let status = 'PLANNED,ACTIVE';
             let searchInputStart = startDate;
             let searchInputEnd = endDate;
             searchCollections(monthType, searchInputStart, searchInputEnd, status);
-            const total = colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
 
             setMonthValue(monthType);
             setMonthFilter(filter);
-            setCollTotalWeight(total);
         }
     };
 
@@ -325,29 +297,6 @@ const Collection = ({
                 setSuccessModalShow(true);
             }
         }
-    };
-
-    // Collection Type
-
-    const handleCollectionType = (inputValue) => {
-        let collectionType = inputValue;
-
-        if (collectionType === "1") {
-            let type = "Monthly"
-            return type
-        } else if (collectionType === "3") {
-            let type = "3 Months"
-            return type
-        }
-    };
-
-    // Collection Date
-
-    const handleCollectionDate = (inputValue) => {
-        let dateFormat = dayjs(`${inputValue} T00:00:00`);
-        let collectionDate = Intl.DateTimeFormat('en-GB', {  month: "short", day: "numeric", year: "numeric" }).format(dateFormat);
-
-        return collectionDate
     };
 
     // Get Wholesale
@@ -485,7 +434,6 @@ const Collection = ({
                                                     setColltotalweight(coll.TotalWeight);
                                                     setColltotalcost(coll.TotalCost);
                                                     setCollphoto(coll.CollectionPhoto);
-                                                    setCollphotourl(`http://127.0.0.1:8000/media/${coll.CollectionPhoto}`);
                                                     setCollspreadsheet(coll.CollectionSpreadsheet);
                                                     setCollstatus(coll.CollectionStatus);
                                                     setSuccessModalShow(false);
@@ -499,7 +447,7 @@ const Collection = ({
                                             </Dropdown.Item>
                                             <EditCollectionModal show={editModalShow}
                                             onHide={editModalClose}
-                                            fileSelect={handleFileSelected}
+                                            handleFile={handleFileSelected}
                                             addphoto={handleFileSubmit}
                                             collid={collid}
                                             colldate={colldate}

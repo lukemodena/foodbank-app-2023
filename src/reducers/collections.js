@@ -31,7 +31,8 @@ const initialState = {
     total: 0,
     totalc: 0,
     isAuthenticated: null,
-    statusCol: []
+    statusCol: [],
+    activeId: null
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
@@ -172,9 +173,12 @@ export default function(state = initialState, action) {
                 result: payload
             }
         case ACTIVE_COLLECTION_SUCCESS:
+            localStorage.setItem('activeId', payload[0].CollectionID)
+            localStorage.setItem('activeDate', payload[0].CollectionDate)
             return {
                 ...state,
-                statusCol: payload
+                statusCol: payload,
+                activeId: payload[0].CollectionID
             }
         case ACTIVE_COLLECTION_FAIL:
             return {

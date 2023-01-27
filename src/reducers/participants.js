@@ -43,6 +43,7 @@ export default function(state = initialState, action) {
     const { type, payload } = action;
     switch(type) {
         case PARTICIPATION_LIST_SUCCESSFUL:
+            localStorage.setItem('noParticipants', payload.length)
             return {
                 ...state,
                 parsList: payload,

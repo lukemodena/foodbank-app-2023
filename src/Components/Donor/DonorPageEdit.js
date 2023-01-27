@@ -3,7 +3,6 @@ import {Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BsPlusLg, BsXCircle, BsEnvelope } from "react-icons/bs";
 import useWindowSize from '../common/useWindow';
-import dayjs from 'dayjs';
 
 import { InfoDonorModal } from './MoreInfoModal';
 import { AddDonorModal } from "./AddDonModal";
@@ -11,6 +10,9 @@ import { EditDonorModal } from './EditDonModal';
 import SearchBar from "./SearchBar";
 import { SuccessModal } from '../common/SuccessModal';
 import { AddParticipationModal } from './AddParticipatingDonorModal';
+import { handleCollectionDate } from '../common/dateFuncs';
+import { handleDonorType } from '../common/typeFuncs';
+import { typeOptions } from '../common/miscObjects';
 
 import { getDonors, searchDonors, deleteDonor, editDonor, deleteDonorsMulti } from '../../actions/donors';
 import { getActiveCollection } from '../../actions/collections';
@@ -36,32 +38,6 @@ const DonorPage = ({
     // Set Default States
     const size = useWindowSize(); 
     const [refresh, setRefresh] = useState(null);
-    const [monthOptions, setMonthOptions] = useState([
-        {
-            key: 0,
-            type: "All",
-            value: "",
-            filter: "All Contacts"
-        },
-        {
-            key: 1,
-            type: "Monthly (Both)",
-            value: "1",
-            filter: "Monthly Contacts"
-        },
-        {
-            key: 2,
-            type: "3 Months",
-            value: "3",
-            filter: "3 Months Contacts"
-        },
-        {
-            key: 3,
-            type: "Other",
-            value: "0",
-            filter: "Other Contacts"
-        }
-    ]);
     
     const [monthFilter, setMonthFilter] = useState("All Contacts");
     const [monthValue, setMonthValue] = useState("");
@@ -238,7 +214,7 @@ const DonorPage = ({
 
     // Add Participant
 
-    const handleAddParticipant = (CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, WholesaleID) => {
+    const handleAddParticipant = (CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, Notes, WholesaleID) => {
     
         let colId = CollectionID;
         let donId = DonorID;
@@ -247,6 +223,7 @@ const DonorPage = ({
         let totDon = TotalDonated;
         let droTim = DropOffTime;
         let whoId = WholesaleID;
+        let notes = Notes;
 
         let CollID = colId;
         let DonID = donId;
@@ -255,40 +232,8 @@ const DonorPage = ({
         // - If yes, new participant is not added 
         // - if no, new participant is added + if cash donation wholesale is updated
         //console.log(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
-        getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
+        getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, notes, donId, colId, whoId)
         setSuccessModalShow(true);
-    };
-
-    // Donor Type
-
-    const handleDonorType = (inputValue) => {
-        let donorType = inputValue;
-
-        if (donorType === "1") {
-            let type = "Monthly (Both)";
-            return type
-        } else if (donorType === "3") {
-            let type = "3 Months";
-            return type
-        } else if (donorType === "0") {
-            let type = "Other";
-            return type
-        } else if (donorType === "1v") {
-            let type = "Monthly/Both (+ Volunteer)";
-            return type
-        } else if (donorType === "3v") {
-            let type = "3 Months (+ Volunteer)";
-            return type
-        }
-    };
-
-    // Collection Date
-
-    const handleCollectionDate = (inputValue) => {
-        let dateFormat = dayjs(`${inputValue} T00:00:00`);
-        let collectionDate = Intl.DateTimeFormat('en-GB', {  month: "short", day: "numeric", year: "numeric" }).format(dateFormat);
-
-        return collectionDate
     };
 
     return(
@@ -305,7 +250,7 @@ const DonorPage = ({
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            {monthOptions.map((option) => (
+                            {typeOptions.map((option) => (
                                 <Dropdown.Item key={option.key} onClick={() => handleFilter(option.value, option.filter)} href="#/contacts">{option.type}</Dropdown.Item>
                             ))}
                         </Dropdown.Menu>

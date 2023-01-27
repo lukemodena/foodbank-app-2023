@@ -10,6 +10,9 @@ import { AddParticipationModal } from './AddParticipationModal';
 import { EditParticipationModal } from './EditParticipationModal';
 import SearchBar from './SearchBar';
 import { SuccessModal } from '../common/SuccessModal';
+import { handleCollectionDate } from '../common/dateFuncs';
+import { handleParticipantType } from '../common/typeFuncs';
+import { participantOptions, handleParticipantPayment } from '../common/miscObjects';
 
 import { getDonors } from '../../actions/donors';
 import { getCollections, getActiveCollection } from '../../actions/collections';
@@ -18,49 +21,17 @@ import { getWholesale } from '../../actions/wholesale';
 
 // PARTICIPANTS PAGE //
 
-const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveCollection, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, getDonors, getWholesale, whol, statusCol}) => {
+const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveCollection, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, getDonors, getWholesale, whol, activeId}) => {
     
     // Set Default States
     
     const size = useWindowSize(); 
     const [refresh, setRefresh] = useState(null);
-    const [monthOptions, setMonthOptions] = useState([
-        {
-            key: 0,
-            type: "All",
-            value: "",
-            filter: "All"
-        },
-        {
-            key: 1,
-            type: "Drop-Off",
-            value: "1",
-            filter: "Drop-Off"
-        },
-        {
-            key: 2,
-            type: "Collection",
-            value: "2",
-            filter: "Collection"
-        },
-        {
-            key: 3,
-            type: "Cash Donation",
-            value: "3",
-            filter: "Cash Donation"
-        },
-        {
-            key: 4,
-            type: "Online Order",
-            value: "4",
-            filter: "Online Order"
-        }
-    ]);
 
     const [collectionDate, setCollectionDate] = useState("Select Collection");
-    const [collectionID, setCollectionID] = useState("");
+    const [collectionID, setCollectionID] = useState(`${localStorage.getItem('activeId')}`);
 
-    const [value, setValue] = useState(dayjs('2022-04-07 T00:00:00'));
+    const [value, setValue] = useState("N/A");
     const [donationTypeVal, setDonationTypeVal] = useState(null);
     const [totalDonatedVal, setTotalDonatedVal] = useState("0");
     const [paymentRecievedVal, setPaymentRecievedVal] = useState("false");
@@ -72,10 +43,15 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
     // Handle Data Request (Initial + Refresh)
 
     useEffect(() => {
-        getActiveCollection()
+        let collection = collectionID;
+        let searchInput = searchValue;
+        let type = typeValue;
+        getParticipantList(collection, searchInput, type);
         getCollections(null);
         getDonors();
         setRefresh("NO");
+        setShowAddButton(true);
+        console.log(parsList[0].length)
       }, []);
 
 
@@ -121,6 +97,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
 
     const successDeleteModalClose = () => {
         setSuccessDeleteModalShow(false);
+        setRefresh("YES");
     };
 
     // Participation Modal Info Handlers
@@ -158,6 +135,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
     const [pardontype, setPardontype] = useState(null);
     const [partotdon, setPartotdon] = useState(null);
     const [partime, setPartime] = useState(null);
+    const [parnotes, setParnotes] = useState(null);
     const [parrec, setParrec] = useState(null);
     const [type, setType] = useState(null);
     const [isAdd, setIsAdd] = useState(null);
@@ -191,15 +169,16 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
        
     // Add Participant
 
-    const handleAddParticipant = (CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, WholesaleID) => {
+    const handleAddParticipant = (CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, Notes, WholesaleID) => {
         
-        let colId = CollectionID
-        let donId = DonorID
-        let payRec = PaymentRecieved
-        let donTyp = DonationType
-        let totDon = TotalDonated
-        let droTim = DropOffTime
-        let whoId = WholesaleID
+        let colId = CollectionID;
+        let donId = DonorID;
+        let payRec = PaymentRecieved;
+        let donTyp = DonationType;
+        let totDon = TotalDonated;
+        let droTim = DropOffTime;
+        let notes = Notes;
+        let whoId = WholesaleID;
 
         let CollID = colId
         let DonID = donId
@@ -208,16 +187,16 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
         // - If yes, new participant is not added 
         // - if no, new participant is added + if cash donation wholesale is updated
         
-        getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
+        getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, notes,donId, colId, whoId)
         setSuccessModalShow(true);
         
     };
 
     // Edit Participant
 
-    const handleEditParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID) => {
+    const handleEditParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID) => {
 
-        editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID)
+        editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID)
         setSuccessModalShow(true);
     };
 
@@ -240,58 +219,6 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
         getParticipantList(collection, searchInput, type);
     };
 
-    // Participant Type
-
-    const handleParticipantType = (inputValue) => {
-        let participantType = inputValue;
-
-        if (participantType === "0") {
-            let type = "N/A"
-            return type
-        } else if (participantType === "1") {
-            let type = "Drop-Off"
-            return type
-        } else if (participantType === "2") {
-            let type = "Collection"
-            return type
-        } else if (participantType === "3") {
-            let type = "Cash Donation"
-            return type
-        } else if (participantType === "4") {
-            let type = "Online Order"
-            return type
-        } else {
-            let type = "N/A"
-            return type
-        }
-    };
-
-    // Participant Payment
-
-    const handleParticipantPayment = (inputValue) => {
-        let participantPayment = inputValue;
-
-        if (participantPayment === "true") {
-            let recieved = "Yes"
-            return recieved
-        } else if (participantPayment === "false") {
-            let recieved = "No"
-            return recieved
-        } else {
-            let recieved = "N/A"
-            return recieved
-        }
-    };
-    
-    // Collection Date
-
-    const handleCollectionDate = (inputValue) => {
-        let dateFormat = dayjs(`${inputValue} T00:00:00`);
-        let collectionDate = Intl.DateTimeFormat('en-GB', {  month: "short", day: "numeric", year: "numeric" }).format(dateFormat);
-
-        return collectionDate
-    };
-
     return (
         <div style={{paddingTop: "38.5px"}}>
 
@@ -306,7 +233,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
                             {collectionDate}
                         </Dropdown.Toggle>
 
-                        <Dropdown.Menu>
+                        <Dropdown.Menu style={{height: "300px", overflowY: "scroll"}}>
                             {colls.map((coll) => (
                                 <Dropdown.Item key={coll.CollectionID} onClick={() => handleFilter(coll.CollectionID, coll.CollectionDate)} href="#/participants">{handleCollectionDate(coll.CollectionDate)}</Dropdown.Item>
                             ))}
@@ -321,7 +248,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            {monthOptions.map((option) => (
+                            {participantOptions.map((option) => (
                                 <Dropdown.Item key={option.key} onClick={() => handleTypeFilter(option.value, option.filter)} href="#/participants">{option.type}</Dropdown.Item>
                             ))}
                         </Dropdown.Menu>
@@ -329,7 +256,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
 
                     {/* Participant Search */}
 
-                    <SearchBar callback={(searchValue) => handleSearch(searchValue)}/>
+                    {(showAddButton === true) &&<SearchBar callback={(searchValue) => handleSearch(searchValue)}/>}
 
                     {/* Add New Participant Modal */}
 
@@ -374,7 +301,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
                             <th>Name</th>
                             {(size.width > 760) &&<th>Address</th>}
                             <th>Donation Type</th>
-                            {(size.width > 760) &&<th>Payment Recieved</th>}
+                            {(size.width > 760) &&<th>Recieved</th>}
                             {(size.width > 760) &&<th>Email</th>}
                             {(size.width > 760) &&<th>Phone</th>}
                         </tr>
@@ -394,7 +321,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
 
                                             <Dropdown.Item onClick={() => {   
                                                     setEditParticipationShow(true);
-                                                    setParid(par.ParticipantID);
+                                                    setParid(par.ParticipationID);
                                                     setDonid(par.DonorID);
                                                     setCollid(par.CollectionID);
                                                     setWhoid(par.WholesaleID);
@@ -407,14 +334,14 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
                                                     setDonphone(par.Phone);
                                                     setPardontype(par.DonationType);
                                                     setPartotdon(par.TotalDonated);
-                                                    setPartime(dayjs(`2022-04-07 T${par.DropOffTime}`));
+                                                    setPartime(par.DropOffTime);
+                                                    setParnotes(par.ParticipationNotes);
                                                     setParrec(par.PaymentRecieved);
                                                     setSuccessModalShow(false);
                                                     setReqStatus(`${par.FullName} from collection on ${collectionDate} saved`);
                                                     setType("participant")
                                                     setIsAdd(false);
                                                     typeChanger(par.DonationType); 
-                                                    handleChange(dayjs(`2022-04-07 T${par.DropOffTime}`));
                                                     totDonChange(par.TotalDonated);
                                                     payRecChange(par.PaymentRecieved)}}>
                                                 More Information...
@@ -436,6 +363,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
                                                 pardontype={pardontype}
                                                 partotdon={partotdon}
                                                 partime={partime}
+                                                parnotes={parnotes}
                                                 parrec={parrec}
                                                 value={value}
                                                 donationTypeVal={donationTypeVal}
@@ -504,7 +432,7 @@ const mapStateToProps = (state) => ({
     colls: state.collections.colls,
     dons: state.donors.dons,
     whol: state.wholesale.whol,
-    statusCol: state.collections.statusCol,
+    activeId: state.collections.activeId,
 });
 
 export default connect(mapStateToProps, { getCollections, getWholesale, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, getDonors, getActiveCollection })(ParticipationPage)

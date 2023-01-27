@@ -96,7 +96,7 @@ export const getParticipants = (CollectionID) => async dispatch => {
 
 // PULL CURRENT PARTICIPANTS
 
-export const getCurrentParticipants = (CollectionID, DonorID, payRec, donTyp, totDon, droTim, donId, colId, whoId) => async dispatch => {
+export const getCurrentParticipants = (CollectionID, DonorID, payRec, donTyp, totDon, droTim, notes, donId, colId, whoId) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -121,13 +121,13 @@ export const getCurrentParticipants = (CollectionID, DonorID, payRec, donTyp, to
                     type: PARTICIPATION_NOT_EXISTS,
                     payload: "Donor Not Participating"
                 });
-                dispatch(addParticipant(payRec, donTyp, totDon, droTim, donId, colId, whoId))
+                dispatch(addParticipant(payRec, donTyp, totDon, droTim, notes, donId, colId, whoId))
             }
                 
         } catch (err) {
             dispatch({
                 type: PARTICIPATION_NOT_EXISTS,
-                payload: "errors"
+                payload: err
             });
             //dispatch(addParticipant(payRec, donTyp, totDon, droTim, donId, colId, whoId))
         }
@@ -266,7 +266,7 @@ export const updateWholesale = (CollectionID, wholesaleID, newDonationVal) => as
 
 // ADD PARTICIPANTS
 
-export const addParticipant  = (payRec, donTyp, totDon, droTim, donId, colId, whoId) => async dispatch => {
+export const addParticipant  = (payRec, donTyp, totDon, droTim, notes, donId, colId, whoId) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -283,6 +283,7 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, donId, colId, wh
             "DonationType":`${donTyp}`,
             "TotalDonated":`${totDon}`,
             "DropOffTime":`${droTim}`,
+            "Notes":`${notes}`,
             "DonorID":`${donId}`,
             "CollectionID":`${colId}`,
             "WholesaleID":`${whoId}`
@@ -314,7 +315,7 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, donId, colId, wh
 
 // EDIT PARTICIPANTS
 
-export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID) => async dispatch => {
+export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -331,6 +332,7 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
             "DonationType":`${DonationType}`,
             "TotalDonated":`${TotalDonated}`,
             "DropOffTime":`${DropOffTime}`,
+            "Notes":`${Notes}`,
             "DonorID":`${DonorID}`,
             "CollectionID":`${CollectionID}`,
             "WholesaleID":`${WholesaleID}`
@@ -350,7 +352,8 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
             }
         } catch (err) {
             dispatch({
-                type: EDIT_PARTICIPATION_FAIL
+                type: EDIT_PARTICIPATION_FAIL,
+                payload: err
             });
             dispatch(alert('Failed'));
         }

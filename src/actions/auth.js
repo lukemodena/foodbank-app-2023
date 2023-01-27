@@ -12,6 +12,7 @@ import {
     LOGOUT_FAIL
 } from './types';
 
+import { getActiveCollection } from './collections';
 // AUTHENTICATION
 
 export const checkAuthenticated = () => async dispatch => {
@@ -51,9 +52,9 @@ export const login = (username, password) => async dispatch => {
         }
     };
 
-
+    let user = `${username}`.toLowerCase()
     const body = {
-        "username":`${username}`,
+        "username":`${user}`,
         "password":`${password}`
     };
 
@@ -88,6 +89,8 @@ export const load_user = () => async dispatch => {
                 type: LOAD_USER_SUCCESS,
                 payload: res.data
             });
+            
+            dispatch(getActiveCollection());
         } catch (err) {
             dispatch({
                 type: LOAD_USER_FAIL

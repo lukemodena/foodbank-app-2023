@@ -5,6 +5,8 @@ import { BsDownload } from "react-icons/bs";
 import { SuccessModal } from "../common/SuccessModal";
 import dayjs from 'dayjs';
 
+import { handleCollectionDateEmail } from "../common/dateFuncs";
+
 export function WriteEmail(props) {
     const {
         show,
@@ -26,57 +28,22 @@ export function WriteEmail(props) {
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
 
-    const handleCollectionDate = () => {
-        let dateFormat = dayjs(`${colldate} T00:00:00`);
-        let numDate = Intl.DateTimeFormat('en-GB', { day: "numeric" }).format(dateFormat); 
-
-        if (numDate === "1" | numDate === "21" | numDate === "31") { 
-            let collectionDay = Intl.DateTimeFormat('en-GB', { weekday: 'long', day: "numeric" }).format(dateFormat);
-            let collectionMonth = Intl.DateTimeFormat('en-GB', { month: "long" }).format(dateFormat);
-
-            let collectionDate = `${collectionDay}st ${collectionMonth}`
-
-            return collectionDate
-        } else if (numDate === "2" | numDate === "22") {
-            let collectionDay = Intl.DateTimeFormat('en-GB', { weekday: 'long', day: "numeric" }).format(dateFormat);
-            let collectionMonth = Intl.DateTimeFormat('en-GB', { month: "long" }).format(dateFormat);
-
-            let collectionDate = `${collectionDay}nd ${collectionMonth}`
-
-            return collectionDate
-        } else if (numDate === "3" | numDate === "23") {
-            let collectionDay = Intl.DateTimeFormat('en-GB', { weekday: 'long', day: "numeric" }).format(dateFormat);
-            let collectionMonth = Intl.DateTimeFormat('en-GB', { month: "long" }).format(dateFormat);
-
-            let collectionDate = `${collectionDay}rd ${collectionMonth}`
-
-            return collectionDate
-        } else {
-            let collectionDay = Intl.DateTimeFormat('en-GB', { weekday: 'long', day: "numeric" }).format(dateFormat);
-            let collectionMonth = Intl.DateTimeFormat('en-GB', { month: "long" }).format(dateFormat);
-
-            let collectionDate = `${collectionDay}th ${collectionMonth}`
-
-            return collectionDate
-        }
-    };
-
     const emailSignOff = '\nYour support is very much appreciated.\n \nKindest wishes\nJackie\njsp.foodcollection@gmail.com\n07764 614151';
 
     const setFirstSubject = () => {
-        setSubject(`FOOD COLLECTION ${handleCollectionDate().toUpperCase()} PLEASE HELP FEED LOCAL PEOPLE IN FOOD CRISIS`);
+        setSubject(`FOOD COLLECTION ${handleCollectionDateEmail(colldate).toUpperCase()} PLEASE HELP FEED LOCAL PEOPLE IN FOOD CRISIS`);
     };
 
     const setFirstBody = () => {
-        setBody(`Dear Neighbours\n \nThank you for supporting the Neighbours Food Collection for Camden Foodbank. More than ever foodbanks are playing a key role in feeding people who would otherwise go hungry.\n \nThe next Neighbours collection to help local people in food crisis is on ${handleCollectionDate()}. If you can donate food in these difficult times your help would be greatly appreciated\n \nCamden Foodbank urgently needs the following targeted food items:\n \n${foodlist}\n \nIf you would like to donate food on ${handleCollectionDate()} you can do so as follows:\n \n1.	DELIVER - Email me DELIVER and bring the food around to my home between 8.00 a.m. and 1.00 p.m on ${handleCollectionDate()}.\n \n2.	INTERNET SHOPPING - Email me INTERNET and send the targeted food to my home between 8.00 a.m. and 1.00 p.m on ${handleCollectionDate()}. (Please put your own name on the delivery so that I can check it in).\n \nMy address is Ground Floor Flat, 12 Frognal Lane, London NW3 7DU. (Sometimes I may be registered as Flat 2).\n${emailSignOff}`);
+        setBody(`Dear Neighbours\n \nThank you for supporting the Neighbours Food Collection for Camden Foodbank. More than ever foodbanks are playing a key role in feeding people who would otherwise go hungry.\n \nThe next Neighbours collection to help local people in food crisis is on ${handleCollectionDateEmail(colldate)}. If you can donate food in these difficult times your help would be greatly appreciated\n \nCamden Foodbank urgently needs the following targeted food items:\n \n${foodlist}\n \nIf you would like to donate food on ${handleCollectionDateEmail(colldate)} you can do so as follows:\n \n1.	DELIVER - Email me DELIVER and bring the food around to my home between 8.00 a.m. and 1.00 p.m on ${handleCollectionDateEmail(colldate)}.\n \n2.	INTERNET SHOPPING - Email me INTERNET and send the targeted food to my home between 8.00 a.m. and 1.00 p.m on ${handleCollectionDateEmail(colldate)}. (Please put your own name on the delivery so that I can check it in).\n \nMy address is Ground Floor Flat, 12 Frognal Lane, London NW3 7DU. (Sometimes I may be registered as Flat 2).\n${emailSignOff}`);
     };
 
     const setReminderSubject = () => {
-        setSubject(`REMINDER - FOOD COLLECTION ${handleCollectionDate().toUpperCase()} PLEASE HELP FEED LOCAL PEOPLE IN FOOD CRISIS`);
+        setSubject(`REMINDER - FOOD COLLECTION ${handleCollectionDateEmail(colldate).toUpperCase()} PLEASE HELP FEED LOCAL PEOPLE IN FOOD CRISIS`);
     };
 
     const setReminderBody = () => {
-        setBody(`Dear Neighbours\n \nA reminder that I am coming around doing a door to door collection of food for local people in food crisis for Camden Foodbank on ${handleCollectionDate()}. If you can donate food in these difficult times your help would be greatly appreciated\n \nIf you would like to donate and you haven’t already contacted me, please see below for two ways to donate:\n \nCamden Foodbank urgently needs the following targeted food items:\n \n${foodlist}\n \nIf you would like to donate food on ${handleCollectionDate()} you can do so as follows:\n \n1.	COLLECT - Email me COLLECT and leave the food you are donating outside your property between 9.00 a.m. and 1.00 p.m on ${colldate}.\n2.	INTERNET SHOPPING - Email me INTERNET and send the targeted food to my home between 8.00 a.m. and 1.00 p.m on ${handleCollectionDate()}. (Please put your own name on the delivery so that I can check it in).\n \nMy address is Ground Floor Flat, 12 Frognal Lane, London NW3 7DU. (Sometimes I may be registered as Flat 2).\n${emailSignOff}`);
+        setBody(`Dear Neighbours\n \nA reminder that I am coming around doing a door to door collection of food for local people in food crisis for Camden Foodbank on ${handleCollectionDateEmail(colldate)}. If you can donate food in these difficult times your help would be greatly appreciated\n \nIf you would like to donate and you haven’t already contacted me, please see below for two ways to donate:\n \nCamden Foodbank urgently needs the following targeted food items:\n \n${foodlist}\n \nIf you would like to donate food on ${handleCollectionDateEmail(colldate)} you can do so as follows:\n \n1.	COLLECT - Email me COLLECT and leave the food you are donating outside your property between 9.00 a.m. and 1.00 p.m on ${handleCollectionDateEmail(colldate)}.\n2.	INTERNET SHOPPING - Email me INTERNET and send the targeted food to my home between 8.00 a.m. and 1.00 p.m on ${handleCollectionDateEmail(colldate)}. (Please put your own name on the delivery so that I can check it in).\n \nMy address is Ground Floor Flat, 12 Frognal Lane, London NW3 7DU. (Sometimes I may be registered as Flat 2).\n${emailSignOff}`);
     };
 
     const setPostSubject = () => {
