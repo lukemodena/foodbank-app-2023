@@ -3,15 +3,6 @@ import {Button, Col, Form, Row, Modal, Image} from 'react-bootstrap';
 import { BsDownload } from "react-icons/bs";
 import { SuccessModal } from "../common/SuccessModal";
 
-
-import { downloadFile } from "../common/downloadFunc";
-
-const fileDownload = (e, name) => {
-    e.preventDefault();
-
-    downloadFile(name)
-};
-
 export function EditCollectionModal(props) {
     const {
         show,
