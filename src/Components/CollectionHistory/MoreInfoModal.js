@@ -1,7 +1,6 @@
 import React from "react";
 import {Button, Col, Form, Row, Modal, Image} from 'react-bootstrap';
 import { BsDownload } from "react-icons/bs";
-import { SuccessModal } from "../common/SuccessModal";
 
 export function MoreInformationModal(props) {
     const {
@@ -16,13 +15,7 @@ export function MoreInformationModal(props) {
         collstatus,
         whototaldonated,
         whototalspent,
-        whoremainder,
-        whoreceipt,
-        successModalShow,
-        successModalClose,
-        reqStatus,
-        type,
-        isAdd
+        whoremainder
     } = props
 
     return (

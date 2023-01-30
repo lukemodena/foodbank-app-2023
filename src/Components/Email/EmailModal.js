@@ -1,9 +1,6 @@
-import { object } from "prop-types";
 import React, {useState} from "react";
 import {Dropdown, Button, Col, Form, Row, Modal, Image} from 'react-bootstrap';
-import { BsDownload } from "react-icons/bs";
 import { SuccessModal } from "../common/SuccessModal";
-import dayjs from 'dayjs';
 
 import { handleCollectionDateEmail } from "../common/dateFuncs";
 

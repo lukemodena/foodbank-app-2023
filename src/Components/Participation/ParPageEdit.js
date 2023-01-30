@@ -14,13 +14,13 @@ import { handleParticipantType, handleDropOffTime } from '../common/typeFuncs';
 import { participantOptions, handleParticipantPayment } from '../common/miscObjects';
 
 import { getDonors } from '../../actions/donors';
-import { getCollections, getActiveCollection } from '../../actions/collections';
+import { getCollections } from '../../actions/collections';
 import { getParticipantList, editParticipant, deleteParticipant, getCurrentParticipants, editParticipantStatus } from '../../actions/participation';
 import { getWholesale } from '../../actions/wholesale';
 
 // PARTICIPANTS PAGE //
 
-const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveCollection, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, editParticipantStatus, getDonors, getWholesale, whol, activeId}) => {
+const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, editParticipantStatus, getDonors, getWholesale, whol, activeId}) => {
     
     // Set Default States
     
@@ -144,7 +144,6 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
     const [type, setType] = useState(null);
     const [isAdd, setIsAdd] = useState(null);
     const [reqStatus, setReqStatus] = useState(null);
-    const [showTable, setShowTable] = useState(false);
 
     // Collection Date Picker
 
@@ -469,4 +468,4 @@ const mapStateToProps = (state) => ({
     activeId: state.collections.activeId,
 });
 
-export default connect(mapStateToProps, { getCollections, getWholesale, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, editParticipantStatus, getDonors, getActiveCollection })(ParticipationPage)
+export default connect(mapStateToProps, { getCollections, getWholesale, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, editParticipantStatus, getDonors })(ParticipationPage)

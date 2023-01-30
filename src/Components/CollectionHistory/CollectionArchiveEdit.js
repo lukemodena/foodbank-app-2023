@@ -1,4 +1,4 @@
-import React,{Component, useState, useEffect } from "react";
+import React,{ useState, useEffect } from "react";
 import {Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { BsXCircle } from "react-icons/bs";
 import SearchBar from "./SearchBar";
@@ -305,11 +305,6 @@ const CollectionArchive = ({
                                             whototalspent={whototalspent}
                                             whoremainder={whoremainder}
                                             whoreceipt={whoreceipt}
-                                            successModalShow={successModalShow}
-                                            successModalClose={successModalClose}
-                                            reqStatus={reqStatus}
-                                            type={type}
-                                            isAdd={isAdd}
                                             />
 
                                             {/* Delete Collection */}
