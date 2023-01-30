@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import { cmp } from '../Components/common/cmpFunc';
 
 import {
     PARTICIPATION_SUCCESS,
@@ -47,11 +48,17 @@ export const getParticipantList = (CollectionID, FullName, Type) => async dispat
                 if (Type === "1" | Type === "4"){
                     dispatch({
                         type: PARTICIPATION_LIST_SUCCESSFUL,
+                        // payload: res.data.sort((a, b) => {
+                        //     if (parseInt(a.DropOffTime) > parseInt(b.DropOffTime)) { return 1; }
+                        //     if (parseInt(b.DropOffTime) > parseInt(a.DropOffTime)) { return -1; }
+                        //     return 0;
+                        //   }),
                         payload: res.data.sort((a, b) => {
-                            if (parseInt(a.DropOffTime) > parseInt(b.DropOffTime)) { return 1; }
-                            if (parseInt(b.DropOffTime) > parseInt(a.DropOffTime)) { return -1; }
-                            return 0;
-                          })
+                            return cmp(
+                                [cmp(a.PaymentRecieved, b.PaymentRecieved), cmp(parseInt(a.DropOffTime), parseInt(b.DropOffTime))],
+                                [cmp(b.PaymentRecieved, a.PaymentRecieved), cmp(parseInt(b.DropOffTime), parseInt(a.DropOffTime))]
+                            );
+                        })
                     });
                 } else if (Type === "2"){
                     dispatch({

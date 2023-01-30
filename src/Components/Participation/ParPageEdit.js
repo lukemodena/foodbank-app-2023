@@ -50,7 +50,6 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
         getDonors();
         setRefresh("NO");
         setShowAddButton(true);
-        console.log(parsList[0].length)
       }, []);
 
 
@@ -145,6 +144,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getActiveColl
     const [type, setType] = useState(null);
     const [isAdd, setIsAdd] = useState(null);
     const [reqStatus, setReqStatus] = useState(null);
+    const [showTable, setShowTable] = useState(false);
 
     // Collection Date Picker
 
