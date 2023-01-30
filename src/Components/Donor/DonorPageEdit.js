@@ -192,7 +192,7 @@ const DonorPage = ({
     // Donor Update
 
     const handleEditSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         let fullName = e.target.FirstName.value + " " + e.target.LastName.value;
 
         let donorId = e.target.DonorID.value;
@@ -329,7 +329,7 @@ const DonorPage = ({
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
 
-                                        {/* Edit Donor Modal */}
+                                        {/* More Information Donor Modal */}
 
                                         <Dropdown.Item
                                             onClick={()=>{
@@ -365,6 +365,8 @@ const DonorPage = ({
                                         donphone={donphone}
                                         doninvolveno={doninvolveno}
                                         />
+
+                                        {/* Edit Donor Modal */}
 
                                         <Dropdown.Item
                                             onClick={()=>{

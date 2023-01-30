@@ -137,17 +137,18 @@ export function EditParticipationModal(props){
                                     {(donationTypeVal === '1' || donationTypeVal ===  '4') &&<Form.Label>Drop-Off Time</Form.Label>}
                                     {(donationTypeVal === '1' || donationTypeVal ===  '4') &&
                                         <Form.Select aria-label="DropOffTime" required name='DropOffTime' onChange={changeTime} placeholder='DropOffTime' defaultValue={partime}>
-                                            <option value="N/A">Please specify...</option>
-                                            <option value="07:00-08:00">07:00-08:00</option>
-                                            <option value="08:00-09:00">08:00-09:00</option>
-                                            <option value="09:00-10:00">09:00-10:00</option>
-                                            <option value="10:00-11:00">10:00-11:00</option>
-                                            <option value="11:00-12:00">11:00-12:00</option>
-                                            <option value="12:00-13:00">12:00-13:00</option>
-                                            <option value="13:00-14:00">13:00-14:00</option>
-                                            <option value="14:00-15:00">14:00-15:00</option>
-                                            <option value="16:00-17:00">16:00-17:00</option>
-                                            <option value="Other">Other</option>
+                                            <option value="11">Please specify...</option>
+                                            <option value="1">07:00-08:00</option>
+                                            <option value="2">08:00-09:00</option>
+                                            <option value="3">09:00-10:00</option>
+                                            <option value="4">10:00-11:00</option>
+                                            <option value="5">11:00-12:00</option>
+                                            <option value="6">12:00-13:00</option>
+                                            <option value="7">13:00-14:00</option>
+                                            <option value="8">14:00-15:00</option>
+                                            <option value="9">15:00-16:00</option>
+                                            <option value="10">16:00-17:00</option>
+                                            <option value="0">Other</option>
                                         </Form.Select>
                                     }
                                 </Form.Group>

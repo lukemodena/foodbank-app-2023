@@ -62,6 +62,7 @@ export const addWholesale = (remainder, collId) => async dispatch => {
             "TotalSpent":parseFloat(0),
             "Remainder":parseFloat(0),
             "WholesaleReceipt":"N/A",
+            "Notes":"",
             "CollectionID":parseInt(collId)
         };
     
@@ -87,7 +88,7 @@ export const addWholesale = (remainder, collId) => async dispatch => {
 
 // EDIT WHOLESALE
 
-export const editWholesale = (wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt) => async dispatch => {
+export const editWholesale = (wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt, notes) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -107,6 +108,7 @@ export const editWholesale = (wholId, totalDonated, totalSpent, collId, newDonat
             "TotalSpent": `${totalSpent}`,
             "Remainder": `${remainder}`,
             "WholesaleReceipt": `${wholesaleReceipt}`,
+            "Notes":`${notes}`,
             "CollectionID": `${collId}`
         };
     

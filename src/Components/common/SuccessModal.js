@@ -12,11 +12,12 @@ export function SuccessModal(props) {
     } = props
 
     const refresh = () => {
-        if (type !== "participant") {
-            window.location.reload(false)
-        } else {
-            onHide()
-        }
+        window.location.reload(false)
+        // if (type !== "participant") {
+        //     window.location.reload(false)
+        // } else {
+        //     onHide()
+        // }
     }
 
     const log = () => {

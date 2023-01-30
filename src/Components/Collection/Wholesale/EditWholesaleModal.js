@@ -14,6 +14,7 @@ export function EditWholesaleModal(props) {
         whototalspent,
         whoremainder,
         whoreceipt,
+        whonotes,
         successModalShow,
         successModalClose,
         reqStatus,
@@ -62,6 +63,10 @@ export function EditWholesaleModal(props) {
                                 <Form.Group controlId='TotalSpent'>
                                     <Form.Label>Total Spent</Form.Label>
                                     <Form.Control type='text' name='TotalSpent' placeholder='TotalSpent' defaultValue={whototalspent}/>
+                                </Form.Group>
+                                <Form.Group controlId='Notes'>
+                                    <Form.Label>Notes</Form.Label>
+                                    <Form.Control type='text' name='Notes' placeholder='Notes' defaultValue={whonotes}/>
                                 </Form.Group>
                                 <Form.Group controlId='Receipt'>
                                     <Form.Label>Receipt</Form.Label>

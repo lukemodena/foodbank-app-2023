@@ -148,6 +148,7 @@ export const addWholesale = (collId) => async dispatch => {
             "TotalSpent":"0",
             "Remainder":"0",
             "WholesaleReceipt":"N/A",
+            "Notes":"",
             "CollectionID":`${collId}`
         };
     

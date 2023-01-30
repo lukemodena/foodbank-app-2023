@@ -1,10 +1,9 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { BsPlusLg, BsXCircle } from "react-icons/bs";
 import SearchBar from "./SearchBar";
 import { connect } from 'react-redux';
 import useWindowSize from '../common/useWindow';
-import dayjs from 'dayjs';
 
 import { AddCollectionModal } from "./AddCollModal";
 import { EditCollectionModal } from "./EditCollModal";
@@ -18,7 +17,7 @@ import { monthOptions } from '../common/miscObjects';
 
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
-import { getDonors, searchDonors } from "../../actions/donors";
+import { searchDonors } from "../../actions/donors";
 import { addParticipant, getCurrentParticipants } from "../../actions/participation";
 import { sendEmail } from '../../actions/email';
 
@@ -32,7 +31,6 @@ const Collection = ({
     deleteCollectionsMulti, 
     getWholesale, 
     editWholesale, 
-    getDonors, 
     searchDonors,
     getCurrentParticipants,
     sendEmail,
@@ -144,6 +142,7 @@ const Collection = ({
     const [whototalspent, setWhototalspent] = useState(null);
     const [whoremainder, setWhoremainder] = useState(null);
     const [whoreceipt, setWhoreceipt] = useState(null);
+    const [whonotes, setWhonotes] = useState("");
     const [donors, setDons] = useState([]);
     const [emaillist, setEmailList] = useState([]);
     const [foodlist, setFoodList] = useState("");
@@ -319,8 +318,9 @@ const Collection = ({
         let collId = e.target.CollectionID.value;
         let newDonationVal = e.target.AddDonation.value;
         let wholesaleReceipt = e.target.Receipt.value;
+        let notes = e.target.Notes.value;
 
-        editWholesale(wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt);
+        editWholesale(wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt, notes);
         setSuccessModalShow(true);
     };
 
@@ -523,6 +523,7 @@ const Collection = ({
                                                 setWhototalspent(whol[0].TotalSpent);
                                                 setWhoremainder(whol[0].Remainder);
                                                 setWhoreceipt(whol[0].WholesaleReceipt);
+                                                setWhonotes(whol[0].Notes);
                                                 setReqStatus(`Cash donation for collection on ${coll.CollectionDate} saved`);
                                                 setType("wholesale");
                                                 setIsAdd(false);
@@ -539,6 +540,7 @@ const Collection = ({
                                             whototalspent={whototalspent}
                                             whoremainder={whoremainder}
                                             whoreceipt={whoreceipt}
+                                            whonotes={whonotes}
                                             successModalShow={successModalShow}
                                             successModalClose={successModalClose}
                                             reqStatus={reqStatus}
@@ -602,4 +604,4 @@ const mapStateToProps = (state) => ({
     total: state.collections.total
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, searchDonors, addParticipant, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti, sendEmail})(Collection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonors, addParticipant, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti, sendEmail})(Collection)

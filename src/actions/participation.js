@@ -44,10 +44,31 @@ export const getParticipantList = (CollectionID, FullName, Type) => async dispat
                 });
             } else {
                 const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?collid=${CollectionID}&fullname=${FullName}&type=${Type}`, config)
-                dispatch({
-                    type: PARTICIPATION_LIST_SUCCESSFUL,
-                    payload: res.data
-                });
+                if (Type === "1" | Type === "4"){
+                    dispatch({
+                        type: PARTICIPATION_LIST_SUCCESSFUL,
+                        payload: res.data.sort((a, b) => {
+                            if (parseInt(a.DropOffTime) > parseInt(b.DropOffTime)) { return 1; }
+                            if (parseInt(b.DropOffTime) > parseInt(a.DropOffTime)) { return -1; }
+                            return 0;
+                          })
+                    });
+                } else if (Type === "2"){
+                    dispatch({
+                        type: PARTICIPATION_LIST_SUCCESSFUL,
+                        payload: res.data.sort((a, b) => {
+                            if (a.PostCode > b.PostCode) { return 1; }
+                            if (b.PostCode > a.PostCode) { return -1; }
+                            return 0;
+                          })
+                    });
+                } else {
+                    dispatch({
+                        type: PARTICIPATION_LIST_SUCCESSFUL,
+                        payload: res.data
+                    });
+                }
+                
             }
             
         } catch (err) {
@@ -350,6 +371,53 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
             if (donChange !== 0) {
                 dispatch(updateWholesale(CollectionID, WholesaleID, donChange));
             }
+        } catch (err) {
+            dispatch({
+                type: EDIT_PARTICIPATION_FAIL,
+                payload: err
+            });
+            dispatch(alert('Failed'));
+        }
+    } else {
+        dispatch({
+            type: EDIT_PARTICIPATION_FAIL
+        });
+        dispatch(alert('Insufficient Credentials'));
+    }
+};
+
+// EDIT PARTICIPANTS STATUS
+
+export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, Notes, WholesaleID, FullName, Type) => async dispatch => {
+
+    if (localStorage.getItem('token')){
+        const config ={
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
+            }
+        };
+        
+        const body = {
+            "ParticipationID":`${ParticipantID}`,
+            "PaymentRecieved":`${PaymentRecieved}`,
+            "DonationType":`${DonationType}`,
+            "TotalDonated":`${TotalDonated}`,
+            "DropOffTime":`${DropOffTime}`,
+            "Notes":`${Notes}`,
+            "DonorID":`${DonorID}`,
+            "CollectionID":`${CollectionID}`,
+            "WholesaleID":`${WholesaleID}`
+        };
+    
+        try {
+            const res = await axios.put(`${process.env.REACT_APP_API}participants`, body, config);
+            dispatch({
+                type: EDIT_PARTICIPATION_SUCCESS,
+                payload: res.data
+            });
+            dispatch(getParticipantList(CollectionID, FullName, Type));
         } catch (err) {
             dispatch({
                 type: EDIT_PARTICIPATION_FAIL,
