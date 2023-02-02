@@ -50,46 +50,10 @@ export const getDonors = () => async dispatch => {
 };
 
 // SEARCH
-
 export const searchDonors = (monthType, searchInput) => async dispatch => {
     if (localStorage.getItem('token')) {
-        if (monthType === '3'){
-            const config ={
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('token')}`,
-                    'Accept': 'application/json',
-                }
-            }; 
 
-            if (searchInput == null || searchInput === ""){
-                try {
-                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors/threemonthdonortype`, config)
-                    dispatch({
-                        type: DONOR_SEARCH_SUCCESS,
-                        payload: res.data
-                    });
-                } catch (err) {
-                    dispatch({
-                        type: DONOR_SEARCH_FAIL
-                    });
-                    dispatch(getDonors());
-                }
-            } else {
-                try {
-                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?search=1&?search=3&fullname=${searchInput}`, config)
-                    dispatch({
-                        type: DONOR_SEARCH_SUCCESS,
-                        payload: res.data
-                    });
-                } catch (err) {
-                    dispatch({
-                        type: DONOR_SEARCH_FAIL
-                    });
-                    dispatch(getDonors());
-                }
-            }
-        } else { 
+        //} else { 
             if (searchInput == null || searchInput === ""){
                 try {
                     const config ={
@@ -100,7 +64,7 @@ export const searchDonors = (monthType, searchInput) => async dispatch => {
                         }
                     };
 
-                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?search=${monthType}`, config)
+                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?type=${monthType}`, config)
                     dispatch({
                         type: DONOR_SEARCH_SUCCESS,
                         payload: res.data
@@ -121,7 +85,7 @@ export const searchDonors = (monthType, searchInput) => async dispatch => {
                         }
                     };
                     
-                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?search=${monthType}&fullname=${searchInput}`, config)
+                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?type=${monthType}&fullname=${searchInput}`, config)
                     dispatch({
                         type: DONOR_SEARCH_SUCCESS,
                         payload: res.data
@@ -133,13 +97,101 @@ export const searchDonors = (monthType, searchInput) => async dispatch => {
                     dispatch(getDonors());
                 }
             }
-        }
+        //}
     } else {
         dispatch({
             type: DONOR_SEARCH_FAIL
         });
     }
 };
+//     if (localStorage.getItem('token')) {
+//         if (monthType === '3'){
+//             const config ={
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     'Authorization': `Token ${localStorage.getItem('token')}`,
+//                     'Accept': 'application/json',
+//                 }
+//             }; 
+
+//             if (searchInput == null || searchInput === ""){
+//                 try {
+//                     const res = await axios.get(`${process.env.REACT_APP_API}searchdonors/threemonthdonortype`, config)
+//                     dispatch({
+//                         type: DONOR_SEARCH_SUCCESS,
+//                         payload: res.data
+//                     });
+//                 } catch (err) {
+//                     dispatch({
+//                         type: DONOR_SEARCH_FAIL
+//                     });
+//                     dispatch(getDonors());
+//                 }
+//             } else {
+//                 try {
+//                     const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?fullname=${searchInput}`, config)
+//                     dispatch({
+//                         type: DONOR_SEARCH_SUCCESS,
+//                         payload: res.data
+//                     });
+//                 } catch (err) {
+//                     dispatch({
+//                         type: DONOR_SEARCH_FAIL
+//                     });
+//                     dispatch(getDonors());
+//                 }
+//             }
+//         } else { 
+//             if (searchInput == null || searchInput === ""){
+//                 try {
+//                     const config ={
+//                         headers: {
+//                             'Content-Type': 'application/json',
+//                             'Authorization': `Token ${localStorage.getItem('token')}`,
+//                             'Accept': 'application/json',
+//                         }
+//                     };
+
+//                     const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?type=${monthType}`, config)
+//                     dispatch({
+//                         type: DONOR_SEARCH_SUCCESS,
+//                         payload: res.data
+//                     });
+//                 } catch (err) {
+//                     dispatch({
+//                         type: DONOR_SEARCH_FAIL
+//                     });
+//                     dispatch(getDonors());
+//                 }
+//             } else {
+//                 try {
+//                     const config ={
+//                         headers: {
+//                             'Content-Type': 'application/json',
+//                             'Authorization': `Token ${localStorage.getItem('token')}`,
+//                             'Accept': 'application/json'
+//                         }
+//                     };
+                    
+//                     const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?search=${monthType}&fullname=${searchInput}`, config)
+//                     dispatch({
+//                         type: DONOR_SEARCH_SUCCESS,
+//                         payload: res.data
+//                     });
+//                 } catch (err) {
+//                     dispatch({
+//                         type: DONOR_SEARCH_FAIL
+//                     });
+//                     dispatch(getDonors());
+//                 }
+//             }
+//         }
+//     } else {
+//         dispatch({
+//             type: DONOR_SEARCH_FAIL
+//         });
+//     }
+// };
 
 // ADD DONOR
 

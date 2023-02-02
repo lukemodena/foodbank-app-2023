@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Button, Table, Dropdown, Row} from 'react-bootstrap';
+import {Pagination, Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BsPlusLg, BsXCircle, BsEnvelope } from "react-icons/bs";
 import useWindowSize from '../common/useWindow';
@@ -43,6 +43,7 @@ const DonorPage = ({
     const [monthValue, setMonthValue] = useState("");
     const [searchValue, setSearchValue] = useState("");
     const [isChecked, setIsChecked] = useState([]);
+    const [page, setPage] = useState(1)
 
     // Handle Data Request (Initial + Refresh)
 
