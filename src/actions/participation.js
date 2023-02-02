@@ -179,25 +179,25 @@ export const updateDonor = (donorId) => async dispatch => {
             }
         };
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?donid=${donorId}`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?page=1&donid=${donorId}`, config)
             dispatch({
                 type: DONOR_ID_SEARCH_SUCCESS
             });
 
-            let involveNo = parseInt(res.data[0].InvolveNo)+1
+            let involveNo = parseInt(res.data.data[0].InvolveNo)+1
             
             const body = {
-                "DonorID": `${res.data[0].DonorID}`,
-                "FullName": `${res.data[0].FullName}`,
-                "FirstName": `${res.data[0].FirstName}`,
-                "LastName": `${res.data[0].LastName}`,
-                "Email": `${res.data[0].Email}`,
-                "Address1": `${res.data[0].Address1}`,
-                "Address2": `${res.data[0].Address2}`,
-                "PostCode": `${res.data[0].PostCode}`,
-                "DonorType": `${res.data[0].DonorType}`,
-                "Notes": `${res.data[0].Notes}`,
-                "Phone": `${res.data[0].Phone}`,
+                "DonorID": `${res.data.data[0].DonorID}`,
+                "FullName": `${res.data.data[0].FullName}`,
+                "FirstName": `${res.data.data[0].FirstName}`,
+                "LastName": `${res.data.data[0].LastName}`,
+                "Email": `${res.data.data[0].Email}`,
+                "Address1": `${res.data.data[0].Address1}`,
+                "Address2": `${res.data.data[0].Address2}`,
+                "PostCode": `${res.data.data[0].PostCode}`,
+                "DonorType": `${res.data.data[0].DonorType}`,
+                "Notes": `${res.data.data[0].Notes}`,
+                "Phone": `${res.data.data[0].Phone}`,
                 "InvolveNo": `${involveNo}`
             };
     
@@ -343,7 +343,7 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, notes, donId, co
 
 // EDIT PARTICIPANTS
 
-export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID) => async dispatch => {
+export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, type, searchInput) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -374,6 +374,8 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
                 type: EDIT_PARTICIPATION_SUCCESS,
                 payload: res.data
             });
+
+            dispatch(getParticipantList(CollectionID, searchInput, type))
 
             if (donChange !== 0) {
                 dispatch(updateWholesale(CollectionID, WholesaleID, donChange));
@@ -498,7 +500,7 @@ export const updateWholesaleDelete = (wholesaleID, collectionID, DonationVal) =>
 
 // DELETE PARTICIPANTS
 
-export const deleteParticipant = (participantID, DonationVal, collectionID, wholesaleID) => async dispatch => {
+export const deleteParticipant = (participantID, DonationVal, collectionID, wholesaleID, searchInput, type) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config = {
             headers: {
@@ -515,6 +517,7 @@ export const deleteParticipant = (participantID, DonationVal, collectionID, whol
             });
 
             dispatch(updateWholesaleDelete(wholesaleID, collectionID, DonationVal));
+            dispatch(getParticipantList(collectionID, searchInput, type));
         } catch (err) {
             dispatch({
                 type: DELETE_PARTICIPATION_FAIL

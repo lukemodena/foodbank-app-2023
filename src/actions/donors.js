@@ -18,7 +18,7 @@ import {
 
 // PULL DONORS
 
-export const getDonors = () => async dispatch => {
+export const getDonors = (page) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -30,7 +30,7 @@ export const getDonors = () => async dispatch => {
         };
     
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API}searchdonors`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?page=${page}`, config)
             dispatch({
                 type: DONORS_SUCCESS,
                 payload: res.data
@@ -50,7 +50,7 @@ export const getDonors = () => async dispatch => {
 };
 
 // SEARCH
-export const searchDonors = (monthType, searchInput) => async dispatch => {
+export const searchDonors = (page, monthType, searchInput) => async dispatch => {
     if (localStorage.getItem('token')) {
 
         //} else { 
@@ -64,7 +64,7 @@ export const searchDonors = (monthType, searchInput) => async dispatch => {
                         }
                     };
 
-                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?type=${monthType}`, config)
+                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?page=${page}&type=${monthType}`, config)
                     dispatch({
                         type: DONOR_SEARCH_SUCCESS,
                         payload: res.data
@@ -85,7 +85,7 @@ export const searchDonors = (monthType, searchInput) => async dispatch => {
                         }
                     };
                     
-                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?type=${monthType}&fullname=${searchInput}`, config)
+                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?page=${page}&type=${monthType}&fullname=${searchInput}`, config)
                     dispatch({
                         type: DONOR_SEARCH_SUCCESS,
                         payload: res.data

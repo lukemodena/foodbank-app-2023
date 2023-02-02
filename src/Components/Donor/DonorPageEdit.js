@@ -32,23 +32,28 @@ const DonorPage = ({
     editDonor,
     getActiveCollection,
     getCurrentParticipants,
-    deleteDonorsMulti
+    deleteDonorsMulti,
+    currentPage,
+    has_next,
+    has_previous,
+    total_number
 }) => {
 
     // Set Default States
     const size = useWindowSize(); 
-    const [refresh, setRefresh] = useState(null);
+    const [refresh, setRefresh] = useState("NO");
     
     const [monthFilter, setMonthFilter] = useState("All Contacts");
     const [monthValue, setMonthValue] = useState("");
     const [searchValue, setSearchValue] = useState("");
     const [isChecked, setIsChecked] = useState([]);
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState("1")
 
     // Handle Data Request (Initial + Refresh)
 
     useEffect(() => {
-        getDonors();
+        let newpage = page
+        getDonors(newpage);
         getActiveCollection();
         setRefresh("NO");
       }, []);
@@ -56,7 +61,8 @@ const DonorPage = ({
 
     useEffect(() => {
         if (refresh === "YES"){
-            getDonors();
+            let newpage = page
+            getDonors(newpage);
             getActiveCollection();
             setRefresh("NO");
             setMonthValue("");
@@ -64,7 +70,8 @@ const DonorPage = ({
             setSearchValue("")
             setRefresh("NO");
         } else if (refresh === null) {
-            getDonors();
+            let newpage = page
+            getDonors(newpage);
             getActiveCollection();
             setRefresh("NO");
             setMonthValue("");
@@ -138,7 +145,10 @@ const DonorPage = ({
     const handleFilter = (value, filter) => {
         let monthType = value;
         let searchInput = searchValue;
-        searchDonors(monthType, searchInput);
+        let newpage = "1";
+        
+        searchDonors(newpage, monthType, searchInput);
+        setPage(newpage);
         setMonthValue(monthType);
         setMonthFilter(filter);
     };
@@ -148,10 +158,52 @@ const DonorPage = ({
     const handleSearch = (value) => {
         let monthType = monthValue;
         let searchInput = value;
+        let newpage = "1";
 
         setSearchValue(searchInput);
-        searchDonors(monthType, searchInput);
+        setPage(newpage);
+        searchDonors(newpage, monthType, searchInput);
     };
+
+    // Handle Page
+
+    const handlePage = (inputVal) => {
+       // e.preventDefault();
+
+        let monthType = monthValue;
+        let searchInput = searchValue;
+        let prevPage = currentPage;
+        let newpage = `${parseInt(prevPage)+parseInt(inputVal)}`;
+        //console.log(newpage, prevPage, inputVal)
+        setPage(newpage)
+        searchDonors(newpage, monthType, searchInput);
+    }
+
+    // Handle Last Page
+
+    const handleLastPage = (inputValue) => {
+       // e.preventDefault();
+
+        let monthType = monthValue;
+        let searchInput = searchValue;
+        let newpage = inputValue;
+
+        setPage(newpage)
+        searchDonors(newpage, monthType, searchInput);
+    }
+
+    // Handle First Page
+
+    const handleFirstPage = (inputValue) => {
+        // e.preventDefault();
+    
+            let monthType = monthValue;
+            let searchInput = searchValue;
+            let newpage = inputValue;
+    
+            setPage(newpage)
+            searchDonors(newpage, monthType, searchInput);
+        }
 
     // Donor Delete
 
@@ -314,7 +366,6 @@ const DonorPage = ({
                             {(size.width > 760) &&<th>Address 3</th>}
                             {(size.width > 760) &&<th>Postcode</th>}
                             {(size.width > 760) &&<th>Type</th>}
-                            {(size.width > 760) &&<th>Notes</th>}
                             <th>Phone</th>
                         </tr>
                     </thead>
@@ -482,11 +533,19 @@ const DonorPage = ({
                                 {(size.width > 760) &&<td>{don.Address3}</td>}
                                 {(size.width > 760) &&<td>{don.PostCode}</td>}
                                 {(size.width > 760) &&<td>{handleDonorType(don.DonorType)}</td>}
-                                {(size.width > 760) &&<td>{don.Notes}</td>}
                                 <td>{don.Phone}</td>
                             </tr>)}
                     </tbody>
                 </Table>
+                <Pagination style={{justifyContent:"center"}}>
+                    {(page != "1") &&<Pagination.First onClick={e => handleFirstPage("1")}/>}
+                    {(has_previous) &&<Pagination.Prev onClick={e => handlePage("-1")}/>}
+                    <Pagination.Item active>
+                        {page}
+                    </Pagination.Item>
+                    {(has_next) &&<Pagination.Next onClick={e => handlePage("1")}/>}
+                    {(page != total_number) &&<Pagination.Last onClick={e => handleLastPage(total_number)}/>}
+                </Pagination>
             </div>
         </div>
     )
@@ -499,7 +558,11 @@ const mapStateToProps = (state) => ({
     emails: state.donors.emails,
     partresult: state.participants.partresult,
     statusCol: state.collections.statusCol,
-    whol: state.wholesale.whol
+    whol: state.wholesale.whol,
+    currentPage: state.donors.currentPage,
+    has_next: state.donors.has_next,
+    has_previous: state.donors.has_previous,
+    total_number: state.donors.total_number
 });
 
 export default connect(mapStateToProps, { getDonors, searchDonors, deleteDonor, editDonor, getActiveCollection, getCurrentParticipants, deleteDonorsMulti })(DonorPage)

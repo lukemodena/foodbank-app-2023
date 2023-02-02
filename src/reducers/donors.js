@@ -20,7 +20,11 @@ const initialState = {
     dons: [],
     result: '',
     isAuthenticated: null,
-    emails: ""
+    emails: "",
+    currentPage: null,
+    has_next: false,
+    has_previous: false,
+    total_number: null
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
@@ -42,8 +46,12 @@ export default function(state = initialState, action) {
         case DONORS_SUCCESS:
             return {
                 ...state,
-                dons: payload,
-                emails: payload.map((don)=> `${don.Email}`)
+                dons: payload.data,
+                emails: payload.data.map((don)=> `${don.Email}`),
+                currentPage: payload.page.current,
+                has_next: payload.page.has_next,
+                has_previous: payload.page.has_previous,
+                total_number: payload.page.total_number
                 //emails: JSON.stringify(payload.map((don)=> `${don.Email};`)).replace('["', "").replace('"]', "").replaceAll('","', "")
             }
 
@@ -56,8 +64,12 @@ export default function(state = initialState, action) {
         case DONOR_SEARCH_SUCCESS:
             return{
                 ...state,
-                dons: payload,
-                emails: payload.map((don)=> `${don.Email}`)
+                dons: payload.data,
+                emails: payload.data.map((don)=> `${don.Email}`),
+                currentPage: payload.page.current,
+                has_next: payload.page.has_next,
+                has_previous: payload.page.has_previous,
+                total_number: payload.page.total_number
                 //emails: JSON.stringify(payload.map((don)=> `${don.Email}; `)).replace('["', "").replace('"]', "").replaceAll('","', "")
             }
             
