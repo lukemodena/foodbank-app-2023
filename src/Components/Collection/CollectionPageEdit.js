@@ -17,7 +17,7 @@ import { monthOptions } from '../common/miscObjects';
 
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
-import { searchDonors } from "../../actions/donors";
+import { searchDonorsEmails } from "../../actions/donors";
 import { addParticipant, getCurrentParticipants } from "../../actions/participation";
 import { sendEmail } from '../../actions/email';
 
@@ -31,7 +31,7 @@ const Collection = ({
     deleteCollectionsMulti, 
     getWholesale, 
     editWholesale, 
-    searchDonors,
+    searchDonorsEmails,
     getCurrentParticipants,
     sendEmail,
     colls,
@@ -303,8 +303,9 @@ const Collection = ({
     const handleGetWholesale = (collid, donorType) => {
         let collId = collid
         let donSearch = ""
+        let searchType = "all"
         getWholesale(collId);
-        searchDonors(donorType, donSearch);
+        searchDonorsEmails(searchType, donorType, donSearch);
     };
 
     // Edit Wholesale
@@ -604,4 +605,4 @@ const mapStateToProps = (state) => ({
     total: state.collections.total
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonors, addParticipant, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti, sendEmail})(Collection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonorsEmails, addParticipant, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti, sendEmail})(Collection)

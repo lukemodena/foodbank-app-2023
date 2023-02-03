@@ -7,16 +7,18 @@ import useWindowSize from '../common/useWindow';
 import { InfoDonorModal } from './MoreInfoModal';
 import { AddDonorModal } from "./AddDonModal";
 import { EditDonorModal } from './EditDonModal';
+import { WriteBasicEmail } from '../Email/EmailModal';
 import SearchBar from "./SearchBar";
 import { SuccessModal } from '../common/SuccessModal';
 import { AddParticipationModal } from './AddParticipatingDonorModal';
 import { handleCollectionDate } from '../common/dateFuncs';
 import { handleDonorType } from '../common/typeFuncs';
-import { typeOptions } from '../common/miscObjects';
+import { typeOptions, addressHandler, fullAddressHandler } from '../common/miscObjects';
 
-import { getDonors, searchDonors, deleteDonor, editDonor, deleteDonorsMulti } from '../../actions/donors';
+import { getDonors, searchDonors, searchDonorsEmails, deleteDonor, editDonor, deleteDonorsMulti } from '../../actions/donors';
 import { getActiveCollection } from '../../actions/collections';
 import { getCurrentParticipants } from '../../actions/participation';
+import { sendEmail } from '../../actions/email';
 
 // MAIN DONORS PAGE //
 
@@ -27,12 +29,14 @@ const DonorPage = ({
     statusCol, 
     whol, 
     getDonors, 
-    searchDonors, 
+    searchDonors,
+    searchDonorsEmails,
     deleteDonor,
     editDonor,
     getActiveCollection,
     getCurrentParticipants,
     deleteDonorsMulti,
+    sendEmail,
     currentPage,
     has_next,
     has_previous,
@@ -86,6 +90,7 @@ const DonorPage = ({
     const [editModalShow, setEditModalShow] = useState(false);
     const [infoModalShow, setInfoModalShow] = useState(false);
     const [addParticipationShow, setAddParticipationShow] = useState(false);
+    const [emailModalShow, setEmailModalShow] = useState(false);
     const [successModalShow, setSuccessModalShow] = useState(false);
     const [successDeleteModalShow, setSuccessDeleteModalShow] = useState(false);
 
@@ -109,6 +114,11 @@ const DonorPage = ({
         setRefresh("YES");
     };
 
+    const emailModalClose = () => {
+        setEmailModalShow(false);
+        setRefresh("YES");
+    };
+
     const successModalClose = () => {
         setSuccessModalShow(false);
     };
@@ -119,6 +129,7 @@ const DonorPage = ({
 
     // Page Props
 
+    const emailPage = "all";
     const [donid, setDonid] = useState(null);
     const [donfullname, setDonfullname] = useState(null); 
     const [donfirstname, setDonfirstname] = useState(null); 
@@ -136,6 +147,9 @@ const DonorPage = ({
     const [colldate, setColldate] = useState(null);
     const [colldateread, setColldateread] = useState(null);
     const [whoid, setWhoid] = useState(null);
+    const [emaillist, setEmailList] = useState([]);
+    const [emaillength, setEmailLength] = useState(null);
+    const [emailfullname, setEmailFullName] = useState("");
     const [type, setType] = useState(null);
     const [isAdd, setIsAdd] = useState(null);
     const [reqStatus, setReqStatus] = useState(null);
@@ -163,6 +177,8 @@ const DonorPage = ({
         setSearchValue(searchInput);
         setPage(newpage);
         searchDonors(newpage, monthType, searchInput);
+        searchDonorsEmails(emailPage, monthType, searchInput);
+        console.log(emails.length)
     };
 
     // Handle Page
@@ -320,13 +336,38 @@ const DonorPage = ({
                         <BsPlusLg className="addButton-Icon"/>
                     </Button>
                     
+                    <AddDonorModal show={addModalShow}
+                    onHide={addModalClose}/>
+
+                    {/* Send Email Modal */}
+
                     <Button variant="secondary" className="emailButton"
-                    href={`mailto:${emails}?subject=${encodeURIComponent("test subject") || ''}&body=${encodeURIComponent("test body") || ''}`}>
+                    onClick={() => {
+                        searchDonorsEmails(emailPage, monthValue, searchValue);
+                        setEmailModalShow(true);
+                        setEmailList(emails);
+                        setEmailLength(emails.length)
+                        setEmailFullName(dons[0].FullName)
+                        setSuccessModalShow(false);
+                        setReqStatus(`Email Sent`);
+                        setType("email");
+                        setIsAdd(false)
+                    }}>
                         <BsEnvelope className="emailButton-Icon"/>
                     </Button>
 
-                    <AddDonorModal show={addModalShow}
-                    onHide={addModalClose}/>
+                    <WriteBasicEmail show={emailModalShow}
+                    onHide={emailModalClose}
+                    send={sendEmail}
+                    emaillist={emails}
+                    length={emails.length}
+                    fullname = {emailfullname}
+                    successModalShow={successModalShow}
+                    successModalClose={successModalClose}
+                    reqStatus={reqStatus}
+                    type={type}
+                    isAdd={isAdd}
+                    />
 
                 </Row>
 
@@ -356,24 +397,22 @@ const DonorPage = ({
                                     <BsXCircle className='deleteIcon'/>
                                 </Button>
                             </th>}
-                            {(size.width > 760) &&<th>ID</th>}
                             <th>Options</th>
                             <th>Name</th>
                             {(size.width > 760) &&<th>Email</th>}
                             {(size.width <= 760) &&<th>Address</th>}
-                            {(size.width > 760) &&<th>Address 1</th>}
-                            {(size.width > 760) &&<th>Address 2</th>}
-                            {(size.width > 760) &&<th>Address 3</th>}
+                            {(size.width > 760) &&<th style={{width: "15%"}}>Address 1</th>}
+                            {(size.width > 760) &&<th>Address 2 & 3</th>}
+                            {/* {(size.width > 760) &&<th>Address 3</th>} */}
                             {(size.width > 760) &&<th>Postcode</th>}
-                            {(size.width > 760) &&<th>Type</th>}
+                            {(size.width > 760) &&<th style={{width: "5%"}}>Type</th>}
                             <th>Phone</th>
                         </tr>
                     </thead>
                     <tbody>
                         {dons.map((don)=>
-                            <tr key={don.DonorID}>
+                            <tr key={don.DonorID} style={{height:"50%"}}>
                                 {(size.width > 760) &&<td><input type="checkbox" value={don.DonorID} checked={don.isChecked} onChange={(e) => handleChecked(e)}/></td>}
-                                {(size.width > 760) &&<td>{don.DonorID}</td>}
                                 <td>
                                 <Dropdown>
                                     <Dropdown.Toggle variant="secondary" id="dropdown-basic">
@@ -522,15 +561,10 @@ const DonorPage = ({
                                 </td>
                                 <td>{don.FullName}</td>
                                 {(size.width > 760) &&<td>{don.Email}</td>}
-                                {(size.width <= 760) &&<td>
-                                        {don.Address1} <br />
-                                        {don.Address2} <br />
-                                        {don.Address3}
-                                        {don.PostCode}
-                                </td>}
+                                {(size.width <= 760) &&<td>{fullAddressHandler(don.Address1, don.Address2, don.Address3, don.PostCode)}</td>}
                                 {(size.width > 760) &&<td>{don.Address1}</td>}
-                                {(size.width > 760) &&<td>{don.Address2}</td>}
-                                {(size.width > 760) &&<td>{don.Address3}</td>}
+                                {(size.width > 760) &&<td>{addressHandler(don.Address2, don.Address3)}</td>}
+                                {/* {(size.width > 760) &&<td>{don.Address3}</td>} */}
                                 {(size.width > 760) &&<td>{don.PostCode}</td>}
                                 {(size.width > 760) &&<td>{handleDonorType(don.DonorType)}</td>}
                                 <td>{don.Phone}</td>
@@ -565,4 +599,4 @@ const mapStateToProps = (state) => ({
     total_number: state.donors.total_number
 });
 
-export default connect(mapStateToProps, { getDonors, searchDonors, deleteDonor, editDonor, getActiveCollection, getCurrentParticipants, deleteDonorsMulti })(DonorPage)
+export default connect(mapStateToProps, { getDonors, searchDonors, searchDonorsEmails, deleteDonor, editDonor, getActiveCollection, getCurrentParticipants, deleteDonorsMulti, sendEmail })(DonorPage)

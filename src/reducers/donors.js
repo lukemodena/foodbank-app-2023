@@ -3,6 +3,8 @@ import {
     DONORS_FAIL,
     DONOR_SEARCH_SUCCESS,
     DONOR_SEARCH_FAIL,
+    DONOR_EMAIL_SEARCH_SUCCESS,
+    DONOR_EMAIL_SEARCH_FAIL,
     ADD_DONOR_SUCCESS,
     ADD_DONOR_FAIL,
     EDIT_DONOR_SUCCESS,
@@ -47,7 +49,6 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 dons: payload.data,
-                emails: payload.data.map((don)=> `${don.Email}`),
                 currentPage: payload.page.current,
                 has_next: payload.page.has_next,
                 has_previous: payload.page.has_previous,
@@ -62,15 +63,20 @@ export default function(state = initialState, action) {
             }
 
         case DONOR_SEARCH_SUCCESS:
-            return{
+            return {
                 ...state,
                 dons: payload.data,
-                emails: payload.data.map((don)=> `${don.Email}`),
                 currentPage: payload.page.current,
                 has_next: payload.page.has_next,
                 has_previous: payload.page.has_previous,
                 total_number: payload.page.total_number
                 //emails: JSON.stringify(payload.map((don)=> `${don.Email}; `)).replace('["', "").replace('"]', "").replaceAll('","', "")
+            }
+
+        case DONOR_EMAIL_SEARCH_SUCCESS:
+            return {
+                ...state,
+                emails: payload.map((don)=> `${don.Email}`),
             }
             
         case DONOR_SEARCH_FAIL:

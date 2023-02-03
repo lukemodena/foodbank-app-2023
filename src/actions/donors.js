@@ -6,6 +6,8 @@ import {
     DONORS_FAIL,
     DONOR_SEARCH_SUCCESS,
     DONOR_SEARCH_FAIL,
+    DONOR_EMAIL_SEARCH_SUCCESS,
+    DONOR_EMAIL_SEARCH_FAIL,
     ADD_DONOR_SUCCESS,
     ADD_DONOR_FAIL,
     EDIT_DONOR_SUCCESS,
@@ -95,6 +97,63 @@ export const searchDonors = (page, monthType, searchInput) => async dispatch => 
                         type: DONOR_SEARCH_FAIL
                     });
                     dispatch(getDonors());
+                }
+            }
+        //}
+    } else {
+        dispatch({
+            type: DONOR_SEARCH_FAIL
+        });
+    }
+};
+
+// SEARCH (FOR EMAILS)
+
+export const searchDonorsEmails = (page, monthType, searchInput) => async dispatch => {
+    if (localStorage.getItem('token')) {
+
+        //} else { 
+            if (searchInput == null || searchInput === ""){
+                try {
+                    const config ={
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Token ${localStorage.getItem('token')}`,
+                            'Accept': 'application/json',
+                        }
+                    };
+
+                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?page=${page}&type=${monthType}`, config)
+                    dispatch({
+                        type: DONOR_EMAIL_SEARCH_SUCCESS,
+                        payload: res.data
+                    });
+                } catch (err) {
+                    dispatch({
+                        type: DONOR_EMAIL_SEARCH_FAIL,
+                        payload: err
+                    });
+                }
+            } else {
+                try {
+                    const config ={
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Token ${localStorage.getItem('token')}`,
+                            'Accept': 'application/json'
+                        }
+                    };
+                    
+                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?page=${page}&type=${monthType}&fullname=${searchInput}`, config)
+                    dispatch({
+                        type: DONOR_EMAIL_SEARCH_SUCCESS,
+                        payload: res.data
+                    });
+                } catch (err) {
+                    dispatch({
+                        type: DONOR_EMAIL_SEARCH_FAIL,
+                        payload: err
+                    });
                 }
             }
         //}

@@ -182,3 +182,89 @@ export function WriteEmail(props) {
         </div>
     )
 }
+
+export function WriteBasicEmail(props) {
+    const {
+        show,
+        onHide,
+        send,
+        emaillist,
+        length,
+        fullname,
+        successModalShow,
+        successModalClose,
+        reqStatus,
+        type,
+        isAdd
+    } = props
+
+    const getBody = (length, fullname) => {
+        if (length === 1) {
+            let name = fullname;
+            return name
+        } else {
+            let name = "Neighbours";
+            return name
+        }
+    };
+
+    const [subject, setSubject] = useState('');
+    const body = `Dear ${getBody(length, fullname)},\n\nYour support is very much appreciated.\n \nKindest wishes\nJackie\njsp.foodcollection@gmail.com\n07764 614151`;
+
+    const sendEmail = (e) => {
+        e.preventDefault();
+
+        let subjectSend = e.target.Subject.value;
+        let bodySend = e.target.Body.value;
+        //let emailList = emaillist;
+        let emailList = ['lukefrankel@hotmail.co.uk', 'luke@modena-consulting.co.uk', 'jsp.foodcollection@gmail.com', 'nickcook00@gmail.com'];
+
+        console.log(subjectSend, bodySend, emailList);
+        send(subjectSend, bodySend, emailList);
+    };
+
+    return (
+        <div className='container'>
+            <Modal
+            show={show}
+            size='lg'
+            aria-labelledby='contained-modal-title-vcenter'
+            centered>
+                <Modal.Header closeButton onClick={onHide}>
+                    <Modal.Title id='contained-modal-title-vcenter'>
+                        Prepare Email:
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Row>
+                            <SuccessModal show={successModalShow}
+                                onHide={successModalClose}
+                                reqStatus={reqStatus}
+                                type={type}
+                                isAdd={isAdd}
+                            />
+                            <Form onSubmit={sendEmail}>
+                                <Form.Group controlId='Subject'>
+                                    <Form.Label>Subject</Form.Label>
+                                    <Form.Control as='textarea' name='Subject' required placeholder='Email subject...' defaultValue={subject}/>
+                                </Form.Group>
+                                <Form.Group controlId='Body'>
+                                    <Form.Label>Body</Form.Label>
+                                    <Form.Control as='textarea' name='Body' rows={10} required placeholder='Email body...' defaultValue={body}/>
+                                </Form.Group>
+                                <Form.Group style={{paddingTop: "25px"}}>
+                                    <Button variant='primary' type='submit'>
+                                        Send Email
+                                    </Button>
+                                </Form.Group> 
+                            </Form>
+                        
+                    </Row>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant='secondary' onClick={onHide}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        </div>
+    )
+}
