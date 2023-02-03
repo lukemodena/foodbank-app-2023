@@ -542,63 +542,17 @@
 
 @media (max-width: 415px) {
   .dropdownFilter {
-    width: 50%;
+    width: 110.7px;
   }
   .dropdownFilterButton {
-    width: 50%;
+    width: 110.7px;
   }
 
   .participation-dropdownFilter {
-    width: 140.7px;
+    width: 120.7px;
   }
   .participation-dropdownFilterButton {
-    width: 140.7px;
-  }
-  
-  .searchBarInput {
-    width: 118%;
-    transform: translate(-73.5px, 0px);
-  }
-
-  .searchBarSubmit {
-    transform: translate(110px, 0px);
-  }
-
-  .date-searchBarInput-start {
-    transform: translate(-73.5px, 0px);
-  }
-
-  .date-searchBarInput-end {
-    transform: translate(-23.75px, 0px);
-  }
-
-  .date-searchBarSubmit {
-    transform: translate(120.25px, 0px);
-  }
-
-  .addButton {
-    transform: translate(370.93px, 5px);
-  }
-
-  .date-addButton {
-    transform: translate(370.93px, 5px);
-  }
-}
-
-
-@media (max-width: 404px) {
-  .dropdownFilter {
-    width: 50%;
-  }
-  .dropdownFilterButton {
-    width: 50%;
-  }
-
-  .participation-dropdownFilter {
-    width: 140.7px;
-  }
-  .participation-dropdownFilterButton {
-    width: 140.7px;
+    width: 120.7px;
   }
 
   .participationType-dropdownFilterButton {
@@ -620,53 +574,6 @@
   }
   .participant-addButton {
     transform: translate(343px, 5px);
-  }
-
-  .searchBarInput {
-    width: 100%;
-    transform: translate(-80.5px, 0px);
-  }
-
-  .searchBarSubmit {
-    transform: translate(60.5px, 0px);
-  }
-
-  .date-searchBarInput-start {
-    width: 70.75px;
-    transform: translate(-80.5px, 0px);
-  }
-
-  .date-searchBarInput-end {
-    width: 70.75px;
-    transform: translate(-9.75px, 0px);
-  }
-
-  .date-searchBarSubmit {
-    transform: translate(60.5px, 0px);
-  }
-
-  .addButton {
-    transform: translate(319px, 5px);
-  }
-
-  .date-addButton {
-    transform: translate(319px, 5px);
-  }
-}
-
-@media (max-width: 391px) {
-  .dropdownFilter {
-    width: 110.7px;
-  }
-  .dropdownFilterButton {
-    width: 110.7px;
-  }
-
-  .participation-dropdownFilter {
-    width: 120.7px;
-  }
-  .participation-dropdownFilterButton {
-    width: 120.7px;
   }
 
   .searchBarInput {
@@ -698,6 +605,10 @@
 
   .date-searchButton-Icon {
     transform: translate(0.5px, -0.1px);
+  }
+
+  .emailButton {
+    transform: translate(334.07px, 5px);
   }
 
   .addButton {
