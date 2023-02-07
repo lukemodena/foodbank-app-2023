@@ -53,8 +53,8 @@ const DonorPage = ({
     const [monthValue, setMonthValue] = useState("");
     const [searchValue, setSearchValue] = useState("");
     const [isChecked, setIsChecked] = useState([]);
-    const [page, setPage] = useState("1")
-    const [loading, setLoading] = useState(true)
+    const [page, setPage] = useState("1");
+    const [loading, setLoading] = useState(true);
 
     // Handle Data Request (Initial + Refresh)
 
