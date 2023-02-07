@@ -33,6 +33,7 @@ const CollectionArchive = ({
     const size = useWindowSize(); 
     const [refresh, setRefresh] = useState(null);
     
+    const status = 'ARCHIVED';
     const [monthFilter, setMonthFilter] = useState("Select Collection");
     const [monthValue, setMonthValue] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -42,7 +43,6 @@ const CollectionArchive = ({
     // Handle Data Request (Initial + Refresh)
 
     useEffect(() => {
-        let status = 'ARCHIVED';
         getCollections(status);
         setRefresh("NO");
       }, []);
@@ -50,7 +50,6 @@ const CollectionArchive = ({
 
     useEffect(() => {
         if (refresh === "YES"){
-            let status = 'ARCHIVED';
             getCollections(status);
             setStartDate("");
             setEndDate("");
@@ -58,7 +57,6 @@ const CollectionArchive = ({
             setMonthFilter("All");
             setRefresh("NO");
         } else if (refresh === null) {
-            let status = 'ARCHIVED';
             getCollections(status);
             setStartDate("");
             setEndDate("");
@@ -70,16 +68,11 @@ const CollectionArchive = ({
 
     // Modal Handlers
     const [infoModalShow, setInfoModalShow] = useState(false);
-    const [successModalShow, setSuccessModalShow] = useState(false);
     const [successDeleteModalShow, setSuccessDeleteModalShow] = useState(false);
 
     const infoModalClose = () => {
         setInfoModalShow(false);
         setRefresh("YES");
-    };
-
-    const successModalClose = () => {
-        setSuccessModalShow(false);
     };
 
     const successDeleteModalClose = () => {
@@ -110,7 +103,6 @@ const CollectionArchive = ({
 
     const handleFilter = (value, filter) => {
         let monthType = value;
-        let status = 'ARCHIVED';
 
         if (monthType === "0") {
             getCollections(status);
@@ -128,8 +120,6 @@ const CollectionArchive = ({
     // Collection Search
 
     const handleSearch = (startDate, endDate) => {
-        let status = 'ARCHIVED';
-        let monthType = monthValue;
         let startYear = Intl.DateTimeFormat('en-GB', { year: "numeric" }).format(startDate);
         let startMonth = Intl.DateTimeFormat('en-GB', { month: "2-digit" }).format(startDate);
         let startDay = Intl.DateTimeFormat('en-GB', { day: "2-digit" }).format(startDate);
@@ -142,14 +132,15 @@ const CollectionArchive = ({
         setStartDate(searchInputStart);
         setEndDate(searchInputEnd);
 
-        searchCollections(monthType, searchInputStart, searchInputEnd, status);
+        searchCollections(monthValue, searchInputStart, searchInputEnd, status);
     };
 
     // Collection Delete
 
     const handleDelete = (collId) => {
         if(window.confirm('Are you sure?')){
-            deleteCollection(collId);
+            let single = false
+            deleteCollection(collId, single, monthValue, status);
             setSuccessDeleteModalShow(true);
         }
     };
@@ -174,7 +165,7 @@ const CollectionArchive = ({
         } else {
             let message = `Are you sure you want to delete ${length} record/s?`;
             if(window.confirm(message)){
-                deleteCollectionsMulti(toDelete);
+                deleteCollectionsMulti(toDelete, status);
 
                 setSuccessDeleteModalShow(true);
             }
@@ -282,10 +273,6 @@ const CollectionArchive = ({
                                                     setWhototalspent(whol[0].TotalSpent);
                                                     setWhoremainder(whol[0].Remainder);
                                                     setWhoreceipt(whol[0].WholesaleReceipt);
-                                                    setSuccessModalShow(false);
-                                                    setReqStatus(`Collection on ${coll.CollectionDate} saved`);
-                                                    setType("collection");
-                                                    setIsAdd(false)
                                                 }
                                             }
                                             >

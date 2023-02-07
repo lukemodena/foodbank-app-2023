@@ -20,9 +20,6 @@ export function SuccessModal(props) {
         // }
     }
 
-    const log = () => {
-        console.log(reqStatus)
-    }
     return (
         <div className='container'>
             <Modal

@@ -124,15 +124,16 @@ export const addressHandler = (add2, add3) => {
 
 export const fullAddressHandler = (add1, add2, add3, postcode) => {
     if (add1 === null | add1 === "") {
-        let address = addressHandler(add2, add3);
+        let address1 = addressHandler(add2, add3);
         if (postcode === null | postcode === "") {
-            return address
+            return address1
         } else {
-            if (address === null | address === "") {
+            if (address1 === null | address1 === "") {
                 let address = postcode;
                 return address
             } else {
-                let address = `${address},\n${postcode}`;
+                let fulladdress = `${address1},\n${postcode}`;
+                return fulladdress
             }
         }
     } else {

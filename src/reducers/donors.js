@@ -78,11 +78,17 @@ export default function(state = initialState, action) {
                 ...state,
                 emails: payload.map((don)=> `${don.Email}`),
             }
+
+            case DONOR_EMAIL_SEARCH_FAIL:
+                return {
+                    ...state,
+                    result: payload
+                }    
             
         case DONOR_SEARCH_FAIL:
             return {
                 ...state,
-                dons: payload
+                result: payload
             }
 
         case ADD_DONOR_SUCCESS:

@@ -7,7 +7,6 @@ import useWindowSize from '../common/useWindow';
 
 import { AddCollectionModal } from "./AddCollModal";
 import { EditCollectionModal } from "./EditCollModal";
-import { AddParticipationModal } from "../Participation/AddParticipationModal";
 import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 import { SuccessModal } from "../common/SuccessModal";
 import { WriteEmail } from '../Email/EmailModal';
@@ -18,7 +17,6 @@ import { monthOptions } from '../common/miscObjects';
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
 import { searchDonorsEmails } from "../../actions/donors";
-import { addParticipant, getCurrentParticipants } from "../../actions/participation";
 import { sendEmail } from '../../actions/email';
 
 const Collection = ({ 
@@ -32,10 +30,8 @@ const Collection = ({
     getWholesale, 
     editWholesale, 
     searchDonorsEmails,
-    getCurrentParticipants,
     sendEmail,
     colls,
-    dons,
     emails,
     whol
 }) => {
@@ -50,6 +46,7 @@ const Collection = ({
         photofile: []
     })
     
+    const pageStatus = 'PLANNED,ACTIVE'
     const [monthFilter, setMonthFilter] = useState("Select Collection");
     const [monthValue, setMonthValue] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -59,24 +56,21 @@ const Collection = ({
     // Handle Data Request (Initial + Refresh)
 
     useEffect(() => {
-        let status = 'PLANNED,ACTIVE';
-        getCollections(status);
+        getCollections(pageStatus);
         setRefresh("NO");
       }, []);
 
 
     useEffect(() => {
         if (refresh === "YES"){
-            let status = 'PLANNED,ACTIVE';
-            getCollections(status);
+            getCollections(pageStatus);
             setStartDate("");
             setEndDate("");
             setMonthValue("");
             setMonthFilter("All");
             setRefresh("NO");
         } else if (refresh === null) {
-            let status = 'PLANNED,ACTIVE';
-            getCollections(status);
+            getCollections(pageStatus);
             setStartDate("");
             setEndDate("");
             setMonthValue("");
@@ -88,7 +82,6 @@ const Collection = ({
     // Modal Handlers
     const [addModalShow, setAddModalShow] = useState(false);
     const [editModalShow, setEditModalShow] = useState(false);
-    const [addParticipationShow, setAddParticipationShow] = useState(false);
     const [editWholesaleShow, setEditWholesaleShow] = useState(false);
     const [emailModalShow, setEmailModalShow] = useState(false);
     const [successModalShow, setSuccessModalShow] = useState(false);
@@ -96,27 +89,18 @@ const Collection = ({
 
     const addModalClose = () => {
         setAddModalShow(false);
-        setRefresh("YES");
     };
 
     const editModalClose = () => {
         setEditModalShow(false);
-        setRefresh("YES");
-    };
- 
-    const addParticipationClose = () => {
-        setAddParticipationShow(false);
-        setRefresh("YES");
     };
 
     const editWholesaleClose = () => {
         setEditWholesaleShow(false);
-        setRefresh("YES");
     };
 
     const emailModalClose = () => {
         setEmailModalShow(false);
-        setRefresh("YES");
     };
 
     const successModalClose = () => {
@@ -143,7 +127,6 @@ const Collection = ({
     const [whoremainder, setWhoremainder] = useState(null);
     const [whoreceipt, setWhoreceipt] = useState(null);
     const [whonotes, setWhonotes] = useState("");
-    const [donors, setDons] = useState([]);
     const [emaillist, setEmailList] = useState([]);
     const [foodlist, setFoodList] = useState("");
     const [type, setType] = useState(null);
@@ -156,16 +139,14 @@ const Collection = ({
         let monthType = value;
 
         if (monthType === "0") {
-            let status = 'PLANNED,ACTIVE';
-            getCollections(status);
+            getCollections(pageStatus);
 
             setMonthValue(monthType);
             setMonthFilter(filter);
         } else {
-            let status = 'PLANNED,ACTIVE';
             let searchInputStart = startDate;
             let searchInputEnd = endDate;
-            searchCollections(monthType, searchInputStart, searchInputEnd, status);
+            searchCollections(monthType, searchInputStart, searchInputEnd, pageStatus);
 
             setMonthValue(monthType);
             setMonthFilter(filter);
@@ -175,8 +156,6 @@ const Collection = ({
     // Collection Search
 
     const handleSearch = (startDate, endDate) => {
-        let status = 'PLANNED,ACTIVE';
-        let monthType = monthValue;
         let startYear = Intl.DateTimeFormat('en-GB', { year: "numeric" }).format(startDate);
         let startMonth = Intl.DateTimeFormat('en-GB', { month: "2-digit" }).format(startDate);
         let startDay = Intl.DateTimeFormat('en-GB', { day: "2-digit" }).format(startDate);
@@ -189,14 +168,15 @@ const Collection = ({
         setStartDate(searchInputStart);
         setEndDate(searchInputEnd);
 
-        searchCollections(monthType, searchInputStart, searchInputEnd, status);
+        searchCollections(monthValue, searchInputStart, searchInputEnd, pageStatus);
     };
 
     // Collection Delete
 
     const handleDelete = (collId) => {
         if(window.confirm('Are you sure?')){
-            deleteCollection(collId);
+            let single = true
+            deleteCollection(collId, single, pageStatus);
             setSuccessDeleteModalShow(true);
         }
     };
@@ -221,7 +201,7 @@ const Collection = ({
         } else {
             let message = `Are you sure you want to delete ${length} record/s?`;
             if(window.confirm(message)){
-                deleteCollectionsMulti(toDelete);
+                deleteCollectionsMulti(toDelete, pageStatus);
 
                 setSuccessDeleteModalShow(true);
             }
@@ -259,12 +239,12 @@ const Collection = ({
             let status = e.target.CollectionStatus.value;
 
             if (status === "ACTIVE"){
-                checkStatusEdit(status, collectionId)
+                checkStatusEdit(status, collectionId, pageStatus)
 
-                editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status);
+                editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus);
                 setSuccessModalShow(true);
             } else {
-                editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status);
+                editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus);
                 setSuccessModalShow(true);
             }
 
@@ -289,10 +269,10 @@ const Collection = ({
             if (status === "ACTIVE"){
                 checkStatusEdit(status, collectionId);
 
-                addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status);
+                addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, pageStatus);
                 setSuccessModalShow(true);
             } else {
-                addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status);
+                addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, pageStatus);
                 setSuccessModalShow(true);
             }
         }
@@ -322,30 +302,6 @@ const Collection = ({
         let notes = e.target.Notes.value;
 
         editWholesale(wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt, notes);
-        setSuccessModalShow(true);
-    };
-
-    // Add Participant
-
-    const handleAddParticipant = (CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, WholesaleID) => {
-    
-        let colId = CollectionID;
-        let donId = DonorID;
-        let payRec = PaymentRecieved;
-        let donTyp = DonationType;
-        let totDon = TotalDonated;
-        let time = DropOffTime;
-        let whoId = WholesaleID;
-
-        let droTim = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(time);
-        let CollID = colId;
-        let DonID = donId;
-
-        // Checks if Donor already Participant in collection, 
-        // - If yes, new participant is not added 
-        // - if no, new participant is added + if cash donation wholesale is updated
-        
-        getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId);
         setSuccessModalShow(true);
     };
 
@@ -548,35 +504,6 @@ const Collection = ({
                                             type={type}
                                             isAdd={isAdd}
                                             />
-
-                                            {/* Manage Collection Participants  */}
-
-                                            <Dropdown.Item onClick={() =>{ 
-                                                setAddParticipationShow(true);
-                                                setCollid(coll.CollectionID);
-                                                setWhoid(whol[0].WholesaleID);
-                                                setDons(dons);
-                                                setColldate(coll.CollectionDate);
-                                                setReqStatus(`Participant for collection on ${coll.CollectionDate} saved`);
-                                                setType("participant");
-                                                setIsAdd(true);
-                                            }}
-                                            >
-                                                Add Participant
-                                            </Dropdown.Item>
-                                            <AddParticipationModal show={addParticipationShow}
-                                            onHide={addParticipationClose}
-                                            addpart={handleAddParticipant}
-                                            collid={collid}
-                                            whoid={whoid}
-                                            dons={donors}
-                                            colldate={colldate}
-                                            successModalShow={successModalShow}
-                                            successModalClose={successModalClose}
-                                            reqStatus={reqStatus}
-                                            type={type}
-                                            isAdd={isAdd}
-                                            />
                                         </Dropdown.Menu>
                                     </Dropdown>
 
@@ -598,11 +525,9 @@ const Collection = ({
 const mapStateToProps = (state) => ({
     colls: state.collections.colls,
     whol: state.wholesale.whol,
-    dons: state.donors.dons,
     emails: state.donors.emails,
-    pars: state.participants.pars,
     result: state.collections.result,
     total: state.collections.total
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonorsEmails, addParticipant, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti, sendEmail})(Collection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonorsEmails, checkStatusEdit, deleteCollectionsMulti, sendEmail})(Collection)

@@ -99,8 +99,8 @@ export const editWholesale = (wholId, totalDonated, totalSpent, collId, newDonat
             }
         };
         
-        let currentTotal = parseFloat(totalDonated) + parseFloat(newDonationVal);
-        let remainder = currentTotal - parseFloat(totalSpent);
+        let currentTotal = (parseFloat(totalDonated) + parseFloat(newDonationVal)).toFixed(2);
+        let remainder = (currentTotal - parseFloat(totalSpent)).toFixed(2);
 
         const body = {
             "WholesaleID": `${wholId}`,

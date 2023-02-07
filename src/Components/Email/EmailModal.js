@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Dropdown, Button, Col, Form, Row, Modal, Image} from 'react-bootstrap';
+import {Dropdown, Button, Form, Row, Modal} from 'react-bootstrap';
 import { SuccessModal } from "../common/SuccessModal";
 
 import { handleCollectionDateEmail } from "../common/dateFuncs";
@@ -208,7 +208,7 @@ export function WriteBasicEmail(props) {
         }
     };
 
-    const [subject, setSubject] = useState('');
+    const subject = '';
     const body = `Dear ${getBody(length, fullname)},\n\nYour support is very much appreciated.\n \nKindest wishes\nJackie\njsp.foodcollection@gmail.com\n07764 614151`;
 
     const sendEmail = (e) => {

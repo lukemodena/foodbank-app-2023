@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Button, Table, Dropdown, Row, Form} from 'react-bootstrap';
+import {Table, Dropdown, Row, Form} from 'react-bootstrap';
 import { connect } from 'react-redux';
 //import { BsPlusLg } from "react-icons/bs";
 import useWindowSize from '../common/useWindow';
@@ -164,6 +164,8 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipan
         let type = value;
         let collection = collectionID;
         let searchInput = searchValue;
+
+        console.log(parsList.reduce((a,v) =>  a = a + parseFloat(v.TotalDonated) , 0 ))
         
         getParticipantList(collection, searchInput, type);
 
@@ -329,7 +331,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipan
                             <th>Name</th>
                             {(size.width > 760) &&<th>Address</th>}
                             {(typeValue === "") &&<th>Donation Type</th>}
-                            {(typeValue === "3") &&<th>Recieved</th>}
+                            {(typeValue === "3") &&<th>Received</th>}
                             {(size.width > 760) &&<th>Email</th>}
                         </tr>
                     </thead>

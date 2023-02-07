@@ -174,7 +174,7 @@ export const addWholesale = (collId) => async dispatch => {
 
 // CHECK STATUS (ADD)
 
-export const checkStatusAdd = (status) => async dispatch => {
+export const checkStatusAdd = (status, pageStatus) => async dispatch => {
     if (localStorage.getItem('token')){
         const config ={
             headers: {
@@ -198,7 +198,7 @@ export const checkStatusAdd = (status) => async dispatch => {
             const spreadsheet = await res.data[0].CollectionSpreadsheet
             const newstatus = "ARCHIVED"
             
-            dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, newstatus));
+            dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, newstatus, pageStatus));
             
 
         } catch(err) {
@@ -217,7 +217,7 @@ export const checkStatusAdd = (status) => async dispatch => {
 
 // CHECK STATUS (EDIT)
 
-export const checkStatusEdit = (status, collid) => async dispatch => {
+export const checkStatusEdit = (status, collid, pageStatus) => async dispatch => {
     if (localStorage.getItem('token')){
         const config ={
             headers: {
@@ -242,7 +242,7 @@ export const checkStatusEdit = (status, collid) => async dispatch => {
             const newstatus = "ARCHIVED"
 
             if (parseInt(collid) !== collectionId) {
-                dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, newstatus));
+                dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, newstatus, pageStatus));
             }
 
         } catch(err) {
@@ -261,7 +261,7 @@ export const checkStatusEdit = (status, collid) => async dispatch => {
 
 // ADD COLLECTION
 
-export const addCollection = (date, type, totalWeight, totalCost, photo, spreadsheet, status) => async dispatch => {
+export const addCollection = (date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -299,6 +299,7 @@ export const addCollection = (date, type, totalWeight, totalCost, photo, spreads
                 const data = await res.data[0].CollectionID
 
                 dispatch(addWholesale(data));
+                dispatch(getCollections(pageStatus));
             } catch (err) {
                 dispatch({
                     type: COLLECTION_ID_SEARCH_FAIL
@@ -320,7 +321,7 @@ export const addCollection = (date, type, totalWeight, totalCost, photo, spreads
 
 // EDIT COLLECTION
 
-export const editCollection = (collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status) => async dispatch => {
+export const editCollection = (collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -349,6 +350,8 @@ export const editCollection = (collectionId, date, type, totalWeight, totalCost,
                 payload: res.data
             });
             
+            dispatch(getCollections(pageStatus));
+            
         } catch (err) {
             dispatch({
                 type: EDIT_COLLECTION_FAIL
@@ -366,7 +369,7 @@ export const editCollection = (collectionId, date, type, totalWeight, totalCost,
 
 // DELETE COLLECTION
 
-export const deleteCollection = (collectionId) => async dispatch => {
+export const deleteCollection = (collectionId, single, pageStatus) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config = {
             headers: {
@@ -381,6 +384,10 @@ export const deleteCollection = (collectionId) => async dispatch => {
                 type: DELETE_COLLECTION_SUCCESS,
                 payload: res.data
             });
+            if (single) {
+                dispatch(getCollections(pageStatus));
+            }
+            
         } catch (err) {
             dispatch({
                 type: DELETE_COLLECTION_FAIL
@@ -397,11 +404,12 @@ export const deleteCollection = (collectionId) => async dispatch => {
 
 // DELETE MULTIPLE COLLECTIONS
 
-export const deleteCollectionsMulti = (collections) => async dispatch => {
+export const deleteCollectionsMulti = (collections, pageStatus) => async dispatch => {
     if (localStorage.getItem('token')) {
         await collections.map((id) => {
             try{
-                dispatch(deleteCollection(id))
+                let single = false
+                dispatch(deleteCollection(id, single, pageStatus))
             } catch(err) {
                 dispatch({
                     type: DELETE_COLLECTION_FAIL
@@ -418,7 +426,7 @@ export const deleteCollectionsMulti = (collections) => async dispatch => {
 
 // ADD COLLECTION PHOTO (After Delete)
 
-export const newCollectionPhoto = (file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet, status) => async dispatch => {
+export const newCollectionPhoto = (file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, pageStatus) => async dispatch => {
     const formData = new FormData();
     const config = {
         headers: {
@@ -437,7 +445,7 @@ export const newCollectionPhoto = (file, photo, collectionId, date, type, totalW
             type: COLLECTION_PHOTO_SUCCESS,
             payload: res.data
         });
-        dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status));
+        dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus));
     } catch (err) {
         dispatch({
             type: COLLECTION_PHOTO_FAIL
@@ -447,7 +455,7 @@ export const newCollectionPhoto = (file, photo, collectionId, date, type, totalW
 
 // EDIT COLLECTION (With Photo) - Delete photo (if exists) OR - Add new photo (if none exist)
 
-export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status) => async dispatch => {
+export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, pageStatus) => async dispatch => {
 
     const formData = new FormData();
 
@@ -470,7 +478,7 @@ export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type
                 type: COLLECTION_PHOTO_SUCCESS,
                 payload: res.data
             });
-            dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status));
+            dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus));
         } catch (err) {
             dispatch({
                 type: COLLECTION_PHOTO_FAIL
@@ -500,7 +508,7 @@ export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type
                     type: OLD_PHOTO_DELETE_SUCCESS,
                     payload: res.data
                 });
-                dispatch(newCollectionPhoto(file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet));
+                dispatch(newCollectionPhoto(file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet, pageStatus));
             } catch (err) {
                 dispatch({
                     type: OLD_PHOTO_DELETE_FAIL,

@@ -54,9 +54,11 @@ export default function(state = initialState, action) {
         case COLLECTIONS_SUCCESS:
             return {
                 ...state,
-                colls: payload,
-                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
-                totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
+                colls: payload.data,
+                total: payload.page['TotalWeight'],
+                totalc: payload.page['TotalCost']
+                //total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
+                //totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
             }
 
         case COLLECTIONS_FAIL:
@@ -70,17 +72,21 @@ export default function(state = initialState, action) {
         case COLLECTION_SEARCH_SUCCESS:
             return{
                 ...state,
-                colls: payload,
-                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
-                totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
+                colls: payload.data,
+                total: payload.page['TotalWeight'],
+                totalc: payload.page['TotalCost']
+                //total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
+                //totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
             }
             
         case COLLECTION_SEARCH_FAIL:
             return {
                 ...state,
-                colls: payload,
-                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
-                totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
+                colls: payload.data,
+                total: payload.page['TotalWeight'],
+                totalc: payload.page['TotalCost']
+                //total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
+                //totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
             }
 
         case ADD_COLLECTION_SUCCESS:
