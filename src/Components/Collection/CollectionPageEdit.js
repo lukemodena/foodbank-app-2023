@@ -4,6 +4,7 @@ import { BsPlusLg, BsXCircle } from "react-icons/bs";
 import SearchBar from "./SearchBar";
 import { connect } from 'react-redux';
 import useWindowSize from '../common/useWindow';
+import { handleLoadStyle } from '../common/handleLoadStyle';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 import { AddCollectionModal } from "./AddCollModal";
@@ -391,7 +392,7 @@ const Collection = ({
             </div>
             {/* Collection Table */}                    
             {loading ? 
-            <div className="mt-4" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+            <div className="mt-4" style={handleLoadStyle(size.width)}>
                 <div className="loader-container">
                     <ClipLoader color={'#000000'} size={150} />
                 </div> 

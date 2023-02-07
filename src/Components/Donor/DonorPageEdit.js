@@ -5,6 +5,7 @@ import { BsPlusLg, BsXCircle, BsEnvelope } from "react-icons/bs";
 import ClipLoader from 'react-spinners/ClipLoader';
 
 import useWindowSize from '../common/useWindow';
+import { handleLoadStyle } from '../common/handleLoadStyle';
 
 import { InfoDonorModal } from './MoreInfoModal';
 import { AddDonorModal } from "./AddDonModal";
@@ -395,7 +396,7 @@ const DonorPage = ({
             
             {/* Donor Table */}
             {loading ? 
-            <div className="mt-4" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+            <div className="mt-4" style={handleLoadStyle(size.width)}>
                 <div className="loader-container">
                     <ClipLoader color={'#000000'} size={150} />
                 </div> 

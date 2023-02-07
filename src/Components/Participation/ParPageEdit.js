@@ -3,6 +3,7 @@ import {Table, Dropdown, Row, Form} from 'react-bootstrap';
 import { connect } from 'react-redux';
 //import { BsPlusLg } from "react-icons/bs";
 import useWindowSize from '../common/useWindow';
+import { handleLoadStyle } from '../common/handleLoadStyle';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 
@@ -312,7 +313,7 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
             
             {/* Participant Table */}
             {loading ? 
-            <div className="mt-4" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+            <div className="mt-4" style={handleLoadStyle(size.width)}>
                 <div className="loader-container">
                     <ClipLoader color={'#000000'} size={150} />
                 </div> 
