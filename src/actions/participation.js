@@ -45,6 +45,7 @@ export const getParticipantList = (CollectionID, FullName, Type) => async dispat
                 });
             } else {
                 const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?collid=${CollectionID}&fullname=${FullName}&type=${Type}`, config)
+                
                 if (Type === "1" | Type === "4"){
                     dispatch({
                         type: PARTICIPATION_LIST_SUCCESSFUL,

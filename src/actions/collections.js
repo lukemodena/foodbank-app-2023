@@ -31,7 +31,7 @@ import {
 
 // PULL COLLECTION
 
-export const getCollections = (status) => async dispatch => {
+export const getCollections = (page, status) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -43,7 +43,7 @@ export const getCollections = (status) => async dispatch => {
         };
         if (status !== null) {
             try {
-                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?status=${status}`, config)
+                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?page=${page}&status=${status}`, config)
                 dispatch({
                     type: COLLECTIONS_SUCCESS,
                     payload: res.data
@@ -75,9 +75,9 @@ export const getCollections = (status) => async dispatch => {
 
 // SEARCH COLLECTION
 
-export const searchCollections = (monthType, searchInputStart, searchInputEnd) => async dispatch => {
+export const searchCollections = (page, monthType, searchInputStart, searchInputEnd, status) => async dispatch => {
     if (localStorage.getItem('token')) { 
-        if (searchInputStart == null || searchInputStart === ""){
+        if (monthType == null || monthType === ""){
             try {
                 const config ={
                     headers: {
@@ -87,7 +87,7 @@ export const searchCollections = (monthType, searchInputStart, searchInputEnd) =
                     }
                 };
 
-                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?type=${monthType}`, config)
+                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?page=${page}&status=${status}`, config)
                 dispatch({
                     type: COLLECTION_SEARCH_SUCCESS,
                     payload: res.data
@@ -96,7 +96,28 @@ export const searchCollections = (monthType, searchInputStart, searchInputEnd) =
                 dispatch({
                     type: COLLECTION_SEARCH_FAIL
                 });
-                dispatch(getCollections());
+                dispatch(getCollections(page, status));
+            }
+        } else if (searchInputStart == null || searchInputStart === ""){
+            try {
+                const config ={
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Token ${localStorage.getItem('token')}`,
+                        'Accept': 'application/json'
+                    }
+                };
+
+                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?page=${page}&status=${status}&type=${monthType}`, config)
+                dispatch({
+                    type: COLLECTION_SEARCH_SUCCESS,
+                    payload: res.data
+                });
+            } catch (err) {
+                dispatch({
+                    type: COLLECTION_SEARCH_FAIL
+                });
+                dispatch(getCollections(page, status));
             }
         } else {
             try {
@@ -108,7 +129,7 @@ export const searchCollections = (monthType, searchInputStart, searchInputEnd) =
                     }
                 };
                 
-                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?startdate=${searchInputStart}&enddate=${searchInputEnd}&search=${monthType}`, config)
+                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?page=${page}&status=${status}&startdate=${searchInputStart}&enddate=${searchInputEnd}&search=${monthType}`, config)
                 dispatch({
                     type: COLLECTION_SEARCH_SUCCESS,
                     payload: res.data
@@ -117,7 +138,7 @@ export const searchCollections = (monthType, searchInputStart, searchInputEnd) =
                 dispatch({
                     type: COLLECTION_SEARCH_FAIL
                 });
-                dispatch(getCollections());
+                dispatch(getCollections(page, status));
             }
         }
     } else {
@@ -174,7 +195,7 @@ export const addWholesale = (collId) => async dispatch => {
 
 // CHECK STATUS (ADD)
 
-export const checkStatusAdd = (status, pageStatus) => async dispatch => {
+export const checkStatusAdd = (status, page, pageStatus) => async dispatch => {
     if (localStorage.getItem('token')){
         const config ={
             headers: {
@@ -198,7 +219,7 @@ export const checkStatusAdd = (status, pageStatus) => async dispatch => {
             const spreadsheet = await res.data[0].CollectionSpreadsheet
             const newstatus = "ARCHIVED"
             
-            dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, newstatus, pageStatus));
+            dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, newstatus, page, pageStatus));
             
 
         } catch(err) {
@@ -217,7 +238,7 @@ export const checkStatusAdd = (status, pageStatus) => async dispatch => {
 
 // CHECK STATUS (EDIT)
 
-export const checkStatusEdit = (status, collid, pageStatus) => async dispatch => {
+export const checkStatusEdit = (status, collid, page, pageStatus) => async dispatch => {
     if (localStorage.getItem('token')){
         const config ={
             headers: {
@@ -242,7 +263,7 @@ export const checkStatusEdit = (status, collid, pageStatus) => async dispatch =>
             const newstatus = "ARCHIVED"
 
             if (parseInt(collid) !== collectionId) {
-                dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, newstatus, pageStatus));
+                dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, newstatus, page, pageStatus));
             }
 
         } catch(err) {
@@ -261,7 +282,7 @@ export const checkStatusEdit = (status, collid, pageStatus) => async dispatch =>
 
 // ADD COLLECTION
 
-export const addCollection = (date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus) => async dispatch => {
+export const addCollection = (date, type, totalWeight, totalCost, photo, spreadsheet, status, page, pageStatus) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -299,7 +320,7 @@ export const addCollection = (date, type, totalWeight, totalCost, photo, spreads
                 const data = await res.data[0].CollectionID
 
                 dispatch(addWholesale(data));
-                dispatch(getCollections(pageStatus));
+                dispatch(getCollections(page, pageStatus));
             } catch (err) {
                 dispatch({
                     type: COLLECTION_ID_SEARCH_FAIL
@@ -321,7 +342,7 @@ export const addCollection = (date, type, totalWeight, totalCost, photo, spreads
 
 // EDIT COLLECTION
 
-export const editCollection = (collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus) => async dispatch => {
+export const editCollection = (collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, page, pageStatus) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -350,7 +371,7 @@ export const editCollection = (collectionId, date, type, totalWeight, totalCost,
                 payload: res.data
             });
             
-            dispatch(getCollections(pageStatus));
+            dispatch(getCollections(page, pageStatus));
             
         } catch (err) {
             dispatch({
@@ -369,7 +390,7 @@ export const editCollection = (collectionId, date, type, totalWeight, totalCost,
 
 // DELETE COLLECTION
 
-export const deleteCollection = (collectionId, single, pageStatus) => async dispatch => {
+export const deleteCollection = (collectionId, single, page, pageStatus) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config = {
             headers: {
@@ -385,7 +406,7 @@ export const deleteCollection = (collectionId, single, pageStatus) => async disp
                 payload: res.data
             });
             if (single) {
-                dispatch(getCollections(pageStatus));
+                dispatch(getCollections(page, pageStatus));
             }
             
         } catch (err) {
@@ -404,12 +425,12 @@ export const deleteCollection = (collectionId, single, pageStatus) => async disp
 
 // DELETE MULTIPLE COLLECTIONS
 
-export const deleteCollectionsMulti = (collections, pageStatus) => async dispatch => {
+export const deleteCollectionsMulti = (collections, page, pageStatus) => async dispatch => {
     if (localStorage.getItem('token')) {
         await collections.map((id) => {
             try{
                 let single = false
-                dispatch(deleteCollection(id, single, pageStatus))
+                dispatch(deleteCollection(id, single, page, pageStatus))
             } catch(err) {
                 dispatch({
                     type: DELETE_COLLECTION_FAIL
@@ -426,7 +447,7 @@ export const deleteCollectionsMulti = (collections, pageStatus) => async dispatc
 
 // ADD COLLECTION PHOTO (After Delete)
 
-export const newCollectionPhoto = (file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, pageStatus) => async dispatch => {
+export const newCollectionPhoto = (file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, page, pageStatus) => async dispatch => {
     const formData = new FormData();
     const config = {
         headers: {
@@ -445,7 +466,7 @@ export const newCollectionPhoto = (file, photo, collectionId, date, type, totalW
             type: COLLECTION_PHOTO_SUCCESS,
             payload: res.data
         });
-        dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus));
+        dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, page, pageStatus));
     } catch (err) {
         dispatch({
             type: COLLECTION_PHOTO_FAIL
@@ -455,7 +476,7 @@ export const newCollectionPhoto = (file, photo, collectionId, date, type, totalW
 
 // EDIT COLLECTION (With Photo) - Delete photo (if exists) OR - Add new photo (if none exist)
 
-export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, pageStatus) => async dispatch => {
+export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, page, pageStatus) => async dispatch => {
 
     const formData = new FormData();
 
@@ -478,7 +499,7 @@ export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type
                 type: COLLECTION_PHOTO_SUCCESS,
                 payload: res.data
             });
-            dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus));
+            dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, page, pageStatus));
         } catch (err) {
             dispatch({
                 type: COLLECTION_PHOTO_FAIL
@@ -508,7 +529,7 @@ export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type
                     type: OLD_PHOTO_DELETE_SUCCESS,
                     payload: res.data
                 });
-                dispatch(newCollectionPhoto(file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet, pageStatus));
+                dispatch(newCollectionPhoto(file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet, page, pageStatus));
             } catch (err) {
                 dispatch({
                     type: OLD_PHOTO_DELETE_FAIL,

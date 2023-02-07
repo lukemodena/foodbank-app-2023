@@ -32,7 +32,11 @@ const initialState = {
     totalc: 0,
     isAuthenticated: null,
     statusCol: [],
-    activeId: null
+    activeId: null,
+    currentPage: null,
+    has_next: false,
+    has_previous: false,
+    total_number: null
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
@@ -56,7 +60,11 @@ export default function(state = initialState, action) {
                 ...state,
                 colls: payload.data,
                 total: payload.page['TotalWeight'],
-                totalc: payload.page['TotalCost']
+                totalc: payload.page['TotalCost'],
+                currentPage: payload.page.current,
+                has_next: payload.page.has_next,
+                has_previous: payload.page.has_previous,
+                total_number: payload.page.total_number
                 //total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
                 //totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
             }
@@ -74,7 +82,11 @@ export default function(state = initialState, action) {
                 ...state,
                 colls: payload.data,
                 total: payload.page['TotalWeight'],
-                totalc: payload.page['TotalCost']
+                totalc: payload.page['TotalCost'],
+                currentPage: payload.page.current,
+                has_next: payload.page.has_next,
+                has_previous: payload.page.has_previous,
+                total_number: payload.page.total_number
                 //total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
                 //totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
             }
@@ -84,7 +96,11 @@ export default function(state = initialState, action) {
                 ...state,
                 colls: payload.data,
                 total: payload.page['TotalWeight'],
-                totalc: payload.page['TotalCost']
+                totalc: payload.page['TotalCost'],
+                currentPage: payload.page.current,
+                has_next: payload.page.has_next,
+                has_previous: payload.page.has_previous,
+                total_number: payload.page.total_number
                 //total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
                 //totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
             }

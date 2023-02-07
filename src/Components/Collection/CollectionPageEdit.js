@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {Button, Table, Dropdown, Row} from 'react-bootstrap';
+import {Pagination, Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { BsPlusLg, BsXCircle } from "react-icons/bs";
 import SearchBar from "./SearchBar";
 import { connect } from 'react-redux';
 import useWindowSize from '../common/useWindow';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 import { AddCollectionModal } from "./AddCollModal";
 import { EditCollectionModal } from "./EditCollModal";
@@ -33,12 +34,16 @@ const Collection = ({
     sendEmail,
     colls,
     emails,
-    whol
+    whol,
+    currentPage,
+    has_next,
+    has_previous,
+    total_number
 }) => {
 
     // Set Default States
     const size = useWindowSize(); 
-    const [refresh, setRefresh] = useState(null);
+    const [loading, setLoading] = useState(true);
     
     const [photo, setPhoto] = useState({
         photofilename: "anonymous.png",
@@ -52,32 +57,33 @@ const Collection = ({
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [isChecked, setIsChecked] = useState([]);
+    const [page, setPage] = useState("1");
 
     // Handle Data Request (Initial + Refresh)
 
     useEffect(() => {
-        getCollections(pageStatus);
-        setRefresh("NO");
+        setLoading(true);
+        getCollections(page, pageStatus).then(() => setLoading(false));
       }, []);
 
 
-    useEffect(() => {
-        if (refresh === "YES"){
-            getCollections(pageStatus);
-            setStartDate("");
-            setEndDate("");
-            setMonthValue("");
-            setMonthFilter("All");
-            setRefresh("NO");
-        } else if (refresh === null) {
-            getCollections(pageStatus);
-            setStartDate("");
-            setEndDate("");
-            setMonthValue("");
-            setMonthFilter("All");
-            setRefresh("NO");
-        }
-      }, []);
+    // useEffect(() => {
+    //     if (refresh === "YES"){
+    //         getCollections(page, pageStatus);
+    //         setStartDate("");
+    //         setEndDate("");
+    //         setMonthValue("");
+    //         setMonthFilter("All");
+    //         setRefresh("NO");
+    //     } else if (refresh === null) {
+    //         getCollections(page, pageStatus);
+    //         setStartDate("");
+    //         setEndDate("");
+    //         setMonthValue("");
+    //         setMonthFilter("All");
+    //         setRefresh("NO");
+    //     }
+    //   }, []);
 
     // Modal Handlers
     const [addModalShow, setAddModalShow] = useState(false);
@@ -136,17 +142,18 @@ const Collection = ({
     // Collection Month Type Filter
 
     const handleFilter = (value, filter) => {
+        setLoading(true);
         let monthType = value;
 
         if (monthType === "0") {
-            getCollections(pageStatus);
+            getCollections(page, pageStatus).then(() => setLoading(false));
 
             setMonthValue(monthType);
             setMonthFilter(filter);
         } else {
             let searchInputStart = startDate;
             let searchInputEnd = endDate;
-            searchCollections(monthType, searchInputStart, searchInputEnd, pageStatus);
+            searchCollections(page, monthType, searchInputStart, searchInputEnd, pageStatus).then(() => setLoading(false));
 
             setMonthValue(monthType);
             setMonthFilter(filter);
@@ -156,6 +163,7 @@ const Collection = ({
     // Collection Search
 
     const handleSearch = (startDate, endDate) => {
+        setLoading(true);
         let startYear = Intl.DateTimeFormat('en-GB', { year: "numeric" }).format(startDate);
         let startMonth = Intl.DateTimeFormat('en-GB', { month: "2-digit" }).format(startDate);
         let startDay = Intl.DateTimeFormat('en-GB', { day: "2-digit" }).format(startDate);
@@ -168,15 +176,46 @@ const Collection = ({
         setStartDate(searchInputStart);
         setEndDate(searchInputEnd);
 
-        searchCollections(monthValue, searchInputStart, searchInputEnd, pageStatus);
+        searchCollections(page, monthValue, searchInputStart, searchInputEnd, pageStatus).then(() => setLoading(false));
     };
+
+    // Handle Page
+
+    const handlePage = (inputVal) => {
+        setLoading(true);
+    
+        let prevPage = currentPage;
+        let newpage = `${parseInt(prevPage)+parseInt(inputVal)}`;
+        
+        setPage(newpage)
+        searchCollections(newpage, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
+    }
+    
+    // Handle Last Page
+
+    const handleLastPage = (inputValue) => {
+        setLoading(true);
+
+        setPage(inputValue);
+        searchCollections(inputValue, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
+    }
+
+    // Handle First Page
+
+    const handleFirstPage = (inputValue) => {
+        setLoading(true);
+    
+        setPage(inputValue);
+        searchCollections(inputValue, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
+    }
 
     // Collection Delete
 
     const handleDelete = (collId) => {
         if(window.confirm('Are you sure?')){
+            setLoading(true);
             let single = true
-            deleteCollection(collId, single, pageStatus);
+            deleteCollection(collId, single, page, pageStatus).then(() => setLoading(false));
             setSuccessDeleteModalShow(true);
         }
     };
@@ -201,7 +240,8 @@ const Collection = ({
         } else {
             let message = `Are you sure you want to delete ${length} record/s?`;
             if(window.confirm(message)){
-                deleteCollectionsMulti(toDelete, pageStatus);
+                setLoading(true);
+                deleteCollectionsMulti(toDelete, page, pageStatus).then(() => setLoading(false));
 
                 setSuccessDeleteModalShow(true);
             }
@@ -225,6 +265,7 @@ const Collection = ({
 
     const handleFileSubmit = (e) => {
         e.preventDefault();
+        setLoading(true);
 
         let file = e.target.photofile.files[0];
 
@@ -239,12 +280,12 @@ const Collection = ({
             let status = e.target.CollectionStatus.value;
 
             if (status === "ACTIVE"){
-                checkStatusEdit(status, collectionId, pageStatus)
+                checkStatusEdit(status, collectionId, page, pageStatus)
 
-                editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus);
+                editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, page, pageStatus).then(() => setLoading(false));
                 setSuccessModalShow(true);
             } else {
-                editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, pageStatus);
+                editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, page, pageStatus).then(() => setLoading(false));
                 setSuccessModalShow(true);
             }
 
@@ -269,10 +310,10 @@ const Collection = ({
             if (status === "ACTIVE"){
                 checkStatusEdit(status, collectionId);
 
-                addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, pageStatus);
+                addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, page, pageStatus).then(() => setLoading(false));
                 setSuccessModalShow(true);
             } else {
-                addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, pageStatus);
+                addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, page, pageStatus).then(() => setLoading(false));
                 setSuccessModalShow(true);
             }
         }
@@ -292,6 +333,7 @@ const Collection = ({
 
     const handleEditWholesale = (e) => {
         e.preventDefault();
+        setLoading(true);
 
         let wholId = e.target.WholesaleID.value;
         let totalDonated = e.target.TotalDonated.value;
@@ -301,7 +343,7 @@ const Collection = ({
         let wholesaleReceipt = e.target.Receipt.value;
         let notes = e.target.Notes.value;
 
-        editWholesale(wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt, notes);
+        editWholesale(wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt, notes).then(() => setLoading(false));
         setSuccessModalShow(true);
     };
 
@@ -348,6 +390,13 @@ const Collection = ({
                 />
             </div>
             {/* Collection Table */}                    
+            {loading ? 
+            <div className="mt-4" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+                <div className="loader-container">
+                    <ClipLoader color={'#000000'} size={150} />
+                </div> 
+            </div> 
+            : 
             <div style={{overflowX:"fixed"}}>
                 <Table className="mt-4" striped bordered hover size="sm">
                     <thead>
@@ -514,7 +563,16 @@ const Collection = ({
                             </tr>)}
                     </tbody>
                 </Table>
-            </div>
+                <Pagination style={{justifyContent:"center"}}>
+                    {(page != "1") &&<Pagination.First onClick={e => handleFirstPage("1")}/>}
+                    {(has_previous) &&<Pagination.Prev onClick={e => handlePage("-1")}/>}
+                    <Pagination.Item active>
+                        {page}
+                    </Pagination.Item>
+                    {(has_next) &&<Pagination.Next onClick={e => handlePage("1")}/>}
+                    {(page != total_number) &&<Pagination.Last onClick={e => handleLastPage(total_number)}/>}
+                </Pagination>
+            </div>}
         </div>
     )
 
@@ -527,7 +585,11 @@ const mapStateToProps = (state) => ({
     whol: state.wholesale.whol,
     emails: state.donors.emails,
     result: state.collections.result,
-    total: state.collections.total
+    total: state.collections.total,
+    currentPage: state.collections.currentPage,
+    has_next: state.collections.has_next,
+    has_previous: state.collections.has_previous,
+    total_number: state.collections.total_number
 });
 
 export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonorsEmails, checkStatusEdit, deleteCollectionsMulti, sendEmail})(Collection)

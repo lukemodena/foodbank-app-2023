@@ -3,6 +3,7 @@ import {Table, Dropdown, Row, Form} from 'react-bootstrap';
 import { connect } from 'react-redux';
 //import { BsPlusLg } from "react-icons/bs";
 import useWindowSize from '../common/useWindow';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 
 //import { AddParticipationModal } from './AddParticipationModal';
@@ -20,7 +21,7 @@ import { getWholesale } from '../../actions/wholesale';
 
 // PARTICIPANTS PAGE //
 
-const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, editParticipantStatus, getDonors, getWholesale, whol, activeId}) => {
+const ParticipationPage = ({parsList, colls, getCollections, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, editParticipantStatus, getDonors, getWholesale, whol, activeId}) => {
     
     // Set Default States
     
@@ -38,16 +39,21 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipan
     const [searchValue, setSearchValue] = useState("");
     const [typeValue, setTypeValue] = useState("");
     const [typeFilter, setTypeFilter] = useState("All");
+    const [loading, setLoading] = useState(true)
 
     // Handle Data Request (Initial + Refresh)
 
     useEffect(() => {
+        
         let collection = collectionID;
         let searchInput = searchValue;
         let type = typeValue;
-        getParticipantList(collection, searchInput, type);
-        getCollections(null);
-        //getDonors();
+        let collPage = "all";
+        let collStatus = "";
+        setLoading(true);
+        
+        getParticipantList(collection, searchInput, type).then(() => setLoading(false));
+        getCollections(collPage, collStatus);
         setRefresh("NO");
         setShowAddButton(true);
       }, []);
@@ -55,20 +61,30 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipan
 
     useEffect(() => {
         if (refresh === "YES"){
+            
             let collection = collectionID;
             let searchInput = searchValue;
             let type = typeValue;
-            getParticipantList(collection, searchInput, type);
+            let collPage = "all";
+            let collStatus = "";
+            setLoading(true);
+
+            getParticipantList(collection, searchInput, type).then(() => setLoading(false));
             getWholesale(collection)
             //getDonors();
-            getCollections(null);
+            getCollections(collPage, collStatus);
             setRefresh("NO");
         } else if (refresh === null) {
+            
             let collection = collectionID;
             let searchInput = searchValue;
             let type = typeValue;
-            getParticipantList(collection, searchInput, type);
-            getCollections(null);
+            let collPage = "all";
+            let collStatus = "";
+            setLoading(true);
+
+            getParticipantList(collection, searchInput, type).then(() => setLoading(false));
+            getCollections(collPage, collStatus);
             //getDonors();
             setRefresh("NO");
             setShowAddButton(true);
@@ -148,11 +164,14 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipan
     // Collection Date Picker
 
     const handleFilter = (CollectionID, CollectionDate) => {
+
         let collection = CollectionID;
         let searchInput =searchValue;
         let type = typeValue;
+        setLoading(true);
+
         getWholesale(collection);
-        getParticipantList(collection, searchInput, type);
+        getParticipantList(collection, searchInput, type).then(() => setLoading(false));
         setCollectionDate(CollectionDate);
         setCollectionID(collection);
         setShowAddButton(true);
@@ -164,10 +183,11 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipan
         let type = value;
         let collection = collectionID;
         let searchInput = searchValue;
+        setLoading(true);
 
         console.log(parsList.reduce((a,v) =>  a = a + parseFloat(v.TotalDonated) , 0 ))
         
-        getParticipantList(collection, searchInput, type);
+        getParticipantList(collection, searchInput, type).then(() => setLoading(false));
 
         setTypeValue(type);
         setTypeFilter(filter);
@@ -286,40 +306,18 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipan
 
                     {(showAddButton === true) &&<SearchBar callback={(searchValue) => handleSearch(searchValue)}/>}
 
-                    {/* Add New Participant Modal */}
-
-                    {/* {(showAddButton === true) &&<Button variant="secondary" className="participant-addButton"
-                    onClick={()=>{
-                        //setAddParticipationShow(true); 
-                        setCollid(collectionID); 
-                        setWhoid(whol[0].WholesaleID);
-                        setColldate(collectionDate);
-                        setReqStatus(`Participant for collection on ${collectionDate} saved`);
-                        setType("participant");
-                        setIsAdd(true)
-                    }}>
-                        <BsPlusLg className="participant-addButton-Icon"/>
-                    </Button>}
-                    <AddParticipationModal 
-                        show={addParticipationShow}
-                        onHide={addParticipationClose}
-                        addpart={handleAddParticipant}
-                        collid={collid}
-                        whoid={whoid}
-                        dons={dons}
-                        colldate={colldate}
-                        successModalShow={successModalShow}
-                        successModalClose={successModalClose}
-                        reqStatus={reqStatus}
-                        type={type}
-                        isAdd={isAdd}
-                    /> */}
-
                 </Row>
 
             </div>
             
             {/* Participant Table */}
+            {loading ? 
+            <div className="mt-4" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+                <div className="loader-container">
+                    <ClipLoader color={'#000000'} size={150} />
+                </div> 
+            </div>
+            : 
             <div style={{overflowX:"fixed"}}>
                 <Table className="mt-4" striped bordered hover size="sm">
                     <thead>
@@ -456,7 +454,7 @@ const ParticipationPage = ({parsList, colls, dons, getCollections, getParticipan
                                 </tr>)}
                     </tbody>
                 </Table>
-            </div>
+            </div>}
         </div>
     )
 

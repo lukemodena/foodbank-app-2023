@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {Pagination, Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BsPlusLg, BsXCircle, BsEnvelope } from "react-icons/bs";
+import ClipLoader from 'react-spinners/ClipLoader';
+
 import useWindowSize from '../common/useWindow';
 
 import { InfoDonorModal } from './MoreInfoModal';
@@ -52,38 +54,40 @@ const DonorPage = ({
     const [searchValue, setSearchValue] = useState("");
     const [isChecked, setIsChecked] = useState([]);
     const [page, setPage] = useState("1")
+    const [loading, setLoading] = useState(true)
 
     // Handle Data Request (Initial + Refresh)
 
     useEffect(() => {
         let newpage = page
-        getDonors(newpage);
+        setLoading(true);
+        getDonors(newpage).then(() => setLoading(false));
         getActiveCollection();
         setRefresh("NO");
       }, []);
 
 
-    useEffect(() => {
-        if (refresh === "YES"){
-            let newpage = page
-            getDonors(newpage);
-            getActiveCollection();
-            setRefresh("NO");
-            setMonthValue("");
-            setMonthFilter("All Contacts");
-            setSearchValue("")
-            setRefresh("NO");
-        } else if (refresh === null) {
-            let newpage = page
-            getDonors(newpage);
-            getActiveCollection();
-            setRefresh("NO");
-            setMonthValue("");
-            setMonthFilter("All Contacts");
-            setSearchValue("")
-            setRefresh("NO");
-        }
-      }, []);
+    // useEffect(() => {
+    //     if (refresh === "YES"){
+    //         let newpage = page
+    //         getDonors(newpage);
+    //         getActiveCollection();
+    //         setRefresh("NO");
+    //         setMonthValue("");
+    //         setMonthFilter("All Contacts");
+    //         setSearchValue("")
+    //         setRefresh("NO");
+    //     } else if (refresh === null) {
+    //         let newpage = page
+    //         getDonors(newpage);
+    //         getActiveCollection();
+    //         setRefresh("NO");
+    //         setMonthValue("");
+    //         setMonthFilter("All Contacts");
+    //         setSearchValue("")
+    //         setRefresh("NO");
+    //     }
+    //   }, []);
 
     // Modal Handlers
     const [addModalShow, setAddModalShow] = useState(false);
@@ -160,8 +164,9 @@ const DonorPage = ({
         let monthType = value;
         let searchInput = searchValue;
         let newpage = "1";
+        setLoading(true);
         
-        searchDonors(newpage, monthType, searchInput);
+        searchDonors(newpage, monthType, searchInput).then(() => setLoading(false));
         setPage(newpage);
         setMonthValue(monthType);
         setMonthFilter(filter);
@@ -173,10 +178,11 @@ const DonorPage = ({
         let monthType = monthValue;
         let searchInput = value;
         let newpage = "1";
+        setLoading(true);
 
         setSearchValue(searchInput);
         setPage(newpage);
-        searchDonors(newpage, monthType, searchInput);
+        searchDonors(newpage, monthType, searchInput).then(() => setLoading(false));
         searchDonorsEmails(emailPage, monthType, searchInput);
         console.log(emails.length)
     };
@@ -190,9 +196,10 @@ const DonorPage = ({
         let searchInput = searchValue;
         let prevPage = currentPage;
         let newpage = `${parseInt(prevPage)+parseInt(inputVal)}`;
-        //console.log(newpage, prevPage, inputVal)
-        setPage(newpage)
-        searchDonors(newpage, monthType, searchInput);
+        setLoading(true);
+
+        setPage(newpage);
+        searchDonors(newpage, monthType, searchInput).then(() => setLoading(false));
     }
 
     // Handle Last Page
@@ -203,9 +210,10 @@ const DonorPage = ({
         let monthType = monthValue;
         let searchInput = searchValue;
         let newpage = inputValue;
+        setLoading(true)
 
         setPage(newpage)
-        searchDonors(newpage, monthType, searchInput);
+        searchDonors(newpage, monthType, searchInput).then(() => setLoading(false));
     }
 
     // Handle First Page
@@ -216,16 +224,18 @@ const DonorPage = ({
             let monthType = monthValue;
             let searchInput = searchValue;
             let newpage = inputValue;
-    
+            setLoading(true)
+
             setPage(newpage)
-            searchDonors(newpage, monthType, searchInput);
+            searchDonors(newpage, monthType, searchInput).then(() => setLoading(false));
         }
 
     // Donor Delete
 
     const handleDelete = (donId) => {
         if(window.confirm('Are you sure?')){
-            deleteDonor(donId);
+            setLoading(true)
+            deleteDonor(donId).then(() => setLoading(false));
             setSuccessDeleteModalShow(true);
         }
     };
@@ -251,7 +261,8 @@ const DonorPage = ({
         } else {
             let message = `Are you sure you want to delete ${length} record/s?`;
             if(window.confirm(message)){
-                deleteDonorsMulti(toDelete);
+                setLoading(true)
+                deleteDonorsMulti(toDelete).then(() => setLoading(false));
 
                 setSuccessDeleteModalShow(true);
             }
@@ -277,7 +288,8 @@ const DonorPage = ({
         let phone = e.target.Phone.value;
         let involveNo = e.target.InvolveNo.value;
 
-        editDonor(donorId, fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone, involveNo);
+        setLoading(true)
+        editDonor(donorId, fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone, involveNo).then(() => setLoading(false));
         setSuccessModalShow(true);
     };
 
@@ -301,7 +313,8 @@ const DonorPage = ({
         // - If yes, new participant is not added 
         // - if no, new participant is added + if cash donation wholesale is updated
         //console.log(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
-        getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, notes, donId, colId, whoId)
+        setLoading(true)
+        getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, notes, donId, colId, whoId).then(() => setLoading(false));
         setSuccessModalShow(true);
     };
 
@@ -381,6 +394,13 @@ const DonorPage = ({
             </div>
             
             {/* Donor Table */}
+            {loading ? 
+            <div className="mt-4" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+                <div className="loader-container">
+                    <ClipLoader color={'#000000'} size={150} />
+                </div> 
+            </div> 
+            : 
             <div style={{overflowX:"fixed"}}>
 
                 <Table className="mt-4" striped bordered hover size="sm">
@@ -580,7 +600,7 @@ const DonorPage = ({
                     {(has_next) &&<Pagination.Next onClick={e => handlePage("1")}/>}
                     {(page != total_number) &&<Pagination.Last onClick={e => handleLastPage(total_number)}/>}
                 </Pagination>
-            </div>
+            </div>}
         </div>
     )
 }
