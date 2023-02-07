@@ -11,7 +11,7 @@ import { SuccessModal } from "../common/SuccessModal";
 import { MoreInformationModal } from "./MoreInfoModal";
 import { handleCollectionDate } from "../common/dateFuncs";
 import { handleCollectionType } from "../common/typeFuncs";
-import { monthOptions } from "../common/miscObjects"; 
+import { monthOptions, collectionTypeSelection } from "../common/miscObjects"; 
 
 import { getCollections, searchCollections, deleteCollection, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
 import { getWholesale } from "../../actions/wholesale";
@@ -40,7 +40,7 @@ const CollectionArchive = ({
     const [refresh, setRefresh] = useState(null);
     
     const status = 'ARCHIVED';
-    const [monthFilter, setMonthFilter] = useState("Select Collection");
+    const [monthFilter, setMonthFilter] = useState(collectionTypeSelection(size.width));
     const [monthValue, setMonthValue] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
@@ -51,6 +51,7 @@ const CollectionArchive = ({
     // Handle Data Request (Initial + Refresh)
 
     useEffect(() => {
+        setMonthFilter(collectionTypeSelection(size.width))
         setLoading(true);
         getCollections(page, status).then(() => setLoading(false));
         setRefresh("NO");

@@ -21,6 +21,21 @@ export const monthOptions = [
     }
 ];
 
+// Collection Type Dropdown Placeholder
+
+export const collectionTypeSelection = (inputValue) => {
+    let size = parseInt(inputValue)
+
+    if (size > 760) {
+        let collectionDate = "Select Collection";
+        return collectionDate
+    } else {
+        let collectionDate = "Select Type";
+        return collectionDate
+    }
+};
+
+
 // Contact/Donor Types (for dropdown filter)
 
 export const typeOptions = [
@@ -85,7 +100,11 @@ export const participantOptions = [
     }
 ];
 
-export const collectionDateSelection = (size) => {
+// Participation Date Dropdown Placeholder
+
+export const collectionDateSelection = (inputValue) => {
+    let size = parseInt(inputValue)
+
     if (size > 760) {
         let collectionDate = "Select Collection";
         return collectionDate

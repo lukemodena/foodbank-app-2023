@@ -14,7 +14,7 @@ import { SuccessModal } from "../common/SuccessModal";
 import { WriteEmail } from '../Email/EmailModal';
 import { handleCollectionDate } from '../common/dateFuncs';
 import { handleCollectionType } from '../common/typeFuncs';
-import { monthOptions } from '../common/miscObjects';
+import { monthOptions, collectionTypeSelection } from '../common/miscObjects';
 
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
@@ -53,7 +53,7 @@ const Collection = ({
     })
     
     const pageStatus = 'PLANNED,ACTIVE'
-    const [monthFilter, setMonthFilter] = useState("Select Collection");
+    const [monthFilter, setMonthFilter] = useState(collectionTypeSelection(size.width));
     const [monthValue, setMonthValue] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
@@ -63,6 +63,7 @@ const Collection = ({
     // Handle Data Request (Initial + Refresh)
 
     useEffect(() => {
+        setMonthFilter(collectionTypeSelection(size.width))
         setLoading(true);
         getCollections(page, pageStatus).then(() => setLoading(false));
       }, []);
