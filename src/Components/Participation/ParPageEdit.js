@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {Table, Dropdown, Row, Form} from 'react-bootstrap';
 import { connect } from 'react-redux';
-//import { BsPlusLg } from "react-icons/bs";
 import useWindowSize from '../common/useWindow';
 import { handleLoadStyle } from '../common/handleLoadStyle';
 import ClipLoader from 'react-spinners/ClipLoader';
 
-
-//import { AddParticipationModal } from './AddParticipationModal';
 import { EditParticipationModal } from './EditParticipationModal';
 import SearchBar from './SearchBar';
 import { SuccessModal } from '../common/SuccessModal';
 import { handleCollectionDate } from '../common/dateFuncs';
 import { handleParticipantType, handleDropOffTime } from '../common/typeFuncs';
-import { participantOptions, handleParticipantPayment } from '../common/miscObjects';
+import { participantOptions, handleParticipantPayment, collectionDateSelection } from '../common/miscObjects';
 
-//import { getDonors } from '../../actions/donors';
 import { getCollections } from '../../actions/collections';
 import { getParticipantList, editParticipant, deleteParticipant, getCurrentParticipants, editParticipantStatus } from '../../actions/participation';
 import { getWholesale } from '../../actions/wholesale';
@@ -28,8 +24,7 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
     
     const size = useWindowSize(); 
     const [refresh, setRefresh] = useState(null);
-
-    const [collectionDate, setCollectionDate] = useState("Select Collection");
+    const [collectionDate, setCollectionDate] = useState(collectionDateSelection(size.width));
     const [collectionID, setCollectionID] = useState(`${localStorage.getItem('activeId')}`);
 
     const [value, setValue] = useState("N/A");
@@ -51,6 +46,7 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
         let type = typeValue;
         let collPage = "all";
         let collStatus = "";
+        setCollectionDate(collectionDateSelection(size.width));
         setLoading(true);
         
         getParticipantList(collection, searchInput, type).then(() => setLoading(false));
@@ -68,6 +64,7 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
             let type = typeValue;
             let collPage = "all";
             let collStatus = "";
+            setCollectionDate(collectionDateSelection(size.width))
             setLoading(true);
 
             getParticipantList(collection, searchInput, type).then(() => setLoading(false));
@@ -94,16 +91,9 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
 
     // Modal Handlers
 
-    //const [addParticipationShow, setAddParticipationShow] = useState(false);
     const [editParticipationShow, setEditParticipationShow] = useState(false);
     const [successModalShow, setSuccessModalShow] = useState(false);
     const [successDeleteModalShow, setSuccessDeleteModalShow] = useState(false);
-    
-    // const addParticipationClose = () => {
-    //     setAddParticipationShow(false);
-    //     setRefresh("YES");
-    //     console.log(refresh)
-    // };
 
     const editParticipationClose = () => {
         setEditParticipationShow(false);
@@ -193,31 +183,6 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
         setTypeValue(type);
         setTypeFilter(filter);
     };
-       
-    // Add Participant
-
-    // const handleAddParticipant = (CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, Notes, WholesaleID) => {
-        
-    //     let colId = CollectionID;
-    //     let donId = DonorID;
-    //     let payRec = PaymentRecieved;
-    //     let donTyp = DonationType;
-    //     let totDon = TotalDonated;
-    //     let droTim = DropOffTime;
-    //     let notes = Notes;
-    //     let whoId = WholesaleID;
-
-    //     let CollID = colId
-    //     let DonID = donId
-
-    //     // Checks if Donor already Participant in collection, 
-    //     // - If yes, new participant is not added 
-    //     // - if no, new participant is added + if cash donation wholesale is updated
-        
-    //     getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, notes,donId, colId, whoId)
-    //     setSuccessModalShow(true);
-        
-    // };
 
     // Edit Participant
 
@@ -259,11 +224,10 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
         if (PayRec === "true"){
             let newStatus = "false"
             editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, searchInput, type);
-            //window.location.reload(false);
+            
         } else if (PayRec === "false"){
             let newStatus = "true"
             editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, searchInput, type);
-            //window.location.reload(false);
         };
         
     };

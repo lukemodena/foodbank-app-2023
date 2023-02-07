@@ -50,6 +50,8 @@ export const typeOptions = [
     }
 ];
 
+// Participant Types (for dropdown filter)
+
 export const participantOptions = [
     {
         key: 0,
@@ -82,6 +84,16 @@ export const participantOptions = [
         filter: "Online Order"
     }
 ];
+
+export const collectionDateSelection = (size) => {
+    if (size > 760) {
+        let collectionDate = "Select Collection";
+        return collectionDate
+    } else {
+        let collectionDate = "Select Date";
+        return collectionDate
+    }
+};
 
 // Participant Payment
 
