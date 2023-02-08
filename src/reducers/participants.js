@@ -36,17 +36,25 @@ const initialState = {
     ],
     partresult:"",
     result:"",
-    isAuthenticated: null
+    isAuthenticated: null,
+    currentPage: null,
+    has_next: false,
+    has_previous: false,
+    total_number: null
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
     const { type, payload } = action;
     switch(type) {
         case PARTICIPATION_LIST_SUCCESSFUL:
-            localStorage.setItem('noParticipants', payload.length)
+        
             return {
                 ...state,
-                parsList: payload,
+                parsList: payload.data,
+                currentPage: payload.page.current,
+                has_next: payload.page.has_next,
+                has_previous: payload.page.has_previous,
+                total_number: payload.page.total_number,
                 partresult: "Participants found successfully"
             }
 

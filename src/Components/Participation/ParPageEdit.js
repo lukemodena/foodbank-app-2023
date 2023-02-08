@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Table, Dropdown, Row, Form} from 'react-bootstrap';
+import {Pagination, Table, Dropdown, Row, Form} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import useWindowSize from '../common/useWindow';
 import { handleLoadStyle } from '../common/handleLoadStyle';
@@ -10,7 +10,7 @@ import SearchBar from './SearchBar';
 import { SuccessModal } from '../common/SuccessModal';
 import { handleCollectionDate } from '../common/dateFuncs';
 import { handleParticipantType, handleDropOffTime } from '../common/typeFuncs';
-import { participantOptions, handleParticipantPayment, collectionDateSelection } from '../common/miscObjects';
+import { participantOptions, handleParticipantPayment, collectionDateSelection, fullAddressHandler } from '../common/miscObjects';
 
 import { getCollections } from '../../actions/collections';
 import { getParticipantList, editParticipant, deleteParticipant, getCurrentParticipants, editParticipantStatus } from '../../actions/participation';
@@ -18,12 +18,26 @@ import { getWholesale } from '../../actions/wholesale';
 
 // PARTICIPANTS PAGE //
 
-const ParticipationPage = ({parsList, colls, getCollections, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, editParticipantStatus, getDonors, getWholesale, whol, activeId}) => {
+const ParticipationPage = ({
+    parsList, 
+    colls, 
+    getCollections, 
+    getParticipantList, 
+    deleteParticipant, 
+    editParticipant, 
+    editParticipantStatus, 
+    getWholesale, 
+    whol, 
+    activeId,
+    currentPage,
+    has_next,
+    has_previous,
+    total_number
+}) => {
     
     // Set Default States
     
     const size = useWindowSize(); 
-    const [refresh, setRefresh] = useState(null);
     const [collectionDate, setCollectionDate] = useState(collectionDateSelection(size.width));
     const [collectionID, setCollectionID] = useState(`${localStorage.getItem('activeId')}`);
 
@@ -35,9 +49,10 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
     const [searchValue, setSearchValue] = useState("");
     const [typeValue, setTypeValue] = useState("");
     const [typeFilter, setTypeFilter] = useState("All");
+    const [page, setPage] = useState("1");
     const [loading, setLoading] = useState(true)
 
-    // Handle Data Request (Initial + Refresh)
+    // Handle Initial Data Request
 
     useEffect(() => {
         
@@ -49,46 +64,13 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
         setCollectionDate(collectionDateSelection(size.width));
         setLoading(true);
         
-        getParticipantList(collection, searchInput, type).then(() => setLoading(false));
+        getParticipantList(page, collection, searchInput, type).then(() => setLoading(false));
         getCollections(collPage, collStatus);
-        setRefresh("NO");
         setShowAddButton(true);
       }, []);
 
 
-    useEffect(() => {
-        if (refresh === "YES"){
-            
-            let collection = collectionID;
-            let searchInput = searchValue;
-            let type = typeValue;
-            let collPage = "all";
-            let collStatus = "";
-            setCollectionDate(collectionDateSelection(size.width))
-            setLoading(true);
-
-            getParticipantList(collection, searchInput, type).then(() => setLoading(false));
-            getWholesale(collection)
-            //getDonors();
-            getCollections(collPage, collStatus);
-            setRefresh("NO");
-        } else if (refresh === null) {
-            
-            let collection = collectionID;
-            let searchInput = searchValue;
-            let type = typeValue;
-            let collPage = "all";
-            let collStatus = "";
-            setLoading(true);
-
-            getParticipantList(collection, searchInput, type).then(() => setLoading(false));
-            getCollections(collPage, collStatus);
-            //getDonors();
-            setRefresh("NO");
-            setShowAddButton(true);
-        }
-      }, []);
-
+    
     // Modal Handlers
 
     const [editParticipationShow, setEditParticipationShow] = useState(false);
@@ -97,18 +79,14 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
 
     const editParticipationClose = () => {
         setEditParticipationShow(false);
-        setRefresh("YES");
-        console.log(refresh)
     };
 
     const successModalClose = () => {
         setSuccessModalShow(false);
-        console.log(refresh)
     };
 
     const successDeleteModalClose = () => {
         setSuccessDeleteModalShow(false);
-        console.log(refresh)
     };
 
     // Participation Modal Info Handlers
@@ -138,9 +116,7 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
     const [colldate, setColldate] = useState(null);
     const [donfullname, setDonfullname] = useState(null);
     const [donemail, setDonemail] = useState(null);
-    const [donaddress1, setDonaddress1] = useState(null);
-    const [donaddress2, setDonaddress2] = useState(null);
-    const [donpostcode, setDonpostcode] = useState(null);
+    const [donfulladdress, setDonfulladdress] = useState(null);
     const [donnotes, setDonnotes] = useState(null);
     const [donphone, setDonphone] = useState(null);
     const [pardontype, setPardontype] = useState(null);
@@ -159,10 +135,12 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
         let collection = CollectionID;
         let searchInput =searchValue;
         let type = typeValue;
+        let filtPage = "1";
         setLoading(true);
+        setPage(filtPage);
 
         getWholesale(collection);
-        getParticipantList(collection, searchInput, type).then(() => setLoading(false));
+        getParticipantList(filtPage, collection, searchInput, type).then(() => setLoading(false));
         setCollectionDate(CollectionDate);
         setCollectionID(collection);
         setShowAddButton(true);
@@ -175,10 +153,13 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
         let collection = collectionID;
         let searchInput = searchValue;
         setLoading(true);
+        let filtPage = "1";
+        setLoading(true);
+        setPage(filtPage);
 
         console.log(parsList.reduce((a,v) =>  a = a + parseFloat(v.TotalDonated) , 0 ))
         
-        getParticipantList(collection, searchInput, type).then(() => setLoading(false));
+        getParticipantList(filtPage, collection, searchInput, type).then(() => setLoading(false));
 
         setTypeValue(type);
         setTypeFilter(filter);
@@ -211,8 +192,48 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
         let searchInput = searchVal;
         setSearchValue(searchInput);
         let type = typeValue;
-        getParticipantList(collection, searchInput, type);
+        setLoading(true);
+        let filtPage = "1";
+        setLoading(true);
+        setPage(filtPage);
+        
+        getParticipantList(filtPage, collection, searchInput, type).then(() => setLoading(false));
     };
+
+    // Handle Page
+
+    const handlePage = (inputVal) => {
+ 
+        let prevPage = currentPage;
+        let newpage = `${parseInt(prevPage)+parseInt(inputVal)}`;
+        setLoading(true);
+ 
+        setPage(newpage);
+        getParticipantList(newpage, collectionID, searchValue, typeValue).then(() => setLoading(false));
+    };
+ 
+    // Handle Last Page
+ 
+    const handleLastPage = (inputValue) => {
+ 
+        let newpage = inputValue;
+        setLoading(true);
+ 
+        setPage(newpage)
+        getParticipantList(newpage, collectionID, searchValue, typeValue).then(() => setLoading(false));
+    };
+ 
+    // Handle First Page
+ 
+    const handleFirstPage = (inputValue) => {
+    
+        let newpage = inputValue;
+        setLoading(true);
+ 
+        setPage(newpage);
+        getParticipantList(newpage, collectionID, searchValue, typeValue).then(() => setLoading(false));
+    };
+ 
 
     // Recieve Handle
 
@@ -314,20 +335,18 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
                                             <Dropdown.Item onClick={() => {   
                                                     setEditParticipationShow(true);
                                                     setParid(par.ParticipationID);
-                                                    setDonid(par.DonorID);
+                                                    setDonid(par.DonorID.DonorID);
                                                     setCollid(par.CollectionID);
                                                     setWhoid(par.WholesaleID);
-                                                    setDonfullname(par.FullName);
-                                                    setDonemail(par.Email);
-                                                    setDonaddress1(par.Address1);
-                                                    setDonaddress2(par.Address2);
-                                                    setDonpostcode(par.PostCode);
-                                                    setDonnotes(par.Notes);
-                                                    setDonphone(par.Phone);
+                                                    setDonfullname(par.DonorID.FullName);
+                                                    setDonemail(par.DonorID.Email);
+                                                    setDonfulladdress(fullAddressHandler(par.DonorID.Address1, par.DonorID.Address2, par.DonorID.Address3, par.DonorID.PostCode));
+                                                    setDonnotes(par.DonorID.Notes);
+                                                    setDonphone(par.DonorID.Phone);
                                                     setPardontype(par.DonationType);
                                                     setPartotdon(par.TotalDonated);
                                                     setPartime(par.DropOffTime);
-                                                    setParnotes(par.ParticipationNotes);
+                                                    setParnotes(par.Notes);
                                                     setParrec(par.PaymentRecieved);
                                                     setSuccessModalShow(false);
                                                     setReqStatus(`${par.FullName} from collection on ${collectionDate} saved`);
@@ -347,9 +366,7 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
                                                 whoid={whoid}
                                                 donfullname={donfullname}
                                                 donemail={donemail}
-                                                donaddress1={donaddress1}
-                                                donaddress2={donaddress2}
-                                                donpostcode={donpostcode}
+                                                donfulladdress={donfulladdress}
                                                 donnotes={donnotes}
                                                 donphone={donphone}
                                                 pardontype={pardontype}
@@ -402,23 +419,28 @@ const ParticipationPage = ({parsList, colls, getCollections, getParticipantList,
                                             type="switch"
                                             id="custom-switch"
                                             label={handleParticipantPayment(par.PaymentRecieved)}
-                                            checked={(par.PaymentRecieved === 'true')}
-                                            onChange={(e) => {changeRecVal(e, par.CollectionID, par.DonorID, par.ParticipationID, par.PaymentRecieved, par.DonationType, par.TotalDonated, par.DropOffTime, par.Notes, par.WholesaleID)}}
+                                            checked={(`${par.PaymentRecieved}` === 'true')}
+                                            onChange={(e) => {changeRecVal(e, par.CollectionID, par.DonorID.DonorID, par.ParticipationID, par.PaymentRecieved, par.DonationType, par.TotalDonated, par.DropOffTime, par.Notes, par.WholesaleID)}}
                                         />
                                     </td> : null}
-                                    <td>{par.FullName}</td>
-                                    {(size.width > 760) &&<td>
-                                        {par.Address1} <br />
-                                        {par.Address2} <br />
-                                        {par.PostCode}
-                                    </td>}
+                                    <td>{par.DonorID.FullName}</td>
+                                    {(size.width > 760) &&<td>{fullAddressHandler(par.DonorID.Address1, par.DonorID.Address2, par.DonorID.Address3, par.DonorID.PostCode)}</td>}
                                     {(typeValue === "") &&<td>{handleParticipantType(par.DonationType)}</td>}
                                     {(typeValue === "3") &&<td>{handleParticipantPayment(par.PaymentRecieved)}</td>}
-                                    {(size.width > 760) &&<td>{par.Email}</td>}
+                                    {(size.width > 760) &&<td>{par.DonorID.Email}</td>}
                                     
                                 </tr>)}
                     </tbody>
                 </Table>
+                <Pagination style={{justifyContent:"center"}}>
+                    {(page != "1") &&<Pagination.First onClick={e => handleFirstPage("1")}/>}
+                    {(has_previous) &&<Pagination.Prev onClick={e => handlePage("-1")}/>}
+                    <Pagination.Item active>
+                        {page}
+                    </Pagination.Item>
+                    {(has_next) &&<Pagination.Next onClick={e => handlePage("1")}/>}
+                    {(page != total_number) &&<Pagination.Last onClick={e => handleLastPage(total_number)}/>}
+                </Pagination>
             </div>}
         </div>
     )
@@ -433,6 +455,10 @@ const mapStateToProps = (state) => ({
     colls: state.collections.colls,
     whol: state.wholesale.whol,
     activeId: state.collections.activeId,
+    currentPage: state.participants.currentPage,
+    has_next: state.participants.has_next,
+    has_previous: state.participants.has_previous,
+    total_number: state.participants.total_number
 });
 
 export default connect(mapStateToProps, { getCollections, getWholesale, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, editParticipantStatus })(ParticipationPage)

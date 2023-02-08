@@ -27,7 +27,7 @@ import {
 
 // GET PARTICIPANT LIST
 
-export const getParticipantList = (CollectionID, FullName, Type) => async dispatch => {
+export const getParticipantList = (page, CollectionID, FullName, Type) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config ={
             headers: {
@@ -38,44 +38,94 @@ export const getParticipantList = (CollectionID, FullName, Type) => async dispat
         };
         try {
             if (CollectionID === "" | CollectionID === null ){
-                const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?fullname=${FullName}`, config)
-                dispatch({
-                    type: PARTICIPATION_LIST_SUCCESSFUL,
-                    payload: res.data
-                });
-            } else {
-                const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?collid=${CollectionID}&fullname=${FullName}&type=${Type}`, config)
-                
-                if (Type === "1" | Type === "4"){
-                    dispatch({
-                        type: PARTICIPATION_LIST_SUCCESSFUL,
-                        // payload: res.data.sort((a, b) => {
-                        //     if (parseInt(a.DropOffTime) > parseInt(b.DropOffTime)) { return 1; }
-                        //     if (parseInt(b.DropOffTime) > parseInt(a.DropOffTime)) { return -1; }
-                        //     return 0;
-                        //   }),
-                        payload: res.data.sort((a, b) => {
-                            return cmp(
-                                [cmp(a.PaymentRecieved, b.PaymentRecieved), cmp(parseInt(a.DropOffTime), parseInt(b.DropOffTime))],
-                                [cmp(b.PaymentRecieved, a.PaymentRecieved), cmp(parseInt(b.DropOffTime), parseInt(a.DropOffTime))]
-                            );
-                        })
-                    });
-                } else if (Type === "2"){
-                    dispatch({
-                        type: PARTICIPATION_LIST_SUCCESSFUL,
-                        payload: res.data.sort((a, b) => {
-                            if (a.PostCode > b.PostCode) { return 1; }
-                            if (b.PostCode > a.PostCode) { return -1; }
-                            return 0;
-                          })
-                    });
+                if (Type === "" | Type === null ) {
+                    if (FullName === "" | FullName === null ) {
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}`, config);
+                        dispatch({
+                            type: PARTICIPATION_LIST_SUCCESSFUL,
+                            payload: res.data
+                        });
+                    } else {
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&fullname=${FullName}`, config);
+                        dispatch({
+                            type: PARTICIPATION_LIST_SUCCESSFUL,
+                            payload: res.data
+                        });
+                    } 
                 } else {
-                    dispatch({
-                        type: PARTICIPATION_LIST_SUCCESSFUL,
-                        payload: res.data
-                    });
+                    if (FullName === "" | FullName === null ) {
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&type=${Type}`, config);
+                        dispatch({
+                            type: PARTICIPATION_LIST_SUCCESSFUL,
+                            payload: res.data
+                        });
+                    } else {
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&fullname=${FullName}&type=${Type}`, config);
+                        dispatch({
+                            type: PARTICIPATION_LIST_SUCCESSFUL,
+                            payload: res.data
+                        });
+                    } 
                 }
+
+            } else {
+                if (Type === "" | Type === null ) {
+                    if (FullName === "" | FullName === null ) {
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&collid=${CollectionID}`, config);
+                        dispatch({
+                            type: PARTICIPATION_LIST_SUCCESSFUL,
+                            payload: res.data
+                        });
+                    } else {
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&collid=${CollectionID}&fullname=${FullName}`, config);
+                        dispatch({
+                            type: PARTICIPATION_LIST_SUCCESSFUL,
+                            payload: res.data
+                        });
+                    } 
+                } else {
+                    if (FullName === "" | FullName === null ) {
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&collid=${CollectionID}&type=${Type}`, config);
+                        dispatch({
+                            type: PARTICIPATION_LIST_SUCCESSFUL,
+                            payload: res.data
+                        });
+                    } else {
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&collid=${CollectionID}&fullname=${FullName}&type=${Type}`, config);
+                        dispatch({
+                            type: PARTICIPATION_LIST_SUCCESSFUL,
+                            payload: res.data
+                        });
+                    } 
+                }
+                
+                
+                // if (Type === "1" | Type === "4"){
+                //     dispatch({
+                //         type: PARTICIPATION_LIST_SUCCESSFUL,
+                //         // payload: res.data.sort((a, b) => {
+                //         //     if (parseInt(a.DropOffTime) > parseInt(b.DropOffTime)) { return 1; }
+                //         //     if (parseInt(b.DropOffTime) > parseInt(a.DropOffTime)) { return -1; }
+                //         //     return 0;
+                //         //   }),
+                //         payload: res.data.data.sort((a, b) => {
+                //             return cmp(
+                //                 [cmp(a.PaymentRecieved, b.PaymentRecieved), cmp(parseInt(a.DropOffTime), parseInt(b.DropOffTime))],
+                //                 [cmp(b.PaymentRecieved, a.PaymentRecieved), cmp(parseInt(b.DropOffTime), parseInt(a.DropOffTime))]
+                //             );
+                //         })
+                //     });
+                // } else if (Type === "2"){
+                //     dispatch({
+                //         type: PARTICIPATION_LIST_SUCCESSFUL,
+                //         payload: res.data.data.sort((a, b) => {
+                //             if (a.PostCode > b.PostCode) { return 1; }
+                //             if (b.PostCode > a.PostCode) { return -1; }
+                //             return 0;
+                //           })
+                //     });
+                // } else {
+                // }
                 
             }
             

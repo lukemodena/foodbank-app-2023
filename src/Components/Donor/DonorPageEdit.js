@@ -48,7 +48,6 @@ const DonorPage = ({
 
     // Set Default States
     const size = useWindowSize(); 
-    const [refresh, setRefresh] = useState("NO");
     
     const [monthFilter, setMonthFilter] = useState("All Contacts");
     const [monthValue, setMonthValue] = useState("");
@@ -57,38 +56,16 @@ const DonorPage = ({
     const [page, setPage] = useState("1");
     const [loading, setLoading] = useState(true);
 
-    // Handle Data Request (Initial + Refresh)
+    // Handle Initial Data Request
 
     useEffect(() => {
         let newpage = page
         setLoading(true);
         getDonors(newpage).then(() => setLoading(false));
         getActiveCollection();
-        setRefresh("NO");
       }, []);
 
 
-    // useEffect(() => {
-    //     if (refresh === "YES"){
-    //         let newpage = page
-    //         getDonors(newpage);
-    //         getActiveCollection();
-    //         setRefresh("NO");
-    //         setMonthValue("");
-    //         setMonthFilter("All Contacts");
-    //         setSearchValue("")
-    //         setRefresh("NO");
-    //     } else if (refresh === null) {
-    //         let newpage = page
-    //         getDonors(newpage);
-    //         getActiveCollection();
-    //         setRefresh("NO");
-    //         setMonthValue("");
-    //         setMonthFilter("All Contacts");
-    //         setSearchValue("")
-    //         setRefresh("NO");
-    //     }
-    //   }, []);
 
     // Modal Handlers
     const [addModalShow, setAddModalShow] = useState(false);
@@ -101,27 +78,22 @@ const DonorPage = ({
 
     const addModalClose = () => {
         setAddModalShow(false);
-        setRefresh("YES");
     };
 
     const editModalClose = () => {
         setEditModalShow(false);
-        setRefresh("YES");
     };
 
     const infoModalClose = () => {
         setInfoModalShow(false);
-        setRefresh("YES");
     };
 
     const addParticipationClose = () => {
         setAddParticipationShow(false);
-        setRefresh("YES");
     };
 
     const emailModalClose = () => {
         setEmailModalShow(false);
-        setRefresh("YES");
     };
 
     const successModalClose = () => {
@@ -191,7 +163,6 @@ const DonorPage = ({
     // Handle Page
 
     const handlePage = (inputVal) => {
-       // e.preventDefault();
 
         let monthType = monthValue;
         let searchInput = searchValue;
@@ -206,36 +177,34 @@ const DonorPage = ({
     // Handle Last Page
 
     const handleLastPage = (inputValue) => {
-       // e.preventDefault();
 
         let monthType = monthValue;
         let searchInput = searchValue;
         let newpage = inputValue;
-        setLoading(true)
+        setLoading(true);
 
-        setPage(newpage)
+        setPage(newpage);
         searchDonors(newpage, monthType, searchInput).then(() => setLoading(false));
     }
 
     // Handle First Page
 
     const handleFirstPage = (inputValue) => {
-        // e.preventDefault();
     
             let monthType = monthValue;
             let searchInput = searchValue;
             let newpage = inputValue;
-            setLoading(true)
+            setLoading(true);
 
-            setPage(newpage)
+            setPage(newpage);
             searchDonors(newpage, monthType, searchInput).then(() => setLoading(false));
-        }
+    }
 
     // Donor Delete
 
     const handleDelete = (donId) => {
         if(window.confirm('Are you sure?')){
-            setLoading(true)
+            setLoading(true);
             deleteDonor(donId).then(() => setLoading(false));
             setSuccessDeleteModalShow(true);
         }

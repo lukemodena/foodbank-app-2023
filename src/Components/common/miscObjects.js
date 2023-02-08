@@ -119,10 +119,10 @@ export const collectionDateSelection = (inputValue) => {
 export const handleParticipantPayment = (inputValue) => {
     let participantPayment = inputValue;
 
-    if (participantPayment === "true") {
+    if (participantPayment === "true" | participantPayment === true) {
         let recieved = "Yes";
         return recieved
-    } else if (participantPayment === "false") {
+    } else if (participantPayment === "false" | participantPayment === false) {
         let recieved = "No";
         return recieved
     } else {

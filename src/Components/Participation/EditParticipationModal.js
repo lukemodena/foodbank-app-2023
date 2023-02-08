@@ -15,9 +15,7 @@ export function EditParticipationModal(props){
         whoid,
         donfullname,
         donemail,
-        donaddress1,
-        donaddress2,
-        donpostcode,
+        donfulladdress,
         donnotes,
         donphone,
         pardontype,
@@ -184,9 +182,7 @@ export function EditParticipationModal(props){
                                     Full Name: <br />
                                     <strong>{donfullname}</strong> <br />
                                     Address: <br />
-                                    <strong>{donaddress1} <br />
-                                    {donaddress2} <br />
-                                    {donpostcode}</strong> <br />
+                                    <strong>{donfulladdress}</strong> <br />
                                     Email: <br />
                                     <strong>{donemail}</strong> <br />
                                     Phone: <br />
