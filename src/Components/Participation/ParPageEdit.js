@@ -245,11 +245,11 @@ const ParticipationPage = ({
         let type = typeValue;
         setLoading(true);
         
-        if (PayRec === "true"){
+        if (PayRec === true){
             let newStatus = "false"
             editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, searchInput, type).then(() => setLoading(false));
             
-        } else if (PayRec === "false"){
+        } else if (PayRec === false){
             let newStatus = "true"
             editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, searchInput, type).then(() => setLoading(false));
         };
