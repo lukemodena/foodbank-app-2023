@@ -430,7 +430,7 @@ const ParticipationPage = ({
                                     <td>{par.DonorID.FullName}</td>
                                     {(typeValue === "2") &&<td>{fullAddressHandler(par.DonorID.Address1, par.DonorID.Address2, par.DonorID.Address3, par.DonorID.PostCode)}</td>}
                                     {(typeValue === "") &&<td>{handleParticipantType(par.DonationType)}</td>}
-                                    {(typeValue === "3") &&<td>{par.TotalDonated}</td>}
+                                    {(typeValue === "3") &&<td>£{par.TotalDonated}</td>}
                                     {(typeValue === "3") &&<td>{handleParticipantPayment(par.PaymentRecieved)}</td>}
                                     {(size.width > 760) &&<td>{par.DonorID.Email}</td>}
                                     
