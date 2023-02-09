@@ -3,10 +3,16 @@ import dayjs from 'dayjs';
 // Collection Date (Participants + Collection Page)
 
 export const handleCollectionDate = (inputValue) => {
-    let dateFormat = dayjs(`${inputValue} T00:00:00`);
-    let collectionDate = Intl.DateTimeFormat('en-GB', {  month: "short", day: "numeric", year: "numeric" }).format(dateFormat);
+    if (inputValue === "Select Collection" | inputValue === "Select Date") {
+        let collectionDate = inputValue;
 
-    return collectionDate
+        return collectionDate;
+    } else {
+        let dateFormat = dayjs(`${inputValue} T00:00:00`);
+        let collectionDate = Intl.DateTimeFormat('en-GB', {  month: "short", day: "numeric", year: "numeric" }).format(dateFormat);
+
+        return collectionDate;
+    }
 };
 
 // Collection Date (Email Modal)

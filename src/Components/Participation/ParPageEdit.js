@@ -267,7 +267,7 @@ const ParticipationPage = ({
                         {/* Collection Filter */}
 
                         <Dropdown.Toggle className="participation-dropdownFilterButton" variant="outline-secondary" size="sm" id="dropdown-basic">
-                            {collectionDate}
+                            {handleCollectionDate(collectionDate)}
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu style={{height: "300px", overflowY: "scroll"}}>
@@ -314,7 +314,7 @@ const ParticipationPage = ({
                             {(size.width > 760) &&<th>ID</th>}
                             <th>Options</th>
                             {(typeValue === "1" | typeValue === "4") ?<th>Time</th> : null}
-                            {(typeValue === "1" | typeValue === "4") ?<th>Received</th> : null}
+                            {(typeValue === "1" | typeValue === "2" | typeValue === "4") ?<th>Received</th> : null}
                             <th>Name</th>
                             {(typeValue === "2") &&<th>Address</th>}
                             {(typeValue === "") &&<th>Donation Type</th>}
@@ -418,7 +418,7 @@ const ParticipationPage = ({
                                     </Dropdown>
                                     </td>
                                     {(typeValue === "1" | typeValue === "4") ?<td>{handleDropOffTime(par.DropOffTime)}</td> : null}
-                                    {(typeValue === "1" | typeValue === "4") ?<td>
+                                    {(typeValue === "1" | typeValue === "2" | typeValue === "4") ?<td>
                                         <Form.Check 
                                             type="switch"
                                             id="custom-switch"
