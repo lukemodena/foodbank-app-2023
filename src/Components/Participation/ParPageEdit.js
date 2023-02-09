@@ -314,7 +314,7 @@ const ParticipationPage = ({
                             {(size.width > 760) &&<th>ID</th>}
                             <th>Options</th>
                             {(typeValue === "1" | typeValue === "4") ?<th>Time</th> : null}
-                            {(typeValue === "1" | typeValue === "4") ?<th>Recieved</th> : null}
+                            {(typeValue === "1" | typeValue === "4") ?<th>Received</th> : null}
                             <th>Name</th>
                             {(size.width > 760) &&<th>Address</th>}
                             {(typeValue === "") &&<th>Donation Type</th>}
