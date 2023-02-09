@@ -49,19 +49,19 @@ export const typeOptions = [
         key: 1,
         type: "Monthly (Both)",
         value: "1",
-        filter: "Monthly Contacts"
+        filter: "Monthly"
     },
     {
         key: 2,
         type: "3 Months",
         value: "3",
-        filter: "3 Months Contacts"
+        filter: "3 Months"
     },
     {
         key: 3,
         type: "Other",
         value: "0",
-        filter: "Other Contacts"
+        filter: "Other"
     }
 ];
 
