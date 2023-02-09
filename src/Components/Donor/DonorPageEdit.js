@@ -65,8 +65,6 @@ const DonorPage = ({
         getActiveCollection();
       }, []);
 
-
-
     // Modal Handlers
     const [addModalShow, setAddModalShow] = useState(false);
     const [editModalShow, setEditModalShow] = useState(false);

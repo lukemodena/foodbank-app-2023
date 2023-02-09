@@ -60,32 +60,13 @@ const Collection = ({
     const [isChecked, setIsChecked] = useState([]);
     const [page, setPage] = useState("1");
 
-    // Handle Data Request (Initial + Refresh)
+    // Handle Initial Data Request
 
     useEffect(() => {
         setMonthFilter(collectionTypeSelection(size.width))
         setLoading(true);
         getCollections(page, pageStatus).then(() => setLoading(false));
       }, []);
-
-
-    // useEffect(() => {
-    //     if (refresh === "YES"){
-    //         getCollections(page, pageStatus);
-    //         setStartDate("");
-    //         setEndDate("");
-    //         setMonthValue("");
-    //         setMonthFilter("All");
-    //         setRefresh("NO");
-    //     } else if (refresh === null) {
-    //         getCollections(page, pageStatus);
-    //         setStartDate("");
-    //         setEndDate("");
-    //         setMonthValue("");
-    //         setMonthFilter("All");
-    //         setRefresh("NO");
-    //     }
-    //   }, []);
 
     // Modal Handlers
     const [addModalShow, setAddModalShow] = useState(false);

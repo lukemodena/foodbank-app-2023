@@ -37,7 +37,6 @@ const CollectionArchive = ({
 
     // Set Default States
     const size = useWindowSize(); 
-    const [refresh, setRefresh] = useState(null);
     
     const status = 'ARCHIVED';
     const [monthFilter, setMonthFilter] = useState(collectionTypeSelection(size.width));
@@ -48,33 +47,12 @@ const CollectionArchive = ({
     const [page, setPage] = useState("1");
     const [loading, setLoading] = useState(true);
 
-    // Handle Data Request (Initial + Refresh)
+    // Handle Initial Data Request
 
     useEffect(() => {
         setMonthFilter(collectionTypeSelection(size.width))
         setLoading(true);
         getCollections(page, status).then(() => setLoading(false));
-        setRefresh("NO");
-      }, []);
-
-
-    useEffect(() => {
-        if (refresh === "YES"){
-            setLoading(true);
-            getCollections(page, status).then(() => setLoading(false));
-            setStartDate("");
-            setEndDate("");
-            setMonthValue("");
-            setMonthFilter("All");
-            setRefresh("NO");
-        } else if (refresh === null) {
-            getCollections(page, status).then(() => setLoading(false));
-            setStartDate("");
-            setEndDate("");
-            setMonthValue("");
-            setMonthFilter("All");
-            setRefresh("NO");
-        }
       }, []);
 
     // Modal Handlers
@@ -83,7 +61,6 @@ const CollectionArchive = ({
 
     const infoModalClose = () => {
         setInfoModalShow(false);
-        setRefresh("YES");
     };
 
     const successDeleteModalClose = () => {
