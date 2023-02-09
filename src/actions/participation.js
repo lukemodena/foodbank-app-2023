@@ -173,7 +173,7 @@ export const getParticipants = (CollectionID) => async dispatch => {
     }
 };
 
-// PULL CURRENT PARTICIPANTS
+// PULL CURRENT PARTICIPANTS (FOR CREATE PARTICIPANTS ON CONTACTS/DONOR PAGE - PREVENTS DUPLICATION)
 
 export const getCurrentParticipants = (CollectionID, DonorID, payRec, donTyp, totDon, droTim, notes, donId, colId, whoId) => async dispatch => {
 
@@ -394,7 +394,7 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, notes, donId, co
 
 // EDIT PARTICIPANTS
 
-export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, type, searchInput) => async dispatch => {
+export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, page, Notes, WholesaleID, type, searchInput) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -426,7 +426,7 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
                 payload: res.data
             });
 
-            dispatch(getParticipantList(CollectionID, searchInput, type))
+            dispatch(getParticipantList(page, CollectionID, searchInput, type))
 
             if (donChange !== 0) {
                 dispatch(updateWholesale(CollectionID, WholesaleID, donChange));
@@ -448,7 +448,7 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
 
 // EDIT PARTICIPANTS STATUS
 
-export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, Notes, WholesaleID, FullName, Type) => async dispatch => {
+export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, Notes, WholesaleID, page, FullName, Type) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -477,7 +477,7 @@ export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, Paym
                 type: EDIT_PARTICIPATION_SUCCESS,
                 payload: res.data
             });
-            dispatch(getParticipantList(CollectionID, FullName, Type));
+            dispatch(getParticipantList(page, CollectionID, FullName, Type));
         } catch (err) {
             dispatch({
                 type: EDIT_PARTICIPATION_FAIL,
@@ -551,7 +551,7 @@ export const updateWholesaleDelete = (wholesaleID, collectionID, DonationVal) =>
 
 // DELETE PARTICIPANTS
 
-export const deleteParticipant = (participantID, DonationVal, collectionID, wholesaleID, searchInput, type) => async dispatch => {
+export const deleteParticipant = (participantID, DonationVal, collectionID, wholesaleID, page, searchInput, type) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config = {
             headers: {
@@ -568,7 +568,7 @@ export const deleteParticipant = (participantID, DonationVal, collectionID, whol
             });
 
             dispatch(updateWholesaleDelete(wholesaleID, collectionID, DonationVal));
-            dispatch(getParticipantList(collectionID, searchInput, type));
+            dispatch(getParticipantList(page, collectionID, searchInput, type));
         } catch (err) {
             dispatch({
                 type: DELETE_PARTICIPATION_FAIL

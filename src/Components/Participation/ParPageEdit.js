@@ -170,7 +170,8 @@ const ParticipationPage = ({
     const handleEditParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID) => {
         let type = typeValue;
         let searchInput = searchValue;
-        editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, type, searchInput)
+        setLoading(true);
+        editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, page, type, searchInput).then(() => setLoading(false));
         setSuccessModalShow(true);
     };
 
@@ -179,8 +180,9 @@ const ParticipationPage = ({
     const handleDelete = (parId, parTotDon, collId, wholId) => {
         if(window.confirm('Are you sure?')){
             let searchInput = searchValue;
-            let type = typeValue
-            deleteParticipant(parId, parTotDon, collId, wholId, searchInput, type);
+            let type = typeValue;
+            setLoading(true);
+            deleteParticipant(parId, parTotDon, collId, wholId, page, searchInput, type).then(() => setLoading(false));
             setSuccessDeleteModalShow(true);
         }
     };
@@ -241,14 +243,15 @@ const ParticipationPage = ({
         e.preventDefault();
         let searchInput = searchValue;
         let type = typeValue;
+        setLoading(true);
         
         if (PayRec === "true"){
             let newStatus = "false"
-            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, searchInput, type);
+            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, searchInput, type).then(() => setLoading(false));
             
         } else if (PayRec === "false"){
             let newStatus = "true"
-            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, searchInput, type);
+            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, searchInput, type).then(() => setLoading(false));
         };
         
     };
