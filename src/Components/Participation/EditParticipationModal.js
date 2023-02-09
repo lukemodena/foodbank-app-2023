@@ -66,6 +66,7 @@ export function EditParticipationModal(props){
         let DonorID = e.target.DonorID.value;
         let ParticipantID = e.target.ParticipantID.value;
         let PaymentRecieved = paymentRecievedVal;
+        let OriginalPaymentRecieved = e.target.OriginalPaymentRecieved.value;
         let DonationType = e.target.DonationType.value;
         let originalTotalDonated = e.target.OriginalTotalDonated.value;
         let TotalDonated = totalDonatedVal;
@@ -73,10 +74,9 @@ export function EditParticipationModal(props){
         let Notes = e.target.ParticipationNotes.value;
         let WholesaleID = e.target.WholesaleID.value;
 
-        let DonationChange = parseFloat(TotalDonated) - parseFloat(originalTotalDonated)
-        //console.log(CollectionID, DonorID, ParticipantID, PaymentRecieved, "DonType:", DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID);
+        let DonationChange = parseFloat(TotalDonated) - parseFloat(originalTotalDonated);
 
-        editpart(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID);
+        editpart(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved);
     }
 
 
@@ -162,6 +162,10 @@ export function EditParticipationModal(props){
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
                                     </Form.Select>}
+                                </Form.Group>
+
+                                <Form.Group controlId='OriginalPaymentRecieved'>
+                                    <Form.Control type='hidden' name='OriginalPaymentRecieved' disabled placeholder='OriginalPaymentRecieved' defaultValue={parrec}/>
                                 </Form.Group>
 
                                 <Form.Group controlId='ParticipationNotes'>

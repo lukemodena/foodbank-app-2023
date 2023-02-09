@@ -167,22 +167,23 @@ const ParticipationPage = ({
 
     // Edit Participant
 
-    const handleEditParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID) => {
+    const handleEditParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved) => {
+        
         let type = typeValue;
         let searchInput = searchValue;
         setLoading(true);
-        editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, page, type, searchInput).then(() => setLoading(false));
+        editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, currentPage, type, searchInput).then(() => setLoading(false));
         setSuccessModalShow(true);
     };
 
     // Participant Delete
 
-    const handleDelete = (parId, parTotDon, collId, wholId) => {
+    const handleDelete = (parId, parDonTyp, parTotDon, parPayRec, collId, wholId) => {
         if(window.confirm('Are you sure?')){
             let searchInput = searchValue;
             let type = typeValue;
             setLoading(true);
-            deleteParticipant(parId, parTotDon, collId, wholId, page, searchInput, type).then(() => setLoading(false));
+            deleteParticipant(parId, parDonTyp, parTotDon, parPayRec, collId, wholId, page, searchInput, type).then(() => setLoading(false));
             setSuccessDeleteModalShow(true);
         }
     };
@@ -400,7 +401,7 @@ const ParticipationPage = ({
                                                     setReqStatus(`${par.FullName} from collection on ${collectionDate} deleted`);
                                                     setType("participant");
                                                     setIsAdd(false);
-                                                    handleDelete(par.ParticipationID, par.TotalDonated, par.CollectionID, par.WholesaleID)
+                                                    handleDelete(par.ParticipationID, par.DonationType, par.TotalDonated, par.PaymentRecieved, par.CollectionID, par.WholesaleID)
                                                     }
                                                 }
                                             >

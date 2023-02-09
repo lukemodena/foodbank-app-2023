@@ -208,7 +208,6 @@ export const getCurrentParticipants = (CollectionID, DonorID, payRec, donTyp, to
                 type: PARTICIPATION_NOT_EXISTS,
                 payload: err
             });
-            //dispatch(addParticipant(payRec, donTyp, totDon, droTim, donId, colId, whoId))
         }
     } else {
         dispatch({
@@ -308,12 +307,13 @@ export const updateWholesale = (CollectionID, wholesaleID, newDonationVal) => as
             };
             
             const body = {
-                "WholesaleID": `${wholesaleID}`,
-                "TotalDonated": `${currentTotal}`,
-                "TotalSpent": `${res.data[0].TotalSpent}`,
-                "Remainder": `${remainder}`,
+                "WholesaleID": parseInt(wholesaleID),
+                "TotalDonated": parseFloat(currentTotal).toFixed(2),
+                "TotalSpent": parseFloat(res.data[0].TotalSpent).toFixed(2),
+                "Remainder": parseFloat(remainder).toFixed(2),
                 "WholesaleReceipt": `${res.data[0].WholesaleReceipt}`,
-                "CollectionID": `${res.data[0].CollectionID}`
+                "Notes": `${res.data[0].Notes}`,
+                "CollectionID": parseInt(res.data[0].CollectionID)
             };
             try {
                 const res = await axios.put(`${process.env.REACT_APP_API}wholesale`, body, config);
@@ -323,7 +323,8 @@ export const updateWholesale = (CollectionID, wholesaleID, newDonationVal) => as
                 });
             } catch (err) {
                 dispatch({
-                    type: EDIT_WHOLESALE_FAIL
+                    type: EDIT_WHOLESALE_FAIL,
+                    payload: err
                 });
                 dispatch(alert('Failed'));
             }
@@ -375,7 +376,7 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, notes, donId, co
                 payload: res.data
             });
             dispatch(updateDonor(donId));
-            if (totDon !== "0"){ 
+            if (payRec === "true" | payRec === true){ 
                 dispatch(updateWholesale(colId, whoId, totDon));
             };
         } catch (err) {
@@ -394,7 +395,7 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, notes, donId, co
 
 // EDIT PARTICIPANTS
 
-export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, page, Notes, WholesaleID, type, searchInput) => async dispatch => {
+export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, page, type, searchInput) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -426,10 +427,24 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
                 payload: res.data
             });
 
-            dispatch(getParticipantList(page, CollectionID, searchInput, type))
-
-            if (donChange !== 0) {
-                dispatch(updateWholesale(CollectionID, WholesaleID, donChange));
+            dispatch(getParticipantList(page, CollectionID, searchInput, type));
+            if (DonationType === "3") {
+                if (OriginalPaymentRecieved === PaymentRecieved) {
+                    if ((PaymentRecieved === "true" || PaymentRecieved === true) && donChange !== 0) {
+                        dispatch(updateWholesale(CollectionID, WholesaleID, donChange));                    
+                    }
+                } else if (OriginalPaymentRecieved != PaymentRecieved) {
+                    if (PaymentRecieved === "true" | PaymentRecieved === true) {
+                        let totDonated = parseFloat(TotalDonated);
+                        dispatch(updateWholesale(CollectionID, WholesaleID, totDonated));
+                    } else if ((PaymentRecieved === "false" || PaymentRecieved === false) && donChange === 0) {
+                        let removeDonation = -parseFloat(TotalDonated);
+                        dispatch(updateWholesale(CollectionID, WholesaleID, removeDonation));         
+                    } else if ((PaymentRecieved === "false" || PaymentRecieved === false) && donChange !== 0) {
+                        let removeDonation = -(parseFloat(TotalDonated) - donChange)
+                        dispatch(updateWholesale(CollectionID, WholesaleID, removeDonation));                    
+                    }
+                }
             }
         } catch (err) {
             dispatch({
@@ -495,7 +510,7 @@ export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, Paym
 
 // UPDATE WHOLESALE (DELETE)
 
-export const updateWholesaleDelete = (wholesaleID, collectionID, DonationVal) => async dispatch => {
+export const updateWholesaleDelete = (collectionID, wholesaleID, DonationVal) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -515,12 +530,13 @@ export const updateWholesaleDelete = (wholesaleID, collectionID, DonationVal) =>
             let remainder = currentTotal - parseFloat(res.data[0].TotalSpent);
 
             const body = {
-                "WholesaleID": `${wholesaleID}`,
-                "TotalDonated": `${currentTotal}`,
-                "TotalSpent": `${res.data[0].TotalSpent}`,
-                "Remainder": `${remainder}`,
+                "WholesaleID": parseInt(wholesaleID),
+                "TotalDonated": parseFloat(currentTotal).toFixed(2),
+                "TotalSpent": parseFloat(res.data[0].TotalSpent).toFixed(2),
+                "Remainder": parseFloat(remainder).toFixed(2),
                 "WholesaleReceipt": `${res.data[0].WholesaleReceipt}`,
-                "CollectionID": `${res.data[0].CollectionID}`
+                "Notes": `${res.data[0].Notes}`,
+                "CollectionID": parseInt(res.data[0].CollectionID)
             };
             try {
                 const res = await axios.put(`${process.env.REACT_APP_API}wholesale`, body, config);
@@ -551,7 +567,7 @@ export const updateWholesaleDelete = (wholesaleID, collectionID, DonationVal) =>
 
 // DELETE PARTICIPANTS
 
-export const deleteParticipant = (participantID, DonationVal, collectionID, wholesaleID, page, searchInput, type) => async dispatch => {
+export const deleteParticipant = (participantID, DonationType, DonationVal, PaymentRecieved, collectionID, wholesaleID, page, searchInput, type) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config = {
             headers: {
@@ -566,9 +582,17 @@ export const deleteParticipant = (participantID, DonationVal, collectionID, whol
                 type: DELETE_PARTICIPATION_SUCCESS,
                 payload: res.data
             });
-
-            dispatch(updateWholesaleDelete(wholesaleID, collectionID, DonationVal));
-            dispatch(getParticipantList(page, collectionID, searchInput, type));
+            if (DonationType === "3") { 
+                if (PaymentRecieved === "true" | PaymentRecieved === true) {
+                    dispatch(updateWholesaleDelete(collectionID, wholesaleID, DonationVal));
+                    dispatch(getParticipantList(page, collectionID, searchInput, type));
+                } else {
+                    dispatch(getParticipantList(page, collectionID, searchInput, type));
+                }
+            } else {
+                dispatch(getParticipantList(page, collectionID, searchInput, type));
+            }
+            
         } catch (err) {
             dispatch({
                 type: DELETE_PARTICIPATION_FAIL

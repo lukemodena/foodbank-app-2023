@@ -26,7 +26,10 @@ const initialState = {
     currentPage: null,
     has_next: false,
     has_previous: false,
-    total_number: null
+    total_number: null,
+    total_3months: null,
+    total_monthly: null,
+    total_other: null
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
@@ -52,7 +55,10 @@ export default function(state = initialState, action) {
                 currentPage: payload.page.current,
                 has_next: payload.page.has_next,
                 has_previous: payload.page.has_previous,
-                total_number: payload.page.total_number
+                total_number: payload.page.total_number,
+                total_3months: payload.page.total3Month,
+                total_monthly: payload.page.totalMonthly,
+                total_other: payload.page.totalOther
                 //emails: JSON.stringify(payload.map((don)=> `${don.Email};`)).replace('["', "").replace('"]', "").replaceAll('","', "")
             }
 
@@ -69,7 +75,10 @@ export default function(state = initialState, action) {
                 currentPage: payload.page.current,
                 has_next: payload.page.has_next,
                 has_previous: payload.page.has_previous,
-                total_number: payload.page.total_number
+                total_number: payload.page.total_number,
+                total_3months: payload.page.total3Month,
+                total_monthly: payload.page.totalMonthly,
+                total_other: payload.page.totalOther
                 //emails: JSON.stringify(payload.map((don)=> `${don.Email}; `)).replace('["', "").replace('"]', "").replaceAll('","', "")
             }
 

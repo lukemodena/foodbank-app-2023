@@ -43,7 +43,10 @@ const DonorPage = ({
     currentPage,
     has_next,
     has_previous,
-    total_number
+    total_number,
+    total_3months,
+    total_monthly,
+    total_other
 }) => {
 
     // Set Default States
@@ -584,7 +587,10 @@ const mapStateToProps = (state) => ({
     currentPage: state.donors.currentPage,
     has_next: state.donors.has_next,
     has_previous: state.donors.has_previous,
-    total_number: state.donors.total_number
+    total_number: state.donors.total_number,
+    total_3months: state.donors.total_3months,
+    total_monthly: state.donors.total_monthly,
+    total_other: state.donors.total_other
 });
 
 export default connect(mapStateToProps, { getDonors, searchDonors, searchDonorsEmails, deleteDonor, editDonor, getActiveCollection, getCurrentParticipants, deleteDonorsMulti, sendEmail })(DonorPage)
