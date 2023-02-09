@@ -122,7 +122,7 @@ export function EditParticipationModal(props){
 
                                 <Form.Group controlId='DonationType'>
                                     <Form.Label>Donation Type</Form.Label>
-                                    <Form.Select aria-label="DonationType" required name='DonationType' placeholder='DonationType' onChange={changeType} defaultValue={pardontype}>
+                                    <Form.Select aria-label="DonationType" required name='DonationType' placeholder='Please specify...' onChange={changeType} defaultValue={pardontype}>
                                         <option value="">Please specify...</option>
                                         <option value="0">N/A</option>
                                         <option value="1">Drop-Off</option>
@@ -134,7 +134,7 @@ export function EditParticipationModal(props){
                                 <Form.Group controlId='DropOffTime'>
                                     {(donationTypeVal === '1' || donationTypeVal ===  '4') &&<Form.Label>Drop-Off Time</Form.Label>}
                                     {(donationTypeVal === '1' || donationTypeVal ===  '4') &&
-                                        <Form.Select aria-label="DropOffTime" required name='DropOffTime' onChange={changeTime} placeholder='DropOffTime' defaultValue={partime}>
+                                        <Form.Select aria-label="DropOffTime" required name='DropOffTime' onChange={changeTime} placeholder='Please specify...' defaultValue={partime}>
                                             <option value="11">Please specify...</option>
                                             <option value="1">07:00-08:00</option>
                                             <option value="2">08:00-09:00</option>
@@ -153,11 +153,11 @@ export function EditParticipationModal(props){
                                 
                                 <Form.Group controlId='TotalDonated'>
                                     {donationTypeVal === '3' &&<Form.Label>Total Donated (£)</Form.Label>}
-                                    {donationTypeVal === '3' &&<Form.Control type='text' name='TotalDonated' required placeholder='TotalDonated' onChange={changeTotal} defaultValue={partotdon} />}
+                                    {donationTypeVal === '3' &&<Form.Control type='text' name='TotalDonated' required placeholder='Total amount donated...' onChange={changeTotal} defaultValue={partotdon} />}
                                 </Form.Group>
                                 <Form.Group controlId='PaymentRecieved'>
                                     {donationTypeVal === '3' &&<Form.Label>Payment Recieved</Form.Label>}
-                                    {donationTypeVal === '3' &&<Form.Select aria-label="PaymentRecieved" required name='PaymentRecieved' placeholder='PaymentRecieved' onChange={changeRecieved} defaultValue={parrec}>
+                                    {donationTypeVal === '3' &&<Form.Select aria-label="PaymentRecieved" required name='PaymentRecieved' placeholder='Please specify...' onChange={changeRecieved} defaultValue={parrec}>
                                         <option>Please specify...</option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
@@ -170,7 +170,7 @@ export function EditParticipationModal(props){
 
                                 <Form.Group controlId='ParticipationNotes'>
                                     <Form.Label>Participation Notes</Form.Label>
-                                    <Form.Control type='text' name='ParticipationNotes' placeholder='ParticipationNotes' defaultValue={parnotes} />
+                                    <Form.Control type='text' name='ParticipationNotes' placeholder='Please enter further notes here...' defaultValue={parnotes} />
                                 </Form.Group>
                             
                                 <Form.Group style={{paddingTop: "25px"}}>
