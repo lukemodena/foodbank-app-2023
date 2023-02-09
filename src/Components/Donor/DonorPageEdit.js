@@ -558,7 +558,11 @@ const DonorPage = ({
                                 {/* {(size.width > 760) &&<td>{don.Address3}</td>} */}
                                 {(size.width > 760) &&<td>{don.PostCode}</td>}
                                 {(size.width > 760) &&<td>{handleDonorType(don.DonorType)}</td>}
-                                <td>{don.Phone}</td>
+                                {(size.width > 760) ? 
+                                    <td>{don.Phone}</td>
+                                    :
+                                    <td><a href={`tel:${don.Phone}`}>{don.Phone}</a></td>
+                                }
                             </tr>)}
                     </tbody>
                 </Table>
