@@ -353,6 +353,7 @@ export class AddDonorForm extends Component{
                                 <Form.Control type='text' {...getInputProps({
                                     placeholder: 'Search Places ...',
                                     className: 'location-search-input',
+                                    types: ['address']
                                 })}
                                 />
                             </Form.Group>
