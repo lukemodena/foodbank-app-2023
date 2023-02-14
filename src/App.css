@@ -100,6 +100,29 @@
 
 /* Dropdown */
 
+.autocomplete-dropdown-container {
+  display: block;
+  border-bottom: honeydew;
+  border-left: honeydew;
+  border-right: honeydew;
+  border-top: 1px solid #e6e6e6;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  border-radius: 0 0 2px 2px;
+  width: 345.6px;
+  z-index: 10;
+}
+
+.suggestion-item {
+  padding: 8px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.suggestion-item--active {
+  padding: 8px;
+  background-color: #fafafa;
+}
+
 .dropdownFilter {
   padding-top: 5px;
   padding-bottom: 5px;

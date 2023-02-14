@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Row } from 'react-bootstrap';
 import { BsArrowRightShort } from 'react-icons/bs';
-import {Row} from 'react-bootstrap';
 
 import { Box } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';

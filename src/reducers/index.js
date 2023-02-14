@@ -6,6 +6,7 @@ import collections from './collections';
 import wholesale from './wholesale';
 import participants from './participants';
 import email from './email';
+import googlemaps from './googlemaps';
 
 export default combineReducers({
     auth,
@@ -14,4 +15,5 @@ export default combineReducers({
     wholesale,
     participants,
     email,
+    googlemaps,
 });

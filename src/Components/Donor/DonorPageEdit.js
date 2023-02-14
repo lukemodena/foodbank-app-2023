@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Pagination, Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { BsPlusLg, BsXCircle, BsEnvelope } from "react-icons/bs";
+import { BsPlusLg, BsXCircle, BsEnvelope, BsFillTelephoneFill } from "react-icons/bs";
 import ClipLoader from 'react-spinners/ClipLoader';
 
 import useWindowSize from '../common/useWindow';
