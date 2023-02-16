@@ -25,7 +25,7 @@ export function WriteEmail(props) {
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
 
-    const emailSignOff = '\nYour support is very much appreciated.\n \nKindest wishes\nJackie\njsp.foodcollection@gmail.com\n07764 614151';
+    const emailSignOff = '\nYour support is very much appreciated.\n \nKindest wishes\nJackie\n07764 614151\njsp.foodcollection@gmail.com';
 
     const setFirstSubject = () => {
         setSubject(`FOOD COLLECTION ${handleCollectionDateEmail(colldate).toUpperCase()} PLEASE HELP FEED LOCAL PEOPLE IN FOOD CRISIS`);
