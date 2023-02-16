@@ -1,8 +1,9 @@
 import React,{Component, useState, useRef, useEffect} from 'react';
-import { Button, Form, Dropdown } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 import { addDonor } from '../../actions/donors';
+import { addressFinder } from '../../actions/googlemaps';
 
 import PropTypes from 'prop-types';
 
@@ -214,11 +215,13 @@ export class AddDonorForm extends Component{
 
     static propTypes = {
         addDonor: PropTypes.func.isRequired,
+        addressFinder: PropTypes.func.isRequired,
         result: PropTypes.string.isRequired,
+        googleResult: PropTypes.array.isRequired,
+        googleTest: PropTypes.string.isRequired,
     };
 
     // Handle Full Name  
-
 
     handleFirstName = (e) => {
         let value1 = e.target.value;
@@ -252,17 +255,39 @@ export class AddDonorForm extends Component{
 
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-    // Address Auntocomplete
+    // Address Autocomplete
+    // handleList = (e) => {
+    //     e.preventDefault()
+
+    //     let arrayAddress = [];
+
+    //     for(let i=0; i < Object.keys(this.props.googleResult).length; i++){
+    //         let addObj = {
+    //             "Number": payload[i]['address_components'][0]['long_name'], 
+    //             "Add1": payload[i]['address_components'][1]['long_name'], 
+    //             "Add2": payload[i]['address_components'][2]['long_name'], 
+    //             "Add3": payload[i]['address_components'][4]['long_name'], 
+    //             "Postcode": payload[i]['address_components'][6]['long_name']
+    //         };
+    //         arrayAddress.push(addObj)
+    //     };
+    // }
 
     handleChange = address => {
         this.setState({ address });
     };
-     
+
+    handleAddress = latLng => {
+        let latlng = `${latLng['lat']},${latLng['lng']}`;
+        console.log('Success', latLng['lat'], latLng['lng']);
+        this.props.addressFinder(latlng)
+    }; 
+
     handleSelect = address => {
-    geocodeByAddress(address)
-        .then(results => getLatLng(results[0]))
-        .then(latLng => console.log('Success', latLng))
-        .catch(error => console.error('Error', error));
+        geocodeByAddress(address)
+            .then(results => getLatLng(results[0]))
+            .then(latLng => this.handleAddress(latLng))
+            .catch(error => console.error('Error', error));
     };
 
     // Add Donor
@@ -282,10 +307,9 @@ export class AddDonorForm extends Component{
         let phone = e.target.Phone.value;
 
 
-        console.log(donorType)
+        //console.log(Object.keys(this.props.googleResult).length)
 
         this.props.addDonor(fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone);
-        //this.props.addressFinder(postCode);
 
         let response = `${fullName} added`
 
@@ -309,11 +333,13 @@ export class AddDonorForm extends Component{
 
     render() {
         let successModalClose=()=>this.setState({successModalShow:false});
+
         const searchOptions = {
             location: new window.google.maps.LatLng(51.55330439999999, -0.1866832),
             componentRestrictions: { country: "gb" },
             radius: 100000
         };
+        
         return (
             // Add Donor Form 
             <div>
@@ -353,7 +379,6 @@ export class AddDonorForm extends Component{
                                 <Form.Control type='text' {...getInputProps({
                                     placeholder: 'Search Places ...',
                                     className: 'location-search-input',
-                                    types: ['address']
                                 })}
                                 />
                             </Form.Group>
@@ -433,7 +458,9 @@ export class AddDonorForm extends Component{
 // Reducer
 
 const mapStateToProps = (state) => ({
-    result: state.donors.result
+    result: state.donors.result,
+    googleResult: state.googlemaps.googleResult,
+    googleTest: state.googlemaps.googleTest
 });
 
-export default connect(mapStateToProps, { addDonor })(AddDonorForm)
+export default connect(mapStateToProps, { addDonor, addressFinder })(AddDonorForm)

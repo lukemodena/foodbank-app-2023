@@ -4,7 +4,9 @@ import {
 } from '../actions/types';
 
 const initialState = { 
-    googleResult: ''
+    googleResult: [],
+    googleTest: '',
+    googleArray: [],
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
@@ -12,9 +14,23 @@ export default function(state = initialState, action) {
     switch(type) {
 
         case ADDRESS_SEARCH_SUCCESS:
+            // let arrayAddress = [];
+
+            // for(let i=0; i < payload.length; i++){
+            //     let addObj = {
+            //         "Number": payload[i]['address_components'][0].long_name, 
+            //         "Add1": payload[i]['address_components'][1].long_name,
+            //         "Add2": payload[i]['address_components'][2].long_name, 
+            //         "Add3": payload[i]['address_components'][4].long_name, 
+            //         "Postcode": payload[i]['address_components'][6].long_name
+            //     };
+            //     arrayAddress.push(addObj)
+            // };
             return {
                 ...state,
-                googleResult: payload
+                googleResult: payload,
+                // googleTest: payload[0]['address_components'][0]['long_name'],
+                // googleArray: arrayAddress
             }
 
         case ADDRESS_SEARCH_FAIL:

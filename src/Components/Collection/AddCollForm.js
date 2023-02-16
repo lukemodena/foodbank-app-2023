@@ -45,15 +45,12 @@ export class AddCollectionForm extends Component{
         let spreadsheet = "No Spreadsheet";
         let status = e.target.CollectionStatus.value;
 
-        let monthValue = "";
-        let startDate = "";
-        let endDate = "";
         let pageStatus = "PLANNED,ACTIVE";
         let page = "1"
 
         if (status === "ACTIVE") {
             this.props.checkStatusAdd(status, page, pageStatus)
-            this.props.addCollection(date, type, totalWeight, totalCost, photo, spreadsheet, status, monthValue, startDate, endDate, page, pageStatus);
+            this.props.addCollection(date, type, totalWeight, totalCost, photo, spreadsheet, status, page, pageStatus);
 
             let response = `Collection on ${date} added successfully!`
 
@@ -67,7 +64,7 @@ export class AddCollectionForm extends Component{
                 reqStatus:response
             })
         } else {
-            this.props.addCollection(date, type, totalWeight, totalCost, photo, spreadsheet, status, monthValue, startDate, endDate, page, pageStatus);
+            this.props.addCollection(date, type, totalWeight, totalCost, photo, spreadsheet, status, page, pageStatus);
             
             let response = `Collection on ${date} added`
 

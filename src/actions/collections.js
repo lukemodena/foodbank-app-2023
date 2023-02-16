@@ -310,10 +310,10 @@ export const addCollection = (date, type, totalWeight, totalCost, photo, spreads
                 payload: res.data
             });
             try {
-                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?startdate=${date}`, config);
+                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?page=all&startdate=${date}`, config);
                 dispatch({
                     type: COLLECTION_ID_SEARCH_SUCCESS,
-                    payload: res.data[0].CollectionID
+                    payload: res.data
                 });
 
                 const data = await res.data[0].CollectionID
