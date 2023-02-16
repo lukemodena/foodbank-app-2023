@@ -58,7 +58,7 @@ export function EditWholesaleModal(props) {
                                         <Form.Control type='text' name='TotalDonated' disabled placeholder='TotalDonated' defaultValue={whototaldonated}/>
                                     </Form.Group>
                                     <Form.Group controlId='AddDonation'>
-                                        <Form.Label>Add Donation</Form.Label>
+                                        <Form.Label>Add Remainder</Form.Label>
                                         <Form.Control type='text' name='AddDonation' placeholder='AddDonation' defaultValue={"0"}/>
                                     </Form.Group>
                                     <Form.Group controlId='TotalSpent'>
