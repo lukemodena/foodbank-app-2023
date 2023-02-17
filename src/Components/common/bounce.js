@@ -42,7 +42,7 @@ export const Bounce = (Notes) => {
         )
     } else {
         return (
-            <OverlayTrigger trigger="click" placement="right" overlay={popover(Notes)}>
+            <OverlayTrigger trigger="click" rootClose placement="right" overlay={popover(Notes)}>
                 <a><DiamondWrapper/></a>
             </OverlayTrigger>
         )
