@@ -562,7 +562,7 @@ const DonorPage = ({
                                 {(size.width > 760) ? 
                                     <td>{don.Phone}</td>
                                     :
-                                    <td>{phoneHandler(don.Phone)}</td>
+                                    <td className='align-middle'>{phoneHandler(don.Phone)}</td>
                                 }
                             </tr>)}
                     </tbody>

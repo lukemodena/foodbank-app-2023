@@ -203,7 +203,7 @@ export const phoneHandler = (Phone) => {
         )
     } else {
         return (
-            <a href={`tel:${Phone}`}><BsFillTelephoneFill/></a>
+            <a href={`tel:${Phone}`}><BsFillTelephoneFill style={{height:"100%", width:"100%"}}/></a>
         )
     }
 };
