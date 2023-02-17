@@ -124,7 +124,7 @@ export function EditParticipationModal(props){
                                     <Form.Label>Donation Type</Form.Label>
                                     <Form.Select aria-label="DonationType" required name='DonationType' placeholder='Please specify...' onChange={changeType} defaultValue={pardontype}>
                                         <option value="">Please specify...</option>
-                                        <option value="0">N/A</option>
+                                        <option value="0">Query</option>
                                         <option value="1">Drop-Off</option>
                                         <option value="2">Collection</option>
                                         <option value="3">Cash Donation</option>

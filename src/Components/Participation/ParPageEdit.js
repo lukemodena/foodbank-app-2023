@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import useWindowSize from '../common/useWindow';
 import { handleLoadStyle } from '../common/handleLoadStyle';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { Bounce } from '../common/bounce';
 
 import { EditParticipationModal } from './EditParticipationModal';
 import SearchBar from './SearchBar';
@@ -257,6 +258,9 @@ const ParticipationPage = ({
         
     };
 
+
+      
+
     return (
         <div style={{paddingTop: "38.5px"}}>
 
@@ -428,7 +432,7 @@ const ParticipationPage = ({
                                             onChange={(e) => {changeRecVal(e, par.CollectionID, par.DonorID.DonorID, par.ParticipationID, par.PaymentRecieved, par.DonationType, par.TotalDonated, par.DropOffTime, par.Notes, par.WholesaleID)}}
                                         />
                                     </td> : null}
-                                    <td>{par.DonorID.FullName}</td>
+                                    <td>{par.DonorID.FullName} {Bounce(par.Notes)}</td>
                                     {(typeValue === "2") &&<td>{fullAddressHandler(par.DonorID.Address1, par.DonorID.Address2, par.DonorID.Address3, par.DonorID.PostCode)}</td>}
                                     {(typeValue === "") &&<td>{handleParticipantType(par.DonationType)}</td>}
                                     {(typeValue === "3") &&<td>£{par.TotalDonated}</td>}

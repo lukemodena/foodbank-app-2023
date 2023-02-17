@@ -18,7 +18,7 @@ export const handleParticipantType = (inputValue) => {
     let participantType = inputValue;
 
     if (participantType === "0") {
-        let type = "N/A"
+        let type = "Query"
         return type
     } else if (participantType === "1") {
         let type = "Drop-Off"

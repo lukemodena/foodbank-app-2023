@@ -1,3 +1,7 @@
+import { animated } from "@react-spring/web";
+import { BsSuitDiamondFill } from "react-icons/bs";
+import { Button } from "react-bootstrap";
+
 // Collection Month Types (for dropdown filter)
 
 export const monthOptions = [
@@ -190,3 +194,7 @@ export const fullAddressHandler = (add1, add2, add3, postcode) => {
         }
     }
 };
+
+// Diamond Animation
+
+export const AnimatedDiamond = animated(BsSuitDiamondFill)
