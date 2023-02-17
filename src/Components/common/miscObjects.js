@@ -1,6 +1,5 @@
 import { animated } from "@react-spring/web";
-import { BsSuitDiamondFill } from "react-icons/bs";
-import { Button } from "react-bootstrap";
+import { BsFillTelephoneFill } from "react-icons/bs";
 
 // Collection Month Types (for dropdown filter)
 
@@ -195,6 +194,16 @@ export const fullAddressHandler = (add1, add2, add3, postcode) => {
     }
 };
 
-// Diamond Animation
+// Phone Number Handler
 
-export const AnimatedDiamond = animated(BsSuitDiamondFill)
+export const phoneHandler = (Phone) => {
+    if (Phone === "" || Phone === null) {
+        return (
+            null
+        )
+    } else {
+        return (
+            <a href={`tel:${Phone}`}><BsFillTelephoneFill/></a>
+        )
+    }
+};

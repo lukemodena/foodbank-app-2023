@@ -16,7 +16,8 @@ import { SuccessModal } from '../common/SuccessModal';
 import { AddParticipationModal } from './AddParticipatingDonorModal';
 import { handleCollectionDate } from '../common/dateFuncs';
 import { handleDonorType } from '../common/typeFuncs';
-import { typeOptions, addressHandler, fullAddressHandler } from '../common/miscObjects';
+import { typeOptions, addressHandler, fullAddressHandler, phoneHandler } from '../common/miscObjects';
+import { Bounce } from '../common/bounce';
 
 import { getDonors, searchDonors, searchDonorsEmails, deleteDonor, editDonor, deleteDonorsMulti } from '../../actions/donors';
 import { getActiveCollection } from '../../actions/collections';
@@ -550,7 +551,7 @@ const DonorPage = ({
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 </td>
-                                <td>{don.FullName}</td>
+                                <td>{don.FullName} {Bounce(don.Notes)}</td>
                                 {(size.width > 760) &&<td>{don.Email}</td>}
                                 {(size.width <= 760) &&<td>{fullAddressHandler(don.Address1, don.Address2, don.Address3, don.PostCode)}</td>}
                                 {(size.width > 760) &&<td>{don.Address1}</td>}
@@ -561,7 +562,7 @@ const DonorPage = ({
                                 {(size.width > 760) ? 
                                     <td>{don.Phone}</td>
                                     :
-                                    <td><a href={`tel:${don.Phone}`}>{don.Phone}</a></td>
+                                    <td>{phoneHandler(don.Phone)}</td>
                                 }
                             </tr>)}
                     </tbody>
