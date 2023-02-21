@@ -12,7 +12,8 @@ export function SuccessModal(props) {
     } = props
 
     const refresh = () => {
-        window.location.reload(false)
+        onHide()
+        //window.location.reload(false)
         // if (type !== "participant") {
         //     window.location.reload(false)
         // } else {
@@ -45,7 +46,7 @@ export function SuccessModal(props) {
                 
                 <Modal.Footer>
                     {(type === "partdonor") &&<Button variant='secondary' onClick={refresh}>Exit</Button>}
-                    {(isAdd === false) &&<Button variant='secondary' onClick={refresh}>Exit</Button>}
+                    {(isAdd === false) &&<Button variant='secondary' onClick={onHide}>Exit</Button>}
                     {(isAdd === true) &&<Row>
                         <Col>
                             <Button variant='primary' onClick={onHide}>Yes</Button>

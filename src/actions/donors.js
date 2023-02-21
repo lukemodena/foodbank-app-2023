@@ -166,7 +166,7 @@ export const searchDonorsEmails = (page, monthType, searchInput) => async dispat
 
 // ADD DONOR
 
-export const addDonor = (fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone) => async dispatch => {
+export const addDonor = (fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone, volunteer) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -176,6 +176,8 @@ export const addDonor = (fullName, firstName, lastName, email, address1, address
                 'Accept': 'application/json'
             }
         };
+
+        let page = "1";
         
         const body = {
             "DonorID":null,
@@ -189,7 +191,9 @@ export const addDonor = (fullName, firstName, lastName, email, address1, address
             "PostCode": `${postCode}`,
             "DonorType": `${donorType}`,
             "Notes": `${notes}`,
-            "Phone": `${phone}`
+            "Phone": `${phone}`,
+            "InvolveNo": 0,
+            "Volunteer": `${volunteer}`
         };
     
         try {
@@ -198,6 +202,8 @@ export const addDonor = (fullName, firstName, lastName, email, address1, address
                 type: ADD_DONOR_SUCCESS,
                 payload: res.data
             });
+
+            dispatch(getDonors(page));
         } catch (err) {
             dispatch({
                 type: ADD_DONOR_FAIL
@@ -214,7 +220,7 @@ export const addDonor = (fullName, firstName, lastName, email, address1, address
 
 // EDIT DONOR
 
-export const editDonor = (donorId, fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone, involveNo) => async dispatch => {
+export const editDonor = (donorId, fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone, involveNo, volunteer, page, monthType, searchInput) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -238,7 +244,8 @@ export const editDonor = (donorId, fullName, firstName, lastName, email, address
             "DonorType": `${donorType}`,
             "Notes": `${notes}`,
             "Phone": `${phone}`,
-            "InvolveNo": `${involveNo}`
+            "InvolveNo": `${involveNo}`,
+            "Volunteer": `${volunteer}`
         };
     
         try {
@@ -247,6 +254,8 @@ export const editDonor = (donorId, fullName, firstName, lastName, email, address
                 type: EDIT_DONOR_SUCCESS,
                 payload: res.data
             });
+
+            dispatch(searchDonors(page, monthType, searchInput));
             
         } catch (err) {
             dispatch({
@@ -264,7 +273,7 @@ export const editDonor = (donorId, fullName, firstName, lastName, email, address
 
 // DELETE DONOR
 
-export const deleteDonor = (donorId) => async dispatch => {
+export const deleteDonor = (donorId, page, monthType, searchInput) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config = {
             headers: {
@@ -279,6 +288,8 @@ export const deleteDonor = (donorId) => async dispatch => {
                 type: DELETE_DONOR_SUCCESS,
                 payload: res.data
             });
+
+            dispatch(searchDonors(page, monthType, searchInput));
         } catch (err) {
             dispatch({
                 type: DELETE_DONOR_FAIL
@@ -294,11 +305,11 @@ export const deleteDonor = (donorId) => async dispatch => {
 
 // DELETE MULTIPLE DONORS
 
-export const deleteDonorsMulti = (donors) => async dispatch => {
+export const deleteDonorsMulti = (donors, page, monthType, searchInput) => async dispatch => {
     if (localStorage.getItem('token')) {
         await donors.map((id) => {
             try{
-                dispatch(deleteDonor(id))
+                dispatch(deleteDonor(id, page, monthType, searchInput))
             } catch(err) {
                 dispatch({
                     type: DELETE_DONOR_FAIL

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Pagination, Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { BsPlusLg, BsXCircle, BsEnvelope, BsFillTelephoneFill } from "react-icons/bs";
+import { BsPlusLg, BsXCircle, BsEnvelope } from "react-icons/bs";
 import ClipLoader from 'react-spinners/ClipLoader';
 
 import useWindowSize from '../common/useWindow';
@@ -15,7 +15,7 @@ import SearchBar from "./SearchBar";
 import { SuccessModal } from '../common/SuccessModal';
 import { AddParticipationModal } from './AddParticipatingDonorModal';
 import { handleCollectionDate } from '../common/dateFuncs';
-import { handleDonorType } from '../common/typeFuncs';
+import { handleDonorType, handleDonorVolunteer } from '../common/typeFuncs';
 import { typeOptions, addressHandler, fullAddressHandler, phoneHandler } from '../common/miscObjects';
 import { Bounce } from '../common/bounce';
 
@@ -76,6 +76,7 @@ const DonorPage = ({
     const [addParticipationShow, setAddParticipationShow] = useState(false);
     const [emailModalShow, setEmailModalShow] = useState(false);
     const [successModalShow, setSuccessModalShow] = useState(false);
+    const [successOverlayShow, setSuccessOverlayShow] = useState(false);
     const [successDeleteModalShow, setSuccessDeleteModalShow] = useState(false);
 
     const addModalClose = () => {
@@ -96,6 +97,10 @@ const DonorPage = ({
 
     const emailModalClose = () => {
         setEmailModalShow(false);
+    };
+
+    const successOverlayClose = () => {
+        setSuccessOverlayShow(false);
     };
 
     const successModalClose = () => {
@@ -122,6 +127,10 @@ const DonorPage = ({
     const [donnotes, setDonnotes] = useState(null);
     const [donphone, setDonphone] = useState(null);
     const [doninvolveno, setDoninvolveno] = useState(null);
+    const [donvolunteer, setDonvolunteer] = useState(null);
+
+    const [isVolunteer, setIsVolunteer] = React.useState("");
+
     const [collid, setCollid] = useState(null);
     const [colldate, setColldate] = useState(null);
     const [colldateread, setColldateread] = useState(null);
@@ -207,7 +216,7 @@ const DonorPage = ({
     const handleDelete = (donId) => {
         if(window.confirm('Are you sure?')){
             setLoading(true);
-            deleteDonor(donId).then(() => setLoading(false));
+            deleteDonor(donId, page, monthValue, searchValue).then(() => setLoading(false));
             setSuccessDeleteModalShow(true);
         }
     };
@@ -234,7 +243,7 @@ const DonorPage = ({
             let message = `Are you sure you want to delete ${length} record/s?`;
             if(window.confirm(message)){
                 setLoading(true)
-                deleteDonorsMulti(toDelete).then(() => setLoading(false));
+                deleteDonorsMulti(toDelete, page, monthValue, searchValue).then(() => setLoading(false));
 
                 setSuccessDeleteModalShow(true);
             }
@@ -255,14 +264,16 @@ const DonorPage = ({
         let address2 = e.target.Address2.value;
         let address3 = e.target.Address3.value;
         let postCode = e.target.PostCode.value.toUpperCase();
-        let donorType = `${e.target.DonorType.value}${e.target.Volunteer.value}`;
+        let donorType = e.target.DonorType.value;
         let notes = e.target.Notes.value;
         let phone = e.target.Phone.value;
         let involveNo = e.target.InvolveNo.value;
+        let volunteer = handleDonorVolunteer(e.target.Volunteer.value);
+        
+        //console.log(volunteer)
 
-        setLoading(true)
-        editDonor(donorId, fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone, involveNo).then(() => setLoading(false));
-        setSuccessModalShow(true);
+        setLoading(true);
+        editDonor(donorId, fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone, involveNo, volunteer, page, monthValue, searchValue).then(() => setEditModalShow(false)).then(() => setLoading(false)).then(() => setSuccessOverlayShow(true));
     };
 
     // Add Participant
@@ -355,7 +366,13 @@ const DonorPage = ({
                     />
 
                 </Row>
-
+                
+                <SuccessModal show={successOverlayShow}
+                    onHide={successOverlayClose}
+                    reqStatus={reqStatus}
+                    type={type}
+                    isAdd={isAdd}
+                />
                 <SuccessModal show={successDeleteModalShow}
                     onHide={successDeleteModalClose}
                     reqStatus={reqStatus}
@@ -426,7 +443,7 @@ const DonorPage = ({
                                                 setDonaddress2(don.Address2);
                                                 setDonaddress3(don.Address3);
                                                 setDonpostcode(don.PostCode);
-                                                setDondonortype(handleDonorType(don.DonorType));
+                                                setDondonortype(handleDonorType(don.DonorType, don.Volunteer));
                                                 setDonnotes(don.Notes);
                                                 setDonphone(don.Phone);
                                                 setDoninvolveno(don.InvolveNo);
@@ -454,6 +471,7 @@ const DonorPage = ({
                                         <Dropdown.Item
                                             onClick={()=>{
                                                 setEditModalShow(true);
+
                                                 setDonid(don.DonorID);
                                                 setDonfullname(don.FullName);
                                                 setDonfirstname(don.FirstName);
@@ -467,6 +485,10 @@ const DonorPage = ({
                                                 setDonnotes(don.Notes);
                                                 setDonphone(don.Phone);
                                                 setDoninvolveno(don.InvolveNo);
+                                                setDonvolunteer(don.Volunteer);
+
+                                                setIsVolunteer(handleDonorVolunteer(don.Volunteer));
+
                                                 setSuccessModalShow(false);
                                                 setReqStatus(`${don.FullName} saved`);
                                                 setType("contact");
@@ -479,6 +501,7 @@ const DonorPage = ({
                                         <EditDonorModal show={editModalShow}
                                         onHide={editModalClose}
                                         edit={handleEditSubmit}
+
                                         donid={donid}
                                         donfirstname={donfirstname}
                                         donlastname={donlastname}
@@ -492,6 +515,11 @@ const DonorPage = ({
                                         donnotes={donnotes}
                                         donphone={donphone}
                                         doninvolveno={doninvolveno}
+                                        donvolunteer={donvolunteer}
+
+                                        isVolunteer={isVolunteer}
+                                        setIsVolunteer={setIsVolunteer}
+
                                         successModalShow={successModalShow}
                                         successModalClose={successModalClose}
                                         reqStatus={reqStatus}
@@ -558,7 +586,7 @@ const DonorPage = ({
                                 {(size.width > 760) &&<td>{addressHandler(don.Address2, don.Address3)}</td>}
                                 {/* {(size.width > 760) &&<td>{don.Address3}</td>} */}
                                 {(size.width > 760) &&<td>{don.PostCode}</td>}
-                                {(size.width > 760) &&<td>{handleDonorType(don.DonorType)}</td>}
+                                {(size.width > 760) &&<td>{handleDonorType(don.DonorType, don.Volunteer)}</td>}
                                 {(size.width > 760) ? 
                                     <td>{don.Phone}</td>
                                     :

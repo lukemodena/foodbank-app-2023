@@ -23,6 +23,11 @@ export function EditDonorModal(props) {
         donnotes,
         donphone,
         doninvolveno,
+        donvolunteer,
+
+        isVolunteer,
+        setIsVolunteer,
+
         successModalShow,
         successModalClose,
         reqStatus,
@@ -30,7 +35,6 @@ export function EditDonorModal(props) {
         isAdd
     } = props
 
-    const [isVolunteer, setIsVolunteer] = React.useState("");
 
     return (
         <div className='container'>
@@ -98,12 +102,9 @@ export function EditDonorModal(props) {
                                         <option value="0">Other</option>
                                     </Form.Select>
                                 </Form.Group>  
-                                <Form.Group className="mb-3" controlId="AssignVolunteer">
-                                    <Form.Check type="checkbox" label="Volunteer?" defaultValue={isVolunteer} onChange={(e) => {e.target.checked ? setIsVolunteer("v") : setIsVolunteer("")}} />
+                                <Form.Group className="mb-3" controlId="Volunteer">
+                                    <Form.Check type="checkbox" label="Volunteer?" defaultChecked={donvolunteer} defaultValue={isVolunteer} onChange={(e) => {e.target.checked ? setIsVolunteer("v") : setIsVolunteer("")}} />
                                 </Form.Group>  
-                                <Form.Group controlId='Volunteer'>
-                                    <Form.Control type='hidden' name='Volunteer' disabled placeholder='Volunteer' value={isVolunteer} />
-                                </Form.Group>
                                 <Form.Group controlId='Notes'>
                                     <Form.Label>Notes</Form.Label>
                                     <Form.Control type='text' name='Notes' placeholder='Enter any notes...' defaultValue={donnotes} />

@@ -8,6 +8,7 @@ import { addressFinder } from '../../actions/googlemaps';
 import PropTypes from 'prop-types';
 
 import { SuccessModal } from '../common/SuccessModal';
+import { handleDonorVolunteer } from '../common/typeFuncs';
 
 import PlacesAutocomplete, {
     geocodeByAddress,
@@ -202,7 +203,7 @@ export class AddDonorForm extends Component{
             Address2:"",
             Address3:"",
             PostCode:"",
-            Notes:"N/A",
+            Notes:"",
             Phone:"",
             isVolunteer:"",
             successModalShow:false,
@@ -302,14 +303,17 @@ export class AddDonorForm extends Component{
         let address2 = e.target.Address3.value;
         let address3 = e.target.Address2.value;
         let postCode = e.target.PostCode.value.toUpperCase();
-        let donorType = `${e.target.DonorType.value}${this.state.isVolunteer}`;
+        let donorType = e.target.DonorType.value;
         let notes = e.target.Notes.value;
         let phone = e.target.Phone.value;
+        let volunteer = handleDonorVolunteer(e.target.Volunteer.value);
+
+        //console.log(volunteer)
 
 
         //console.log(Object.keys(this.props.googleResult).length)
 
-        this.props.addDonor(fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone);
+        this.props.addDonor(fullName, firstName, lastName, email, address1, address2, address3, postCode, donorType, notes, phone, volunteer);
 
         let response = `${fullName} added`
 
@@ -322,7 +326,7 @@ export class AddDonorForm extends Component{
             Address2:"",
             Address3:"",
             PostCode:"",
-            Notes:"N/A",
+            Notes:"",
             Phone:"",
             isVolunteer:"",
             successModalShow:true,

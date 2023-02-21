@@ -4,9 +4,10 @@ import { BsArrowRightShort } from 'react-icons/bs';
 
 const SearchBar = ({callback}) => {
     const [innerValue, setInnerValue] = useState("");
-    const handleSubmit = e => {
-        e.preventDefault()
-        callback(innerValue)
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        callback(innerValue);
+        setInnerValue("");
     }
   return (
     <form className='searchBar' onSubmit={handleSubmit}>

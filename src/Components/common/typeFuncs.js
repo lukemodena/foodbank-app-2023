@@ -38,10 +38,31 @@ export const handleParticipantType = (inputValue) => {
     }
 };
 
+// Donor Volunteer Handler
+
+export const handleDonorVolunteer = (inputValue) => {
+    let volunteerVal = inputValue;
+
+    if (volunteerVal === "v") {
+        let volunteer = true;
+        return volunteer
+    } else if (volunteerVal === "") {
+        let volunteer = false;
+        return volunteer
+    } else if (volunteerVal === true) {
+        let volunteer = "v";
+        return volunteer
+    } else if (volunteerVal === false) {
+        let volunteer = "";
+        return volunteer
+    }
+};
+
+
 // Donor Type
 
-export const handleDonorType = (inputValue) => {
-    let donorType = inputValue;
+export const handleDonorType = (inputValue, volunteerValue) => {
+    let donorType = `${inputValue}${handleDonorVolunteer(volunteerValue)}`;
 
     if (donorType === "1") {
         let type = "Monthly (Both)";

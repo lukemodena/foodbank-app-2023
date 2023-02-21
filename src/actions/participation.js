@@ -248,7 +248,8 @@ export const updateDonor = (donorId) => async dispatch => {
                 "DonorType": `${res.data.data[0].DonorType}`,
                 "Notes": `${res.data.data[0].Notes}`,
                 "Phone": `${res.data.data[0].Phone}`,
-                "InvolveNo": `${involveNo}`
+                "InvolveNo": `${involveNo}`,
+                "Volunteer": `${res.data.data[0].Volunteer}`
             };
     
             try {
