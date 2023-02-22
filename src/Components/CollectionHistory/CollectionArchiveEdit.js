@@ -1,5 +1,5 @@
 import React,{ useState, useEffect } from "react";
-import {Pagination, Button, Table, Dropdown, Row} from 'react-bootstrap';
+import {Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { BsXCircle } from "react-icons/bs";
 import SearchBar from "./SearchBar";
 import { connect } from 'react-redux';
@@ -9,6 +9,8 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 import { SuccessModal } from "../common/SuccessModal";
 import { MoreInformationModal } from "./MoreInfoModal";
+import { PaginationFooter } from "../common/Pagination";
+
 import { handleCollectionDate } from "../common/dateFuncs";
 import { handleCollectionType } from "../common/typeFuncs";
 import { monthOptions, collectionTypeSelection } from "../common/miscObjects"; 
@@ -36,7 +38,8 @@ const CollectionArchive = ({
 }) => {
 
     // Set Default States
-    const size = useWindowSize(); 
+    const size = useWindowSize();  
+    const pageData = "coll";
     
     const status = 'ARCHIVED';
     const [monthFilter, setMonthFilter] = useState(collectionTypeSelection(size.width));
@@ -124,36 +127,6 @@ const CollectionArchive = ({
 
         searchCollections(page, monthValue, searchInputStart, searchInputEnd, status).then(() => setLoading(false));
     };
-
-    // Handle Page
-
-    const handlePage = (inputVal) => {
-        setLoading(true);
-    
-        let prevPage = currentPage;
-        let newpage = `${parseInt(prevPage)+parseInt(inputVal)}`;
-        
-        setPage(newpage)
-        searchCollections(newpage, monthValue, startDate, endDate, status).then(() => setLoading(false));
-    }
-    
-    // Handle Last Page
-
-    const handleLastPage = (inputValue) => {
-        setLoading(true);
-
-        setPage(inputValue);
-        searchCollections(inputValue, monthValue, startDate, endDate, status).then(() => setLoading(false));
-    }
-
-    // Handle First Page
-
-    const handleFirstPage = (inputValue) => {
-        setLoading(true);
-    
-        setPage(inputValue);
-        searchCollections(inputValue, monthValue, startDate, endDate, status).then(() => setLoading(false));
-    }
 
     // Collection Delete
 
@@ -348,15 +321,25 @@ const CollectionArchive = ({
                             </tr>)}
                     </tbody>
                 </Table>
-                <Pagination style={{justifyContent:"center"}}>
-                    {(page != "1") &&<Pagination.First onClick={e => handleFirstPage("1")}/>}
-                    {(has_previous) &&<Pagination.Prev onClick={e => handlePage("-1")}/>}
-                    <Pagination.Item active>
-                        {page}
-                    </Pagination.Item>
-                    {(has_next) &&<Pagination.Next onClick={e => handlePage("1")}/>}
-                    {(page != total_number) &&<Pagination.Last onClick={e => handleLastPage(total_number)}/>}
-                </Pagination>
+                <PaginationFooter 
+                data={pageData}
+                monthValue={monthValue}
+                searchValue={null}
+                typeValue={null}
+                CollectionID={null}
+                startDate={startDate}
+                endDate={endDate}
+                pageStatus={status}
+                currentPage={currentPage}
+                setPage={setPage}
+                page={page}
+                setLoading={setLoading}
+                searchDonors={null}
+                searchCollections={searchCollections}
+                getCurrentParticipants={null}
+                has_previous={has_previous}
+                has_next={has_next}
+                total_number={total_number}/>
             </div>}
         </div>
     )

@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import {Dropdown, Button, Form, Row, Modal} from 'react-bootstrap';
 import { SuccessModal } from "../common/SuccessModal";
+import { ClipLoader } from "react-spinners";
 
 import { handleCollectionDateEmail } from "../common/dateFuncs";
+import { handleLoadStyle } from "../common/handleLoadStyle";
 
 export function WriteEmail(props) {
     const {
@@ -14,16 +16,13 @@ export function WriteEmail(props) {
         collphoto,
         emaillist,
         foodlist,
-        successModalShow,
-        successModalClose,
-        reqStatus,
-        type,
-        isAdd
+        size
     } = props
 
     const [emailType, setEmailType] = useState('Create New Email...');
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
+    const [emailLoading, setEmailLoading] = useState(false);
 
     const emailSignOff = '\nYour support is very much appreciated.\n \nKindest wishes\nJackie\n07764 614151\njsp.foodcollection@gmail.com';
 
@@ -117,10 +116,10 @@ export function WriteEmail(props) {
         let subjectSend = e.target.Subject.value;
         let bodySend = e.target.Body.value;
         // let emailList = emaillist;
-        let emailList = ['lukefrankel@hotmail.co.uk', 'luke@modena-consulting.co.uk', 'jsp.foodcollection@gmail.com', 'nickcook00@gmail.com'];
+        let emailList = ['lukefrankel@hotmail.co.uk', 'luke@modena-consulting.co.uk'];
 
         console.log(subjectSend, bodySend, emailList);
-        send(subjectSend, bodySend, emailList);
+        send(subjectSend, bodySend, emailList).then(() => onHide()).then(() => setEmailLoading(false));
     };
 
     return (
@@ -151,12 +150,14 @@ export function WriteEmail(props) {
                         </Dropdown.Menu>
                     </Dropdown>
                     <Row>
-                            <SuccessModal show={successModalShow}
-                                onHide={successModalClose}
-                                reqStatus={reqStatus}
-                                type={type}
-                                isAdd={isAdd}
-                            />
+                            
+                        {emailLoading ? 
+                            <div className="mt-4" style={handleLoadStyle(size.width)}>
+                                <div className="loader-container">
+                                    <ClipLoader color={'#000000'} size={150} />
+                                </div> 
+                            </div> 
+                            : 
                             <Form onSubmit={sendEmail}>
                                 <Form.Group controlId='Subject'>
                                     <Form.Label>Subject</Form.Label>
@@ -171,7 +172,7 @@ export function WriteEmail(props) {
                                         Send Email
                                     </Button>
                                 </Form.Group> 
-                            </Form>
+                            </Form>}
                         
                     </Row>
                 </Modal.Body>
@@ -191,12 +192,10 @@ export function WriteBasicEmail(props) {
         emaillist,
         length,
         fullname,
-        successModalShow,
-        successModalClose,
-        reqStatus,
-        type,
-        isAdd
+        size
     } = props
+
+    const [emailLoading, setEmailLoading] = useState(false);
 
     const getBody = (length, fullname) => {
         if (length === 1) {
@@ -217,10 +216,10 @@ export function WriteBasicEmail(props) {
         let subjectSend = e.target.Subject.value;
         let bodySend = e.target.Body.value;
         //let emailList = emaillist;
-        let emailList = ['lukefrankel@hotmail.co.uk', 'luke@modena-consulting.co.uk', 'jsp.foodcollection@gmail.com', 'nickcook00@gmail.com'];
-
+        let emailList = ['lukefrankel@hotmail.co.uk', 'luke@modena-consulting.co.uk'];
+        setEmailLoading(true)
         console.log(subjectSend, bodySend, emailList);
-        send(subjectSend, bodySend, emailList);
+        send(subjectSend, bodySend, emailList).then(() => onHide()).then(() => setEmailLoading(false));
     };
 
     return (
@@ -237,27 +236,28 @@ export function WriteBasicEmail(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Row>
-                            <SuccessModal show={successModalShow}
-                                onHide={successModalClose}
-                                reqStatus={reqStatus}
-                                type={type}
-                                isAdd={isAdd}
-                            />
+                        {emailLoading ? 
+                            <div className="mt-4" style={handleLoadStyle(size.width)}>
+                                <div className="loader-container">
+                                    <ClipLoader color={'#000000'} size={150} />
+                                </div> 
+                            </div> 
+                            : 
                             <Form onSubmit={sendEmail}>
-                                <Form.Group controlId='Subject'>
-                                    <Form.Label>Subject</Form.Label>
-                                    <Form.Control as='textarea' name='Subject' required placeholder='Email subject...' defaultValue={subject}/>
-                                </Form.Group>
-                                <Form.Group controlId='Body'>
-                                    <Form.Label>Body</Form.Label>
-                                    <Form.Control as='textarea' name='Body' rows={10} required placeholder='Email body...' defaultValue={body}/>
-                                </Form.Group>
-                                <Form.Group style={{paddingTop: "25px"}}>
-                                    <Button variant='primary' type='submit'>
-                                        Send Email
-                                    </Button>
-                                </Form.Group> 
-                            </Form>
+                            <Form.Group controlId='Subject'>
+                                <Form.Label>Subject</Form.Label>
+                                <Form.Control as='textarea' name='Subject' required placeholder='Email subject...' defaultValue={subject}/>
+                            </Form.Group>
+                            <Form.Group controlId='Body'>
+                                <Form.Label>Body</Form.Label>
+                                <Form.Control as='textarea' name='Body' rows={10} required placeholder='Email body...' defaultValue={body}/>
+                            </Form.Group>
+                            <Form.Group style={{paddingTop: "25px"}}>
+                                <Button variant='primary' type='submit'>
+                                    Send Email
+                                </Button>
+                            </Form.Group> 
+                        </Form>}
                         
                     </Row>
                 </Modal.Body>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Pagination, Table, Dropdown, Row, Form} from 'react-bootstrap';
+import {Table, Dropdown, Row, Form} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import useWindowSize from '../common/useWindow';
 import { handleLoadStyle } from '../common/handleLoadStyle';
@@ -9,6 +9,8 @@ import { Bounce } from '../common/bounce';
 import { EditParticipationModal } from './EditParticipationModal';
 import SearchBar from './SearchBar';
 import { SuccessModal } from '../common/SuccessModal';
+import { PaginationFooter } from '../common/Pagination';
+
 import { handleCollectionDate } from '../common/dateFuncs';
 import { handleParticipantType, handleDropOffTime } from '../common/typeFuncs';
 import { participantOptions, handleParticipantPayment, collectionDateSelection, fullAddressHandler } from '../common/miscObjects';
@@ -39,6 +41,8 @@ const ParticipationPage = ({
     // Set Default States
     
     const size = useWindowSize(); 
+    const pageData = "par"
+
     const [collectionDate, setCollectionDate] = useState(collectionDateSelection(size.width));
     const [collectionID, setCollectionID] = useState(`${localStorage.getItem('activeId')}`);
 
@@ -202,40 +206,6 @@ const ParticipationPage = ({
         setPage(filtPage);
         
         getParticipantList(filtPage, collection, searchInput, type).then(() => setLoading(false));
-    };
-
-    // Handle Page
-
-    const handlePage = (inputVal) => {
- 
-        let prevPage = currentPage;
-        let newpage = `${parseInt(prevPage)+parseInt(inputVal)}`;
-        setLoading(true);
- 
-        setPage(newpage);
-        getParticipantList(newpage, collectionID, searchValue, typeValue).then(() => setLoading(false));
-    };
- 
-    // Handle Last Page
- 
-    const handleLastPage = (inputValue) => {
- 
-        let newpage = inputValue;
-        setLoading(true);
- 
-        setPage(newpage)
-        getParticipantList(newpage, collectionID, searchValue, typeValue).then(() => setLoading(false));
-    };
- 
-    // Handle First Page
- 
-    const handleFirstPage = (inputValue) => {
-    
-        let newpage = inputValue;
-        setLoading(true);
- 
-        setPage(newpage);
-        getParticipantList(newpage, collectionID, searchValue, typeValue).then(() => setLoading(false));
     };
  
 
@@ -442,15 +412,25 @@ const ParticipationPage = ({
                                 </tr>)}
                     </tbody>
                 </Table>
-                <Pagination style={{justifyContent:"center"}}>
-                    {(page != "1") &&<Pagination.First onClick={e => handleFirstPage("1")}/>}
-                    {(has_previous) &&<Pagination.Prev onClick={e => handlePage("-1")}/>}
-                    <Pagination.Item active>
-                        {page}
-                    </Pagination.Item>
-                    {(has_next) &&<Pagination.Next onClick={e => handlePage("1")}/>}
-                    {(page != total_number) &&<Pagination.Last onClick={e => handleLastPage(total_number)}/>}
-                </Pagination>
+                <PaginationFooter 
+                data={pageData}
+                monthValue={null}
+                searchValue={searchValue}
+                typeValue={typeValue}
+                collectionID={collectionID}
+                startDate={null}
+                endDate={null}
+                pageStatus={null}
+                currentPage={currentPage}
+                setPage={setPage}
+                page={page}
+                setLoading={setLoading}
+                searchDonors={null}
+                searchCollections={null}
+                getParticipantList={getParticipantList}
+                has_previous={has_previous}
+                has_next={has_next}
+                total_number={total_number}/>
             </div>}
         </div>
     )

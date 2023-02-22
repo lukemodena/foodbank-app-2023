@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Pagination, Button, Table, Dropdown, Row} from 'react-bootstrap';
+import {Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { BsPlusLg, BsXCircle } from "react-icons/bs";
 import SearchBar from "./SearchBar";
 import { connect } from 'react-redux';
@@ -12,6 +12,8 @@ import { EditCollectionModal } from "./EditCollModal";
 import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 import { SuccessModal } from "../common/SuccessModal";
 import { WriteEmail } from '../Email/EmailModal';
+import { PaginationFooter } from '../common/Pagination';
+
 import { handleCollectionDate } from '../common/dateFuncs';
 import { handleCollectionType } from '../common/typeFuncs';
 import { monthOptions, collectionTypeSelection } from '../common/miscObjects';
@@ -44,6 +46,8 @@ const Collection = ({
 
     // Set Default States
     const size = useWindowSize(); 
+    const pageData = "coll";
+
     const [loading, setLoading] = useState(true);
     
     const [photo, setPhoto] = useState({
@@ -161,36 +165,6 @@ const Collection = ({
 
         searchCollections(page, monthValue, searchInputStart, searchInputEnd, pageStatus).then(() => setLoading(false));
     };
-
-    // Handle Page
-
-    const handlePage = (inputVal) => {
-        setLoading(true);
-    
-        let prevPage = currentPage;
-        let newpage = `${parseInt(prevPage)+parseInt(inputVal)}`;
-        
-        setPage(newpage)
-        searchCollections(newpage, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
-    }
-    
-    // Handle Last Page
-
-    const handleLastPage = (inputValue) => {
-        setLoading(true);
-
-        setPage(inputValue);
-        searchCollections(inputValue, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
-    }
-
-    // Handle First Page
-
-    const handleFirstPage = (inputValue) => {
-        setLoading(true);
-    
-        setPage(inputValue);
-        searchCollections(inputValue, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
-    }
 
     // Collection Delete
 
@@ -481,11 +455,7 @@ const Collection = ({
                                             collphoto={collphoto}
                                             emaillist={emaillist}
                                             foodlist={foodlist}
-                                            successModalShow={successModalShow}
-                                            successModalClose={successModalClose}
-                                            reqStatus={reqStatus}
-                                            type={type}
-                                            isAdd={isAdd}
+                                            size = {size}
                                             />
 
                                             {/* Delete Collection */}
@@ -546,15 +516,25 @@ const Collection = ({
                             </tr>)}
                     </tbody>
                 </Table>
-                <Pagination style={{justifyContent:"center"}}>
-                    {(page != "1") &&<Pagination.First onClick={e => handleFirstPage("1")}/>}
-                    {(has_previous) &&<Pagination.Prev onClick={e => handlePage("-1")}/>}
-                    <Pagination.Item active>
-                        {page}
-                    </Pagination.Item>
-                    {(has_next) &&<Pagination.Next onClick={e => handlePage("1")}/>}
-                    {(page != total_number) &&<Pagination.Last onClick={e => handleLastPage(total_number)}/>}
-                </Pagination>
+                <PaginationFooter 
+                data={pageData}
+                monthValue={monthValue}
+                searchValue={null}
+                typeValue={null}
+                CollectionID={null}
+                startDate={startDate}
+                endDate={endDate}
+                pageStatus={pageStatus}
+                currentPage={currentPage}
+                setPage={setPage}
+                page={page}
+                setLoading={setLoading}
+                searchDonors={null}
+                searchCollections={searchCollections}
+                getCurrentParticipants={null}
+                has_previous={has_previous}
+                has_next={has_next}
+                total_number={total_number}/>
             </div>}
         </div>
     )

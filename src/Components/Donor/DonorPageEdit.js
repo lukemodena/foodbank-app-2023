@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Pagination, Button, Table, Dropdown, Row} from 'react-bootstrap';
+import {Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BsPlusLg, BsXCircle, BsEnvelope } from "react-icons/bs";
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -14,6 +14,8 @@ import { WriteBasicEmail } from '../Email/EmailModal';
 import SearchBar from "./SearchBar";
 import { SuccessModal } from '../common/SuccessModal';
 import { AddParticipationModal } from './AddParticipatingDonorModal';
+import { PaginationFooter } from '../common/Pagination';
+
 import { handleCollectionDate } from '../common/dateFuncs';
 import { handleDonorType, handleDonorVolunteer } from '../common/typeFuncs';
 import { typeOptions, addressHandler, fullAddressHandler, phoneHandler } from '../common/miscObjects';
@@ -52,6 +54,7 @@ const DonorPage = ({
 
     // Set Default States
     const size = useWindowSize(); 
+    const pageData = "don";
     
     const [monthFilter, setMonthFilter] = useState("All Contacts");
     const [monthValue, setMonthValue] = useState("");
@@ -63,7 +66,7 @@ const DonorPage = ({
     // Handle Initial Data Request
 
     useEffect(() => {
-        let newpage = page
+        let newpage = page;
         setLoading(true);
         getDonors(newpage).then(() => setLoading(false));
         getActiveCollection();
@@ -170,46 +173,6 @@ const DonorPage = ({
         searchDonorsEmails(emailPage, monthType, searchInput);
         console.log(emails.length)
     };
-
-    // Handle Page
-
-    const handlePage = (inputVal) => {
-
-        let monthType = monthValue;
-        let searchInput = searchValue;
-        let prevPage = currentPage;
-        let newpage = `${parseInt(prevPage)+parseInt(inputVal)}`;
-        setLoading(true);
-
-        setPage(newpage);
-        searchDonors(newpage, monthType, searchInput).then(() => setLoading(false));
-    }
-
-    // Handle Last Page
-
-    const handleLastPage = (inputValue) => {
-
-        let monthType = monthValue;
-        let searchInput = searchValue;
-        let newpage = inputValue;
-        setLoading(true);
-
-        setPage(newpage);
-        searchDonors(newpage, monthType, searchInput).then(() => setLoading(false));
-    }
-
-    // Handle First Page
-
-    const handleFirstPage = (inputValue) => {
-    
-            let monthType = monthValue;
-            let searchInput = searchValue;
-            let newpage = inputValue;
-            setLoading(true);
-
-            setPage(newpage);
-            searchDonors(newpage, monthType, searchInput).then(() => setLoading(false));
-    }
 
     // Donor Delete
 
@@ -358,11 +321,7 @@ const DonorPage = ({
                     emaillist={emails}
                     length={emails.length}
                     fullname = {emailfullname}
-                    successModalShow={successModalShow}
-                    successModalClose={successModalClose}
-                    reqStatus={reqStatus}
-                    type={type}
-                    isAdd={isAdd}
+                    size = {size}
                     />
 
                 </Row>
@@ -595,15 +554,25 @@ const DonorPage = ({
                             </tr>)}
                     </tbody>
                 </Table>
-                <Pagination style={{justifyContent:"center"}}>
-                    {(page != "1") &&<Pagination.First onClick={e => handleFirstPage("1")}/>}
-                    {(has_previous) &&<Pagination.Prev onClick={e => handlePage("-1")}/>}
-                    <Pagination.Item active>
-                        {page}
-                    </Pagination.Item>
-                    {(has_next) &&<Pagination.Next onClick={e => handlePage("1")}/>}
-                    {(page != total_number) &&<Pagination.Last onClick={e => handleLastPage(total_number)}/>}
-                </Pagination>
+                <PaginationFooter 
+                data={pageData}
+                monthValue={monthValue}
+                searchValue={searchValue}
+                typeValue={null}
+                collectionID={null}
+                startDate={null}
+                endDate={null}
+                pageStatus={null}
+                currentPage={currentPage}
+                setPage={setPage}
+                page={page}
+                setLoading={setLoading}
+                searchDonors={searchDonors}
+                searchCollections={null}
+                getParticipantList={null}
+                has_previous={has_previous}
+                has_next={has_next}
+                total_number={total_number}/>
             </div>}
         </div>
     )
