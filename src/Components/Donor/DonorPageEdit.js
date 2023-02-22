@@ -306,7 +306,7 @@ const DonorPage = ({
                         setEmailModalShow(true);
                         setEmailList(emails);
                         setEmailLength(emails.length)
-                        setEmailFullName(dons[0].FullName)
+                        setEmailFullName(dons[0].FirstName)
                         setSuccessModalShow(false);
                         setReqStatus(`Email Sent`);
                         setType("email");
