@@ -17,8 +17,7 @@ import { monthOptions, collectionTypeSelection } from "../common/miscObjects";
 
 import { getCollections, searchCollections, deleteCollection, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
 import { getWholesale } from "../../actions/wholesale";
-import { getDonors } from "../../actions/donors";
-import { getCurrentParticipants } from "../../actions/participation";
+import { getParticipantList } from "../../actions/participation";
 
 const CollectionArchive = ({ 
     getCollections, 
@@ -26,7 +25,7 @@ const CollectionArchive = ({
     deleteCollection, 
     deleteCollectionsMulti, 
     getWholesale, 
-    getDonors, 
+    getParticipantList,
     colls,
     total,
     totalc,
@@ -34,7 +33,8 @@ const CollectionArchive = ({
     currentPage,
     has_next,
     has_previous,
-    total_number
+    total_number,
+    parLength
 }) => {
 
     // Set Default States
@@ -86,6 +86,8 @@ const CollectionArchive = ({
     const [whototalspent, setWhototalspent] = useState(null);
     const [whoremainder, setWhoremainder] = useState(null);
     const [whoreceipt, setWhoreceipt] = useState(null);
+    const [whonotes, setWhonotes] = useState(null);
+    const [parlength, setParlength] = useState(null);
     const [type, setType] = useState(null);
     const [isAdd, setIsAdd] = useState(null);
     const [reqStatus, setReqStatus] = useState(null);
@@ -170,9 +172,9 @@ const CollectionArchive = ({
     // Get Wholesale
 
     const handleGetWholesale = (collid) => {
-        let collId = collid
-        getWholesale(collId)
-        getDonors()
+        let parPage = "coll";
+        getWholesale(collid);
+        getParticipantList(parPage, collid);
     };
 
     return(
@@ -275,6 +277,8 @@ const CollectionArchive = ({
                                                     setWhototalspent(whol[0].TotalSpent);
                                                     setWhoremainder(whol[0].Remainder);
                                                     setWhoreceipt(whol[0].WholesaleReceipt);
+                                                    setWhonotes(whol[0].Notes);
+                                                    setParlength(parLength);
                                                 }
                                             }
                                             >
@@ -294,6 +298,8 @@ const CollectionArchive = ({
                                             whototalspent={whototalspent}
                                             whoremainder={whoremainder}
                                             whoreceipt={whoreceipt}
+                                            whonotes={whonotes}
+                                            parlength={parlength}
                                             />
 
                                             {/* Delete Collection */}
@@ -336,7 +342,7 @@ const CollectionArchive = ({
                 setLoading={setLoading}
                 searchDonors={null}
                 searchCollections={searchCollections}
-                getCurrentParticipants={null}
+                getParticipantList={null}
                 has_previous={has_previous}
                 has_next={has_next}
                 total_number={total_number}/>
@@ -350,7 +356,6 @@ const CollectionArchive = ({
 const mapStateToProps = (state) => ({
     colls: state.collections.colls,
     whol: state.wholesale.whol,
-    dons: state.donors.dons,
     pars: state.participants.pars,
     result: state.collections.result,
     total: state.collections.total,
@@ -358,7 +363,8 @@ const mapStateToProps = (state) => ({
     currentPage: state.collections.currentPage,
     has_next: state.collections.has_next,
     has_previous: state.collections.has_previous,
-    total_number: state.collections.total_number
+    total_number: state.collections.total_number,
+    parLength: state.participants.parLength
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, getWholesale, getDonors, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti })(CollectionArchive)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, getWholesale, getParticipantList, checkStatusEdit, deleteCollectionsMulti })(CollectionArchive)

@@ -16,7 +16,7 @@ import { handleParticipantType, handleDropOffTime } from '../common/typeFuncs';
 import { participantOptions, handleParticipantPayment, collectionDateSelection, fullAddressHandler } from '../common/miscObjects';
 
 import { getCollections } from '../../actions/collections';
-import { getParticipantList, editParticipant, deleteParticipant, getCurrentParticipants, editParticipantStatus } from '../../actions/participation';
+import { getParticipantList, editParticipant, deleteParticipant, editParticipantStatus } from '../../actions/participation';
 import { getWholesale } from '../../actions/wholesale';
 
 // PARTICIPANTS PAGE //
@@ -451,4 +451,4 @@ const mapStateToProps = (state) => ({
     total_number: state.participants.total_number
 });
 
-export default connect(mapStateToProps, { getCollections, getWholesale, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, editParticipantStatus })(ParticipationPage)
+export default connect(mapStateToProps, { getCollections, getWholesale, getParticipantList, deleteParticipant, editParticipant, editParticipantStatus })(ParticipationPage)

@@ -15,7 +15,9 @@ export function MoreInformationModal(props) {
         collstatus,
         whototaldonated,
         whototalspent,
-        whoremainder
+        whoremainder,
+        whonotes,
+        parlength,
     } = props
 
     return (
@@ -38,6 +40,8 @@ export function MoreInformationModal(props) {
                             <p>
                                 Collection Type: <br />
                                 <strong>{colltype}</strong> <br />
+                                Number of Donors: <br />
+                                <strong>{parlength}</strong> <br />
                                 Total Weight: <br />
                                 <strong>{colltotalweight}kg</strong> <br />
                                 Estimated Cost: <br />
