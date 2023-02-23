@@ -1,6 +1,8 @@
 import React from "react";
-import {Button, Col, Form, Row, Modal, Image} from 'react-bootstrap';
+import {Button, Col, Form, Row, Modal, Image, Dropdown} from 'react-bootstrap';
 import { BsDownload } from "react-icons/bs";
+
+import { MiniTable } from "../common/MiniTable";
 
 export function MoreInformationModal(props) {
     const {
@@ -19,6 +21,13 @@ export function MoreInformationModal(props) {
         whoremainder,
         whonotes,
         parlength,
+        parsList,
+        getParticipantList,
+        par_currentPage,
+        par_has_next,
+        par_has_previous,
+        par_total_number,
+        size
     } = props
 
     return (
@@ -35,43 +44,41 @@ export function MoreInformationModal(props) {
                 </Modal.Header>
                 <Modal.Body>
 
-                    <Row>
-                        
-                        <Col sm={6}>    
-                            <p>
-                                Collection Type: <br />
-                                <strong>{colltype}</strong> <br />
-                                Number of Donors: <br />
-                                <strong>{parlength}</strong> <br />
-                                Total Weight: <br />
-                                <strong>{colltotalweight}kg</strong> <br />
-                                Estimated Cost: <br />
-                                <strong>£{colltotalcost}</strong> <br />
-                                Total Donated: <br />
-                                <strong>£{whototaldonated}</strong> <br />
-                                Total Spent: <br />
-                                <strong>£{whototalspent}</strong> <br />
-                                Remainder: <br />
-                                <strong>£{whoremainder}</strong> <br />
-                                Status: <br />
-                                <strong>{collstatus}</strong> <br />
-                            </p>
-                        </Col>
-                        <Col sm={6}>
-                            <Image width="200px" height="200px" src={`${process.env.REACT_APP_API}media/photos/`+collphoto}/>
-                        </Col>
-                        <Col sm={6}>
-                            <Form>
-                                <Form.Group>
+                    <Row style={{justifyContent:"center", textAlign:"center"}}>
+                        <Col sm={6} style={{justifyContent:"center", textAlign:"center"}}>
+                            <Image style={{borderRadius:"20px", boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} width="200px" height="200px" src={`${process.env.REACT_APP_API}media/photos/`+collphoto}/>
+                            <div style={{paddingTop:"10px"}}>
+                                <p style={{backgroundColor:"lightgray", textAlign:"center", borderRadius:"20px", boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}}>
+                                    <br />Collection Type: <strong>{colltype}</strong> <br />
+                                    Number of Donors: <strong>{parlength}</strong> <br />
+                                    Total Weight: <strong>{colltotalweight}kg</strong> <br />
+                                    Estimated Cost: <strong>£{colltotalcost}</strong> <br />
+                                    Total Donated: <strong>£{whototaldonated}</strong> <br />
+                                    Total Spent: <strong>£{whototalspent}</strong> <br />
+                                    Remainder: <strong>£{whoremainder}</strong> <br />
+                                    Status: <strong>{collstatus}</strong> <br />
+                                    Wholesale Notes:  <strong>{whonotes}</strong> <br />
+                                    Download Picture: <br />
                                     <a href={`${process.env.REACT_APP_API}media/photos/${collphoto}`} target="_blank" download>
-                                        <Button variant="outline-secondary" className="editButton">
-                                            <BsDownload className="editButton-Icon"/>
-                                        </Button>
+                                    <Button variant="outline-secondary" className="editButton">
+                                        <BsDownload className="editButton-Icon"/>
+                                    </Button>
                                     </a>
-                                </Form.Group>
-                            </Form>
-                            
+                                    <br /><br />
+                                </p>
+                            </div>
+
+                            <MiniTable parsList={parsList}
+                            collid={collid}
+                            getParticipantList={getParticipantList}
+                            par_currentPage={par_currentPage}
+                            par_has_next={par_has_next}
+                            par_has_previous={par_has_previous}
+                            par_total_number={par_total_number}
+                            size={size}
+                            />
                         </Col>
+                        
                     </Row>
                 </Modal.Body>
                 <Modal.Footer>

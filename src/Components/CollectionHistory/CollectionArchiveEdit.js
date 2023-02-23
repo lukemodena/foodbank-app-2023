@@ -34,7 +34,12 @@ const CollectionArchive = ({
     has_next,
     has_previous,
     total_number,
-    parTotalLength
+    parTotalLength,
+    parsList,
+    par_currentPage,
+    par_has_next,
+    par_has_previous,
+    par_total_number
 }) => {
 
     // Set Default States
@@ -172,10 +177,12 @@ const CollectionArchive = ({
     // Get Wholesale
 
     const handleGetWholesale = (collid) => {
-        let parPage = "coll";
-        let perParPage = null;
+        let parPage = "1";
+        let perParPage = "5";
+        let parSearchInput = "";
+        let parType = "";
         getWholesale(collid);
-        getParticipantList(parPage, perParPage, collid);
+        getParticipantList(parPage, perParPage, collid, parSearchInput, parType);
     };
 
     return(
@@ -301,6 +308,13 @@ const CollectionArchive = ({
                                             whoreceipt={whoreceipt}
                                             whonotes={whonotes}
                                             parlength={parlength}
+                                            parsList={parsList}
+                                            getParticipantList={getParticipantList}
+                                            par_currentPage={par_currentPage}
+                                            par_has_next={par_has_next}
+                                            par_has_previous={par_has_previous}
+                                            par_total_number={par_total_number}
+                                            size={size}
                                             />
 
                                             {/* Delete Collection */}
@@ -340,6 +354,7 @@ const CollectionArchive = ({
                 currentPage={currentPage}
                 setPage={setPage}
                 page={page}
+                perPage={null}
                 setLoading={setLoading}
                 searchDonors={null}
                 searchCollections={searchCollections}
@@ -365,7 +380,12 @@ const mapStateToProps = (state) => ({
     has_next: state.collections.has_next,
     has_previous: state.collections.has_previous,
     total_number: state.collections.total_number,
-    parTotalLength: state.participants.parTotalLength
+    parTotalLength: state.participants.parTotalLength,
+    parsList: state.participants.parsList,
+    par_currentPage: state.participants.currentPage,
+    par_has_next: state.participants.has_next,
+    par_has_previous: state.participants.has_previous,
+    par_total_number: state.participants.total_number
 });
 
 export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, getWholesale, getParticipantList, checkStatusEdit, deleteCollectionsMulti })(CollectionArchive)

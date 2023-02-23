@@ -425,6 +425,7 @@ const ParticipationPage = ({
                 currentPage={currentPage}
                 setPage={setPage}
                 page={page}
+                perPage={perPage}
                 setLoading={setLoading}
                 searchDonors={null}
                 searchCollections={null}

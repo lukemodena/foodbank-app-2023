@@ -528,6 +528,7 @@ const Collection = ({
                 currentPage={currentPage}
                 setPage={setPage}
                 page={page}
+                perPage={null}
                 setLoading={setLoading}
                 searchDonors={null}
                 searchCollections={searchCollections}

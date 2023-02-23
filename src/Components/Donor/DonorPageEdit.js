@@ -566,6 +566,7 @@ const DonorPage = ({
                 currentPage={currentPage}
                 setPage={setPage}
                 page={page}
+                perPage={null}
                 setLoading={setLoading}
                 searchDonors={searchDonors}
                 searchCollections={null}

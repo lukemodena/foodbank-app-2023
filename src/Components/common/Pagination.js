@@ -15,6 +15,7 @@ export function PaginationFooter(props) {
         currentPage,
         setPage,
         page,
+        perPage,
         setLoading,
         searchDonors,
         searchCollections,
@@ -38,7 +39,7 @@ export function PaginationFooter(props) {
         } else if (data === "coll") {
             searchCollections(newpage, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
         } else if (data === "par") {
-            let per_page = "15"
+            let per_page = perPage
             getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
         }
         
@@ -56,7 +57,7 @@ export function PaginationFooter(props) {
         } else if (data === "coll") {
             searchCollections(newpage, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
         } else if (data === "par") {
-            let per_page = "15"
+            let per_page = perPage
             getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
         }
     }
@@ -74,7 +75,7 @@ export function PaginationFooter(props) {
             } else if (data === "coll") {
                 searchCollections(newpage, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
             } else if (data === "par") {
-                let per_page = "15"
+                let per_page = perPage
                 getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
             }
     }
