@@ -41,7 +41,7 @@ const initialState = {
     has_next: false,
     has_previous: false,
     total_number: null,
-    parLength: null
+    parTotalLength: null
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
@@ -57,7 +57,7 @@ export default function(state = initialState, action) {
                 has_previous: payload.page.has_previous,
                 total_number: payload.page.total_number,
                 partresult: "Participants found successfully",
-                parLength: payload.page.parLength
+                parTotalLength: payload.page.parTotalLength
             }
 
         case PARTICIPATION_LIST_FAIL:

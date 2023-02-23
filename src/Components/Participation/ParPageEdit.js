@@ -42,6 +42,7 @@ const ParticipationPage = ({
     
     const size = useWindowSize(); 
     const pageData = "par"
+    const perPage = "15"
 
     const [collectionDate, setCollectionDate] = useState(collectionDateSelection(size.width));
     const [collectionID, setCollectionID] = useState(`${localStorage.getItem('activeId')}`);
@@ -69,7 +70,7 @@ const ParticipationPage = ({
         setCollectionDate(collectionDateSelection(size.width));
         setLoading(true);
         
-        getParticipantList(page, collection, searchInput, type).then(() => setLoading(false));
+        getParticipantList(page, perPage, collection, searchInput, type).then(() => setLoading(false));
         getCollections(collPage, collStatus);
         setShowAddButton(true);
       }, []);
@@ -145,7 +146,7 @@ const ParticipationPage = ({
         setPage(filtPage);
 
         getWholesale(collection);
-        getParticipantList(filtPage, collection, searchInput, type).then(() => setLoading(false));
+        getParticipantList(filtPage, perPage, collection, searchInput, type).then(() => setLoading(false));
         setCollectionDate(CollectionDate);
         setCollectionID(collection);
         setShowAddButton(true);
@@ -164,7 +165,7 @@ const ParticipationPage = ({
 
         console.log(parsList.reduce((a,v) =>  a = a + parseFloat(v.TotalDonated) , 0 ))
         
-        getParticipantList(filtPage, collection, searchInput, type).then(() => setLoading(false));
+        getParticipantList(filtPage, perPage, collection, searchInput, type).then(() => setLoading(false));
 
         setTypeValue(type);
         setTypeFilter(filter);
@@ -177,7 +178,7 @@ const ParticipationPage = ({
         let type = typeValue;
         let searchInput = searchValue;
         setLoading(true);
-        editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, currentPage, type, searchInput).then(() => setLoading(false));
+        editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, currentPage, perPage, type, searchInput).then(() => setLoading(false));
         setSuccessModalShow(true);
     };
 
@@ -188,7 +189,7 @@ const ParticipationPage = ({
             let searchInput = searchValue;
             let type = typeValue;
             setLoading(true);
-            deleteParticipant(parId, parDonTyp, parTotDon, parPayRec, collId, wholId, page, searchInput, type).then(() => setLoading(false));
+            deleteParticipant(parId, parDonTyp, parTotDon, parPayRec, collId, wholId, page, perPage, searchInput, type).then(() => setLoading(false));
             setSuccessDeleteModalShow(true);
         }
     };
@@ -205,7 +206,7 @@ const ParticipationPage = ({
         setLoading(true);
         setPage(filtPage);
         
-        getParticipantList(filtPage, collection, searchInput, type).then(() => setLoading(false));
+        getParticipantList(filtPage, perPage, collection, searchInput, type).then(() => setLoading(false));
     };
  
 
@@ -219,11 +220,11 @@ const ParticipationPage = ({
         
         if (PayRec === true){
             let newStatus = "false"
-            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, searchInput, type).then(() => setLoading(false));
+            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, perPage, searchInput, type).then(() => setLoading(false));
             
         } else if (PayRec === false){
             let newStatus = "true"
-            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, searchInput, type).then(() => setLoading(false));
+            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, perPage, searchInput, type).then(() => setLoading(false));
         };
         
     };

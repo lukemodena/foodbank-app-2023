@@ -38,7 +38,8 @@ export function PaginationFooter(props) {
         } else if (data === "coll") {
             searchCollections(newpage, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
         } else if (data === "par") {
-            getParticipantList(newpage, collectionID, searchValue, typeValue).then(() => setLoading(false));
+            let per_page = "15"
+            getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
         }
         
     }
@@ -55,7 +56,8 @@ export function PaginationFooter(props) {
         } else if (data === "coll") {
             searchCollections(newpage, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
         } else if (data === "par") {
-            getParticipantList(newpage, collectionID, searchValue, typeValue).then(() => setLoading(false));
+            let per_page = "15"
+            getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
         }
     }
 
@@ -72,7 +74,8 @@ export function PaginationFooter(props) {
             } else if (data === "coll") {
                 searchCollections(newpage, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
             } else if (data === "par") {
-                getParticipantList(newpage, collectionID, searchValue, typeValue).then(() => setLoading(false));
+                let per_page = "15"
+                getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
             }
     }
 

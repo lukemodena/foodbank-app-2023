@@ -27,7 +27,7 @@ import {
 
 // GET PARTICIPANT LIST
 
-export const getParticipantList = (page, CollectionID, FullName, Type) => async dispatch => {
+export const getParticipantList = (page, perPage, CollectionID, FullName, Type) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config ={
             headers: {
@@ -40,13 +40,13 @@ export const getParticipantList = (page, CollectionID, FullName, Type) => async 
             if (CollectionID === "" | CollectionID === null ){
                 if (Type === "" | Type === null ) {
                     if (FullName === "" | FullName === null ) {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
                         });
                     } else {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&fullname=${FullName}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&fullname=${FullName}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
@@ -54,13 +54,13 @@ export const getParticipantList = (page, CollectionID, FullName, Type) => async 
                     } 
                 } else {
                     if (FullName === "" | FullName === null ) {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&type=${Type}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&type=${Type}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
                         });
                     } else {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&fullname=${FullName}&type=${Type}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&fullname=${FullName}&type=${Type}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
@@ -71,13 +71,13 @@ export const getParticipantList = (page, CollectionID, FullName, Type) => async 
             } else {
                 if (Type === "" | Type === null ) {
                     if (FullName === "" | FullName === null ) {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&collid=${CollectionID}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
                         });
                     } else {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&collid=${CollectionID}&fullname=${FullName}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}&fullname=${FullName}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
@@ -85,13 +85,13 @@ export const getParticipantList = (page, CollectionID, FullName, Type) => async 
                     } 
                 } else {
                     if (FullName === "" | FullName === null ) {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&collid=${CollectionID}&type=${Type}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}&type=${Type}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
                         });
                     } else {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&collid=${CollectionID}&fullname=${FullName}&type=${Type}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}&fullname=${FullName}&type=${Type}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
@@ -229,7 +229,7 @@ export const updateDonor = (donorId) => async dispatch => {
             }
         };
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?page=1&donid=${donorId}`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?page=1&per_page=15&donid=${donorId}`, config)
             dispatch({
                 type: DONOR_ID_SEARCH_SUCCESS
             });
@@ -464,7 +464,7 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
 
 // EDIT PARTICIPANTS STATUS
 
-export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, Notes, WholesaleID, page, FullName, Type) => async dispatch => {
+export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, Notes, WholesaleID, page, perPage, FullName, Type) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -493,7 +493,7 @@ export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, Paym
                 type: EDIT_PARTICIPATION_SUCCESS,
                 payload: res.data
             });
-            dispatch(getParticipantList(page, CollectionID, FullName, Type));
+            dispatch(getParticipantList(page, perPage, CollectionID, FullName, Type));
         } catch (err) {
             dispatch({
                 type: EDIT_PARTICIPATION_FAIL,
@@ -568,7 +568,7 @@ export const updateWholesaleDelete = (collectionID, wholesaleID, DonationVal) =>
 
 // DELETE PARTICIPANTS
 
-export const deleteParticipant = (participantID, DonationType, DonationVal, PaymentRecieved, collectionID, wholesaleID, page, searchInput, type) => async dispatch => {
+export const deleteParticipant = (participantID, DonationType, DonationVal, PaymentRecieved, collectionID, wholesaleID, page, perPage, searchInput, type) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config = {
             headers: {
@@ -586,12 +586,12 @@ export const deleteParticipant = (participantID, DonationType, DonationVal, Paym
             if (DonationType === "3") { 
                 if (PaymentRecieved === "true" | PaymentRecieved === true) {
                     dispatch(updateWholesaleDelete(collectionID, wholesaleID, DonationVal));
-                    dispatch(getParticipantList(page, collectionID, searchInput, type));
+                    dispatch(getParticipantList(page, perPage, collectionID, searchInput, type));
                 } else {
-                    dispatch(getParticipantList(page, collectionID, searchInput, type));
+                    dispatch(getParticipantList(page, perPage, collectionID, searchInput, type));
                 }
             } else {
-                dispatch(getParticipantList(page, collectionID, searchInput, type));
+                dispatch(getParticipantList(page, perPage, collectionID, searchInput, type));
             }
             
         } catch (err) {

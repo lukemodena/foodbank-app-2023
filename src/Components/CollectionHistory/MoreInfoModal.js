@@ -6,6 +6,7 @@ export function MoreInformationModal(props) {
     const {
         show,
         onHide,
+        collid,
         colldate,
         colltype,
         colltotalweight,
@@ -69,6 +70,7 @@ export function MoreInformationModal(props) {
                                     </a>
                                 </Form.Group>
                             </Form>
+                            
                         </Col>
                     </Row>
                 </Modal.Body>

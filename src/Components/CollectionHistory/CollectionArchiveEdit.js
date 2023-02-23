@@ -34,7 +34,7 @@ const CollectionArchive = ({
     has_next,
     has_previous,
     total_number,
-    parLength
+    parTotalLength
 }) => {
 
     // Set Default States
@@ -173,8 +173,9 @@ const CollectionArchive = ({
 
     const handleGetWholesale = (collid) => {
         let parPage = "coll";
+        let perParPage = null;
         getWholesale(collid);
-        getParticipantList(parPage, collid);
+        getParticipantList(parPage, perParPage, collid);
     };
 
     return(
@@ -278,7 +279,7 @@ const CollectionArchive = ({
                                                     setWhoremainder(whol[0].Remainder);
                                                     setWhoreceipt(whol[0].WholesaleReceipt);
                                                     setWhonotes(whol[0].Notes);
-                                                    setParlength(parLength);
+                                                    setParlength(parTotalLength);
                                                 }
                                             }
                                             >
@@ -364,7 +365,7 @@ const mapStateToProps = (state) => ({
     has_next: state.collections.has_next,
     has_previous: state.collections.has_previous,
     total_number: state.collections.total_number,
-    parLength: state.participants.parLength
+    parTotalLength: state.participants.parTotalLength
 });
 
 export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, getWholesale, getParticipantList, checkStatusEdit, deleteCollectionsMulti })(CollectionArchive)
