@@ -10,6 +10,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import { AddCollectionModal } from "./AddCollModal";
 import { EditCollectionModal } from "./EditCollModal";
 import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
+import { MoreInformationModal } from '../CollectionHistory/MoreInfoModal';
 import { SuccessModal } from "../common/SuccessModal";
 import { WriteEmail } from '../Email/EmailModal';
 import { PaginationFooter } from '../common/Pagination';
@@ -22,6 +23,7 @@ import { getCollections, searchCollections, deleteCollection, editCollection, ad
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
 import { searchDonorsEmails } from "../../actions/donors";
 import { sendEmail } from '../../actions/email';
+import { getParticipantList } from "../../actions/participation";
 
 const Collection = ({ 
     getCollections, 
@@ -35,13 +37,20 @@ const Collection = ({
     editWholesale, 
     searchDonorsEmails,
     sendEmail,
+    getParticipantList,
     colls,
     emails,
     whol,
     currentPage,
     has_next,
     has_previous,
-    total_number
+    total_number,
+    parTotalLength,
+    parsList,
+    par_currentPage,
+    par_has_next,
+    par_has_previous,
+    par_total_number
 }) => {
 
     // Set Default States
@@ -73,12 +82,18 @@ const Collection = ({
       }, []);
 
     // Modal Handlers
+    const [infoModalShow, setInfoModalShow] = useState(false);
     const [addModalShow, setAddModalShow] = useState(false);
     const [editModalShow, setEditModalShow] = useState(false);
     const [editWholesaleShow, setEditWholesaleShow] = useState(false);
     const [emailModalShow, setEmailModalShow] = useState(false);
     const [successModalShow, setSuccessModalShow] = useState(false);
     const [successDeleteModalShow, setSuccessDeleteModalShow] = useState(false);
+    
+
+    const infoModalClose = () => {
+        setInfoModalShow(false);
+    };
 
     const addModalClose = () => {
         setAddModalShow(false);
@@ -120,6 +135,7 @@ const Collection = ({
     const [whoremainder, setWhoremainder] = useState(null);
     const [whoreceipt, setWhoreceipt] = useState(null);
     const [whonotes, setWhonotes] = useState("");
+    const [parlength, setParlength] = useState(null);
     const [emaillist, setEmailList] = useState([]);
     const [foodlist, setFoodList] = useState("");
     const [type, setType] = useState(null);
@@ -282,7 +298,12 @@ const Collection = ({
         let collId = collid
         let donSearch = ""
         let searchType = "all"
+        let parPage = "1";
+        let perParPage = "5";
+        let parSearchInput = "";
+        let parType = "";
         getWholesale(collId);
+        getParticipantList(parPage, perParPage, collid, parSearchInput, parType);
         searchDonorsEmails(searchType, donorType, donSearch);
     };
 
@@ -386,6 +407,54 @@ const Collection = ({
                                             ...
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
+                                        <Dropdown.Item 
+                                            onClick={()=>
+                                                {
+                                                    setInfoModalShow(true);
+                                                    setCollid(coll.CollectionID);
+                                                    setColldate(handleCollectionDate(coll.CollectionDate));
+                                                    setColltype(handleCollectionType(coll.Type));
+                                                    setColltotalweight(coll.TotalWeight);
+                                                    setColltotalcost(coll.TotalCost);
+                                                    setCollphoto(coll.CollectionPhoto);
+                                                    setCollspreadsheet(coll.CollectionSpreadsheet);
+                                                    setCollstatus(coll.CollectionStatus);
+                                                    setWhoid(whol[0].WholesaleID);
+                                                    setWhototaldonated(whol[0].TotalDonated);
+                                                    setWhototalspent(whol[0].TotalSpent);
+                                                    setWhoremainder(whol[0].Remainder);
+                                                    setWhoreceipt(whol[0].WholesaleReceipt);
+                                                    setWhonotes(whol[0].Notes);
+                                                    setParlength(parTotalLength);
+                                                }
+                                            }
+                                            >
+                                                    More Information...
+                                            </Dropdown.Item>
+                                            <MoreInformationModal show={infoModalShow}
+                                            onHide={infoModalClose}
+                                            collid={collid}
+                                            colldate={colldate}
+                                            colltype={colltype}
+                                            colltotalweight={colltotalweight}
+                                            colltotalcost={colltotalcost}
+                                            collphoto={collphoto}
+                                            collspreadsheet={collspreadsheet}
+                                            collstatus={collstatus}
+                                            whototaldonated={whototaldonated}
+                                            whototalspent={whototalspent}
+                                            whoremainder={whoremainder}
+                                            whoreceipt={whoreceipt}
+                                            whonotes={whonotes}
+                                            parlength={parlength}
+                                            parsList={parsList}
+                                            getParticipantList={getParticipantList}
+                                            par_currentPage={par_currentPage}
+                                            par_has_next={par_has_next}
+                                            par_has_previous={par_has_previous}
+                                            par_total_number={par_total_number}
+                                            size={size}
+                                            />
 
                                             <Dropdown.Item 
                                             onClick={()=>
@@ -553,7 +622,13 @@ const mapStateToProps = (state) => ({
     currentPage: state.collections.currentPage,
     has_next: state.collections.has_next,
     has_previous: state.collections.has_previous,
-    total_number: state.collections.total_number
+    total_number: state.collections.total_number,
+    parTotalLength: state.participants.parTotalLength,
+    parsList: state.participants.parsList,
+    par_currentPage: state.participants.currentPage,
+    par_has_next: state.participants.has_next,
+    par_has_previous: state.participants.has_previous,
+    par_total_number: state.participants.total_number
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonorsEmails, checkStatusEdit, deleteCollectionsMulti, sendEmail})(Collection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonorsEmails, checkStatusEdit, deleteCollectionsMulti, sendEmail, getParticipantList})(Collection)
