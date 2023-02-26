@@ -66,7 +66,7 @@ export function EditParticipationModal(props){
         let DonorID = e.target.DonorID.value;
         let ParticipantID = e.target.ParticipantID.value;
         let PaymentRecieved = paymentRecievedVal;
-        let OriginalPaymentRecieved = e.target.OriginalPaymentRecieved.value;
+        let OriginalPaymentRecieved = (e.target.OriginalPaymentRecieved.value === 'true');
         let DonationType = e.target.DonationType.value;
         let originalTotalDonated = e.target.OriginalTotalDonated.value;
         let TotalDonated = totalDonatedVal;

@@ -396,7 +396,7 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, notes, donId, co
 
 // EDIT PARTICIPANTS
 
-export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, page, type, searchInput) => async dispatch => {
+export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, page, perPage, type, searchInput) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -419,8 +419,8 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
             "WholesaleID":`${WholesaleID}`
         };
 
-        let donChange = parseFloat(DonationChange)
-    
+        let donChange = parseFloat(DonationChange);
+        
         try {
             const res = await axios.put(`${process.env.REACT_APP_API}participants`, body, config);
             dispatch({
@@ -428,25 +428,28 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
                 payload: res.data
             });
 
-            dispatch(getParticipantList(page, CollectionID, searchInput, type));
+            dispatch(getParticipantList(page, perPage, CollectionID, searchInput, type));
+
             if (DonationType === "3") {
                 if (OriginalPaymentRecieved === PaymentRecieved) {
-                    if ((PaymentRecieved === "true" || PaymentRecieved === true) && donChange !== 0) {
+                    if ((PaymentRecieved === "true" || PaymentRecieved === true) && donChange !== 0.0) {
                         dispatch(updateWholesale(CollectionID, WholesaleID, donChange));                    
                     }
                 } else if (OriginalPaymentRecieved != PaymentRecieved) {
                     if (PaymentRecieved === "true" | PaymentRecieved === true) {
                         let totDonated = parseFloat(TotalDonated);
                         dispatch(updateWholesale(CollectionID, WholesaleID, totDonated));
-                    } else if ((PaymentRecieved === "false" || PaymentRecieved === false) && donChange === 0) {
+                    } else if ((PaymentRecieved === "false" || PaymentRecieved === false) && donChange === 0.0) {
                         let removeDonation = -parseFloat(TotalDonated);
                         dispatch(updateWholesale(CollectionID, WholesaleID, removeDonation));         
-                    } else if ((PaymentRecieved === "false" || PaymentRecieved === false) && donChange !== 0) {
+                    } else if ((PaymentRecieved === "false" || PaymentRecieved === false) && donChange !== 0.0) {
                         let removeDonation = -(parseFloat(TotalDonated) - donChange)
                         dispatch(updateWholesale(CollectionID, WholesaleID, removeDonation));                    
                     }
                 }
             }
+            
+            
         } catch (err) {
             dispatch({
                 type: EDIT_PARTICIPATION_FAIL,

@@ -178,8 +178,9 @@ const ParticipationPage = ({
         let type = typeValue;
         let searchInput = searchValue;
         setLoading(true);
+        console.log(PaymentRecieved, DonationType, TotalDonated, DonationChange, OriginalPaymentRecieved)
         editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, currentPage, perPage, type, searchInput).then(() => setLoading(false));
-        setSuccessModalShow(true);
+        setEditParticipationShow(false);
     };
 
     // Participant Delete
