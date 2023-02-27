@@ -585,7 +585,7 @@ const Collection = ({
                             </tr>)}
                     </tbody>
                 </Table>
-                <PaginationFooter 
+                {(total_number !== 1) &&<PaginationFooter 
                 data={pageData}
                 monthValue={monthValue}
                 searchValue={null}
@@ -604,7 +604,7 @@ const Collection = ({
                 getParticipantList={null}
                 has_previous={has_previous}
                 has_next={has_next}
-                total_number={total_number}/>
+                total_number={total_number}/>}
             </div>}
         </div>
     )
