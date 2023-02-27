@@ -47,11 +47,11 @@ export function EditWholesaleModal(props) {
                                 <Col sm={6}>
                                     <Form.Group controlId='CollectionID'>
                                         <Form.Label>Collection ID</Form.Label>
-                                        <Form.Control type='text' name='CollectionID' disabled placeholder='CollectionID' defaultValue={collid}/>
+                                        <Form.Control type='hidden' name='CollectionID' disabled placeholder='CollectionID' defaultValue={collid}/>
                                     </Form.Group>
                                     <Form.Group controlId='WholesaleID'>
                                         <Form.Label>Wholesale ID</Form.Label>
-                                        <Form.Control type='text' name='WholesaleID' disabled placeholder='WholesaleID' defaultValue={whoid}/>
+                                        <Form.Control type='hidden' name='WholesaleID' disabled placeholder='WholesaleID' defaultValue={whoid}/>
                                     </Form.Group>
                                     <Form.Group controlId='TotalDonated'>
                                         <Form.Label>Total Donated</Form.Label>
