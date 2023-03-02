@@ -256,10 +256,10 @@ const Collection = ({
                 checkStatusEdit(status, collectionId, page, pageStatus)
 
                 editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, page, pageStatus).then(() => setLoading(false));
-                setSuccessModalShow(true);
+                setEditModalShow(false);
             } else {
                 editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status, page, pageStatus).then(() => setLoading(false));
-                setSuccessModalShow(true);
+                setEditModalShow(false);
             }
 
         } else {
@@ -284,10 +284,10 @@ const Collection = ({
                 checkStatusEdit(status, collectionId);
 
                 addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, page, pageStatus).then(() => setLoading(false));
-                setSuccessModalShow(true);
+                setEditModalShow(false);
             } else {
                 addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status, page, pageStatus).then(() => setLoading(false));
-                setSuccessModalShow(true);
+                setSuccessModalShow(false);
             }
         }
     };
@@ -322,7 +322,7 @@ const Collection = ({
         let notes = e.target.Notes.value;
 
         editWholesale(wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt, notes).then(() => setLoading(false));
-        setSuccessModalShow(true);
+        setEditWholesaleShow(false);
     };
 
     return(
