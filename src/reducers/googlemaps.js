@@ -1,12 +1,18 @@
 import {
     ADDRESS_SEARCH_SUCCESS,
-    ADDRESS_SEARCH_FAIL
+    ADDRESS_SEARCH_FAIL,
+    GEOCODE_SEARCH_SUCCESS,
+    GEOCODE_SEARCH_FAIL,
+    ROUTE_SUCCESS,
+    ROUTE_FAIL
 } from '../actions/types';
 
 const initialState = { 
     googleResult: [],
     googleTest: '',
     googleArray: [],
+    geocodeResult: [],
+    routeResult: []
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
@@ -37,6 +43,30 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 googleResult: payload
+            }
+
+        case GEOCODE_SEARCH_SUCCESS:
+            return {
+                ...state,
+                geocodeResult:payload
+            }
+
+        case GEOCODE_SEARCH_FAIL:
+            return {
+                ...state,
+                geocodeResult:payload
+            }
+        
+        case ROUTE_SUCCESS:
+            return {
+                ...state,
+                routeResult:payload
+            }
+        
+        case ROUTE_FAIL:
+            return {
+                ...state,
+                routeResult:payload
             }
 
     default:

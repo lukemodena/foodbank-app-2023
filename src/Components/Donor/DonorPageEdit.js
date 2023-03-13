@@ -262,7 +262,6 @@ const DonorPage = ({
         setLoading(true)
         getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, notes, donId, colId, whoId).then(() => setLoading(false));
         setAddParticipationShow(false);
-        setSuccessModalShow(true);
     };
 
     return(

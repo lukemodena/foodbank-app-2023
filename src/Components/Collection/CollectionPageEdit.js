@@ -11,6 +11,7 @@ import { AddCollectionModal } from "./AddCollModal";
 import { EditCollectionModal } from "./EditCollModal";
 import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 import { MoreInformationModal } from '../CollectionHistory/MoreInfoModal';
+import { RouteModal } from '../common/RouteModal';
 import { SuccessModal } from "../common/SuccessModal";
 import { WriteEmail } from '../Email/EmailModal';
 import { PaginationFooter } from '../common/Pagination';
@@ -23,7 +24,8 @@ import { getCollections, searchCollections, deleteCollection, editCollection, ad
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
 import { searchDonorsEmails } from "../../actions/donors";
 import { sendEmail } from '../../actions/email';
-import { getParticipantList } from "../../actions/participation";
+import { editParticipantStatus, getParticipantList } from "../../actions/participation";
+import { geocodeFinder, routePlanner } from '../../actions/googlemaps';
 
 const Collection = ({ 
     getCollections, 
@@ -38,6 +40,8 @@ const Collection = ({
     searchDonorsEmails,
     sendEmail,
     getParticipantList,
+    geocodeFinder,
+    routePlanner,
     colls,
     emails,
     whol,
@@ -50,7 +54,10 @@ const Collection = ({
     par_currentPage,
     par_has_next,
     par_has_previous,
-    par_total_number
+    par_total_number,
+    postcodeOrder,
+    geocodeResult, 
+    routeResult
 }) => {
 
     // Set Default States
@@ -87,6 +94,7 @@ const Collection = ({
     const [editModalShow, setEditModalShow] = useState(false);
     const [editWholesaleShow, setEditWholesaleShow] = useState(false);
     const [emailModalShow, setEmailModalShow] = useState(false);
+    const [routeModalShow, setRouteModalShow] = useState(false);
     const [successModalShow, setSuccessModalShow] = useState(false);
     const [successDeleteModalShow, setSuccessDeleteModalShow] = useState(false);
     
@@ -109,6 +117,10 @@ const Collection = ({
 
     const emailModalClose = () => {
         setEmailModalShow(false);
+    };
+
+    const routeModalClose = () => {
+        setRouteModalShow(false);
     };
 
     const successModalClose = () => {
@@ -527,19 +539,24 @@ const Collection = ({
                                             size = {size}
                                             />
 
-                                            {/* Delete Collection */}
-
+                                            {/* Route Planner */}
                                             <Dropdown.Item
                                             onClick={()=>{
-                                                setSuccessDeleteModalShow(false);
-                                                setReqStatus(`Collection on ${coll.CollectionDate} deleted`);
-                                                setType("collection");
-                                                setIsAdd(false);
-                                                handleDelete(coll.CollectionID)
+                                                setRouteModalShow(true);
                                             }}
                                             >
-                                                Delete
+                                                Create Collection Route
                                             </Dropdown.Item>
+
+                                            <RouteModal show={routeModalShow}
+                                            onHide={routeModalClose}
+                                            postcodeOrder={postcodeOrder}
+                                            size={size}
+                                            editParticipantStatus={editParticipantStatus}
+                                            geocodeFinder={geocodeFinder}
+                                            routePlanner={routePlanner}
+                                            geocodeResult={geocodeResult}
+                                            />
     
                                             {/* Manage Collection Cash Donations */}
 
@@ -575,6 +592,20 @@ const Collection = ({
                                             type={type}
                                             isAdd={isAdd}
                                             />
+
+                                            {/* Delete Collection */}
+
+                                            <Dropdown.Item
+                                            onClick={()=>{
+                                                setSuccessDeleteModalShow(false);
+                                                setReqStatus(`Collection on ${coll.CollectionDate} deleted`);
+                                                setType("collection");
+                                                setIsAdd(false);
+                                                handleDelete(coll.CollectionID)
+                                            }}
+                                            >
+                                                Delete
+                                            </Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
 
@@ -628,7 +659,10 @@ const mapStateToProps = (state) => ({
     par_currentPage: state.participants.currentPage,
     par_has_next: state.participants.has_next,
     par_has_previous: state.participants.has_previous,
-    par_total_number: state.participants.total_number
+    par_total_number: state.participants.total_number,
+    postcodeOrder: state.participants.postcodeOrder,
+    geocodeResult: state.googlemaps.geocodeResult,
+    routeResult: state.googlemaps.routeResult
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonorsEmails, checkStatusEdit, deleteCollectionsMulti, sendEmail, getParticipantList})(Collection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonorsEmails, checkStatusEdit, deleteCollectionsMulti, sendEmail, getParticipantList, geocodeFinder, routePlanner})(Collection)

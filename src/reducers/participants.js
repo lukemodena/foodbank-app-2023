@@ -41,14 +41,20 @@ const initialState = {
     has_next: false,
     has_previous: false,
     total_number: null,
-    parTotalLength: null
+    parTotalLength: null,
+    postcodeOrder: []
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
     const { type, payload } = action;
     switch(type) {
         case PARTICIPATION_LIST_SUCCESSFUL:
-        
+            let order = payload.routeData.sort((a, b) => {
+                if (a.DonorID.PostCode > b.DonorID.PostCode) { return 1; }
+                if (b.DonorID.PostCode > a.DonorID.PostCode) { return -1; }
+                return 0;
+                });
+
             return {
                 ...state,
                 parsList: payload.data,
@@ -57,7 +63,8 @@ export default function(state = initialState, action) {
                 has_previous: payload.page.has_previous,
                 total_number: payload.page.total_number,
                 partresult: "Participants found successfully",
-                parTotalLength: payload.page.parTotalLength
+                parTotalLength: payload.page.parTotalLength,
+                postcodeOrder: order,
             }
 
         case PARTICIPATION_LIST_FAIL:

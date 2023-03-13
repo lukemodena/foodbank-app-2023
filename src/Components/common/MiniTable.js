@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {Table, Dropdown, Row, Form} from 'react-bootstrap';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import {Table, Dropdown} from 'react-bootstrap';
 import { handleLoadStyle } from '../common/handleLoadStyle';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Bounce } from '../common/bounce';

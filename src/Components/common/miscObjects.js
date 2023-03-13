@@ -65,6 +65,12 @@ export const typeOptions = [
         type: "Other",
         value: "0",
         filter: "Other"
+    },
+    {
+        key: 4,
+        type: "Volunteer",
+        value: "volunteer",
+        filter: "Other"
     }
 ];
 
