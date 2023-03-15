@@ -137,15 +137,20 @@ export function EditParticipationModal(props){
                                         <Form.Select aria-label="DropOffTime" required name='DropOffTime' onChange={changeTime} placeholder='Please specify...' defaultValue={partime}>
                                             <option value="11">Please specify...</option>
                                             <option value="1">07:00-08:00</option>
+                                            <option value="1.5">07:30-08:30</option>
                                             <option value="2">08:00-09:00</option>
+                                            <option value="2.5">08:30-09:30</option>
                                             <option value="3">09:00-10:00</option>
+                                            <option value="3.5">09:30-10:30</option>
                                             <option value="4">10:00-11:00</option>
+                                            <option value="4.5">10:30-11:30</option>
                                             <option value="5">11:00-12:00</option>
+                                            <option value="5.5">11:30-12:30</option>
                                             <option value="6">12:00-13:00</option>
+                                            <option value="6.5">12:30-13:30</option>
                                             <option value="7">13:00-14:00</option>
-                                            <option value="8">14:00-15:00</option>
-                                            <option value="9">15:00-16:00</option>
-                                            <option value="10">16:00-17:00</option>
+                                            <option value="7.5">13:30-14:30</option>
+                                            <option value="10">TBC</option>
                                             <option value="0">Other</option>
                                         </Form.Select>
                                     }

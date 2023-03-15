@@ -90,32 +90,47 @@ export const handleDropOffTime = (inputValue) => {
     if (time === "1") {
         let type = "07:00-08:00";
         return type
+    } else if (time === "1.5") {
+        let type = "07:30-08:30";
+        return type
     } else if (time === "2") {
         let type = "08:00-09:00";
+        return type
+    } else if (time === "2.5") {
+        let type = "08:30-09:30";
         return type
     } else if (time === "3") {
         let type = "09:00-10:00";
         return type
+    } else if (time === "3.5") {
+        let type = "09:30-10:30";
+        return type
     } else if (time === "4") {
         let type = "10:00-11:00";
+        return type
+    } else if (time === "4.5") {
+        let type = "10:30-11:30";
         return type
     } else if (time === "5") {
         let type = "11:00-12:00";
         return type
+    } else if (time === "5.5") {
+        let type = "11:30-12:30";
+        return type
     } else if (time === "6") {
         let type = "12:00-13:00";
+        return type
+    } else if (time === "6.5") {
+        let type = "12:30-13:30";
         return type
     } else if (time === "7") {
         let type = "13:00-14:00";
         return type
-    } else if (time === "8") {
-        let type = "14:00-15:00";
-        return type
-    } else if (time === "9") {
-        let type = "15:00-16:00";
+    } else if (time === "7.5") {
+        let type = "13:30-14:30";
         return type
     } else if (time === "10") {
-        let type = "16:00-17:00";
+        let type = "TBC";
         return type
     } else if (time === "0") {
         let type = "Other";
