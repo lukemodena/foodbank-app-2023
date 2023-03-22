@@ -22,7 +22,8 @@ export function PaginationFooter(props) {
         getParticipantList,
         has_previous,
         has_next,
-        total_number
+        total_number,
+        getNotes
     } = props
 
     // Handle Page
@@ -41,6 +42,8 @@ export function PaginationFooter(props) {
         } else if (data === "par") {
             let per_page = perPage
             getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
+        } else if (data === "not") {
+            getNotes(newpage, collectionID).then(() => setLoading(false));
         }
         
     }
@@ -59,6 +62,8 @@ export function PaginationFooter(props) {
         } else if (data === "par") {
             let per_page = perPage
             getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
+        } else if (data === "not") {
+            getNotes(newpage, collectionID).then(() => setLoading(false));
         }
     }
 
@@ -77,6 +82,8 @@ export function PaginationFooter(props) {
             } else if (data === "par") {
                 let per_page = perPage
                 getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
+            } else if (data === "not") {
+                getNotes(newpage, collectionID).then(() => setLoading(false));
             }
     }
 

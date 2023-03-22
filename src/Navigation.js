@@ -51,6 +51,10 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
             {(pathname !== "/collections") &&<NavLink className="navLink" to="/collections" style={{ textDecoration: 'none' }} onClick={() => setExpanded(false)}>
                 Collections
             </NavLink>}
+            {(pathname === "/notes") &&<p className="navLink-Current">Notes</p>}
+            {(pathname !== "/notes") &&<NavLink className="navLink" to="/notes" style={{ textDecoration: 'none' }} onClick={() => setExpanded(false)}>
+                Notes
+            </NavLink>}
             {(pathname === "/participants") &&<p className="navLink-Current">Participants</p>}
             {(pathname !== "/participants") &&<NavLink className="navLink" to="/participants" style={{ textDecoration: 'none' }} onClick={() => setExpanded(false)}>
                 Participants
@@ -75,6 +79,7 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
                         {(pathname === "/login") &&<p><strong>Login</strong></p>}
                         {(pathname === "/contacts") &&<p><strong>Contacts</strong></p>}
                         {(pathname === "/collections") &&<p><strong>Collections</strong></p>}
+                        {(pathname === "/notes") &&<p><strong>Notes</strong></p>}
                         {(pathname === "/participants") &&<p><strong>Participants</strong></p>}
                         {(pathname === "/archive") &&<p><strong>Archive</strong></p>}
                     </div>}

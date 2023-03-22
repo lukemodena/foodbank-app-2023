@@ -8,6 +8,7 @@ import DonorPageEdit from './Components/Donor/DonorPageEdit';
 import CollectionPageEdit from './Components/Collection/CollectionPageEdit';
 import CollectionArchiveEdit from './Components/CollectionHistory/CollectionArchiveEdit';
 import ParPageEdit from './Components/Participation/ParPageEdit';
+import Notes from './Components/Notes/Notes';
 
 import {HashRouter as Router, Route, Routes} from 'react-router-dom';
 
@@ -28,6 +29,7 @@ function App() {
                   <Route exact path='/' element={<Home/>}/>
                   <Route path='/contacts' element={<DonorPageEdit/>}/>
                   <Route path='/collections' element={<CollectionPageEdit/>}/>
+                  <Route exact path='/notes' element={<Notes/>}/>
                   <Route path='/archive' element={<CollectionArchiveEdit/>}/>
                   <Route exact path='/login' element={<NewLogin/>}/>
                   <Route exact path='/participants' element={<ParPageEdit/>}/>

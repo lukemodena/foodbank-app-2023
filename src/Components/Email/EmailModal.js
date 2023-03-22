@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {Dropdown, Button, Form, Row, Modal} from 'react-bootstrap';
-import { SuccessModal } from "../common/SuccessModal";
 import { ClipLoader } from "react-spinners";
 
 import { handleCollectionDateEmail } from "../common/dateFuncs";
