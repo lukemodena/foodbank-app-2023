@@ -98,9 +98,8 @@ const Notes = ({
 
     const handleEditNote = (e, NoteID, Completed) => {
         e.preventDefault();
-        console.log(NoteID, note, Completed, collectionID, page);
-        // setLoading(true);
-        // edit(note, collectionID, page).then(() => {setLoading(false); setAllowEditNote(false)});
+        setLoading(true);
+        editNote(NoteID, note, Completed, collectionID, page).then(() => {setLoading(false); setAllowEditNoteID(null)});
     }
 
     const handleCompleteNote = (e, NoteID, Note, Completed) => {
@@ -157,7 +156,7 @@ const Notes = ({
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr className="row-height nowrap">
                             <td>
                                 <Form.Check 
                                     type="switch"
@@ -166,18 +165,22 @@ const Notes = ({
                             </td>
                             
                             <td>
-                                <Form.Control 
-                                type="textarea" 
-                                placeholder="New Note..."
-                                onChange={(e) => setNewNote(e.target.value)}
-                                />
+                                <Form>
+                                    <Form.Control 
+                                    as="textarea" 
+                                    rows={10}
+                                    className="row-height"
+                                    placeholder="New Note..."
+                                    onChange={(e) => setNewNote(e.target.value)}
+                                    />
+                                </Form>
                             </td>
                             <td>
                                 <a style={{cursor:"pointer"}} onClick={(e) => handleAddNote(e)} ><BsPlusSquare className="notesSave-Icon"/></a>
                             </td>
                         </tr>
                         {notes.map((not)=>
-                                <tr key={not.NoteID}>
+                                <tr key={not.NoteID} className="row-height nowrap">
                                     <td>
                                         <Form.Check 
                                             type="switch"
@@ -189,12 +192,16 @@ const Notes = ({
                                     </td>
                                     
                                     <td>
-                                        <Form.Control  
-                                        type="textarea" 
-                                        defaultValue={not.Note}
-                                        placeholder="Note..."
-                                        onChange={(e) => {handleInputChange(e, e.target.value, not.NoteID, not.Note)}}
-                                        />
+                                        <Form>
+                                            <Form.Control  
+                                            as="textarea" 
+                                            rows={10}
+                                            className="row-height"
+                                            defaultValue={not.Note}
+                                            placeholder="Note..."
+                                            onChange={(e) => {handleInputChange(e, e.target.value, not.NoteID, not.Note)}}
+                                            />
+                                        </Form>
                                     </td>
                                     <td>
                                         {(not.NoteID === allowEditNoteID) &&

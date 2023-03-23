@@ -279,6 +279,60 @@
   color: white;
 }
 
+/* Notes */
+
+.notesSave-Icon {
+  transform: translate(-0.5px, -2.5px);
+  width: 25.706px;
+  height: 25.706px;
+  background-color: rgba(0, 0, 0, 0);
+  border: #C7C7C7;
+  color: #1ea300;
+  padding: 1px 1px;
+  border-radius: .2rem;
+  transition: 0.15s;
+}
+
+.notesDelete-Icon {
+  transform: translate(-0.5px, -2.5px);
+  width: 25.706px;
+  height: 25.706px;
+  background-color: rgba(0, 0, 0, 0);
+  border: #C7C7C7;
+  color: #ff0000;
+  padding: 1px 1px;
+  border-radius: .2rem;
+  transition: 0.15s;
+}
+
+
+/* TableStyles.css  */
+.row-height {
+  height: 5rem !important;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+/* 
+.table .cell-padding {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.table .cell-padding-right {
+  padding-right: 1rem;
+}
+
+.table .cell-padding-left {
+  padding-left: 1rem;
+}
+
+.table>:not(caption)>*>* {
+  padding: 0px;
+} */
+
+/* END */
 
 /* Donor Search */
 
@@ -312,31 +366,6 @@
   border-radius: .2rem;
   transition: 0.15s;
 }
-
-.notesSave-Icon {
-  transform: translate(-0.5px, -2.5px);
-  width: 25.706px;
-  height: 25.706px;
-  background-color: rgba(0, 0, 0, 0);
-  border: #C7C7C7;
-  color: #1ea300;
-  padding: 1px 1px;
-  border-radius: .2rem;
-  transition: 0.15s;
-}
-
-.notesDelete-Icon {
-  transform: translate(-0.5px, -2.5px);
-  width: 25.706px;
-  height: 25.706px;
-  background-color: rgba(0, 0, 0, 0);
-  border: #C7C7C7;
-  color: #ff0000;
-  padding: 1px 1px;
-  border-radius: .2rem;
-  transition: 0.15s;
-}
-
 
 .searchBarSubmit {
   transform: translate(218.5px, 0px);

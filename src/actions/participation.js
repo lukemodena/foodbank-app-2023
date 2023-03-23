@@ -142,37 +142,6 @@ export const getParticipantList = (page, perPage, CollectionID, FullName, Type) 
     }
 }
 
-// PULL PARTICIPANTS
-
-export const getParticipants = (CollectionID) => async dispatch => {
-
-    if (localStorage.getItem('token')){
-        const config ={
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`,
-                'Accept': 'application/json'
-            }
-        };
-        
-        try {
-            const res = await axios.get(`${process.env.REACT_APP_API}searchparticipants?collid=${CollectionID}`, config)
-            dispatch({
-                type: PARTICIPATION_SUCCESS,
-                payload: res.data
-            });
-        } catch (err) {
-            dispatch({
-                type: PARTICIPATION_FAIL
-            });
-        }
-    } else {
-        dispatch({
-            type: PARTICIPATION_FAIL
-        });
-    }
-};
-
 // PULL CURRENT PARTICIPANTS (FOR CREATE PARTICIPANTS ON CONTACTS/DONOR PAGE - PREVENTS DUPLICATION)
 
 export const getCurrentParticipants = (CollectionID, DonorID, payRec, donTyp, totDon, droTim, notes, donId, colId, whoId) => async dispatch => {

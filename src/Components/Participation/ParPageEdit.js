@@ -162,8 +162,6 @@ const ParticipationPage = ({
         let filtPage = "1";
         setLoading(true);
         setPage(filtPage);
-
-        console.log(parsList.reduce((a,v) =>  a = a + parseFloat(v.TotalDonated) , 0 ))
         
         getParticipantList(filtPage, perPage, collection, searchInput, type).then(() => setLoading(false));
 
@@ -178,7 +176,7 @@ const ParticipationPage = ({
         let type = typeValue;
         let searchInput = searchValue;
         setLoading(true);
-        console.log(PaymentRecieved, DonationType, TotalDonated, DonationChange, OriginalPaymentRecieved)
+        
         editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, currentPage, perPage, type, searchInput).then(() => setLoading(false));
         setEditParticipationShow(false);
     };
