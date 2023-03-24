@@ -3,6 +3,7 @@ import {Table, Modal, Form, Button} from 'react-bootstrap';
 import { handleLoadStyle } from '../common/handleLoadStyle';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Bounce } from '../common/bounce';
+import { BsMap } from 'react-icons/bs';
 
 import { PaginationFooter } from '../common/Pagination';
 import dayjs from 'dayjs';
@@ -16,11 +17,12 @@ export const RouteModal = ({
     show,
     onHide,
     postcodeOrder,
+    postcodeLength,
     size,
     editParticipantStatus,
     geocodeFinder,
     routePlanner,
-    geocodeResult
+    geocodeResult,
 }) => {
     
     // Set Default States
@@ -36,6 +38,142 @@ export const RouteModal = ({
     const [add1, setAdd1] = useState(null);
     const [add2, setAdd2] = useState(null);
     const [add3, setAdd3] = useState(null);
+
+    // Handle Select Collection Address#
+
+    const [isChecked, setIsChecked] = useState([]);
+    const [link, setLink] = useState('https://www.google.com/maps/dir/51.5536862,-0.185989')
+
+
+    const handleChecked = (e, postCode) => {
+        const id = e.target.value;
+
+        let isFound = isChecked.some(element => {
+            return element.id === id;
+          });
+        
+        if (isFound) {
+            console.log("id found")
+            setIsChecked(locs => locs.filter(loc => loc.id !== id))
+        } else {
+            let checkedLoc = {
+                "id": id,
+                "postcode": `/${postCode.replace(" ","+")}`
+            };
+            console.log("id not found")
+            setIsChecked([...isChecked, checkedLoc])
+        }
+        
+    };
+
+    const handleCreateRoute = (e) => {
+        e.preventDefault();
+
+        let toRoute = isChecked;
+        let length = toRoute.length;
+
+        if (length === 0){
+            let message = `Please select the destination/s`;
+            window.confirm(message);
+        } else if (length > 10) {
+            let remove = length - 10;
+            let message = `You have selected ${length} destinations, please remove ${remove} destination/s`;
+            window.confirm(message);
+        } else {
+
+            let startLocation = '51.5536862,-0.185989';
+            let firstDestination = isChecked[0]['postcode'];
+
+            if (length === 1) {
+
+                setLink(`https://www.google.com/maps/dir/${startLocation}${firstDestination}/`);
+
+            } else if (length === 2) {
+                
+                let secondDestination = isChecked[1]['postcode'];
+                setLink(`https://www.google.com/maps/dir/${startLocation}${firstDestination}${secondDestination}/`);
+
+            } else if (length === 3) {
+                
+                let secondDestination = isChecked[1]['postcode'];
+                let thirdDestination = isChecked[1]['postcode'];
+                setLink(`https://www.google.com/maps/dir/${startLocation}${firstDestination}${secondDestination}${thirdDestination}/`);
+
+            } else if (length === 4) {
+                
+                let secondDestination = isChecked[1]['postcode'];
+                let thirdDestination = isChecked[1]['postcode'];
+                let fourthDestination = isChecked[1]['postcode'];
+                setLink(`https://www.google.com/maps/dir/${startLocation}${firstDestination}${secondDestination}${thirdDestination}${fourthDestination}/`);
+
+            } else if (length === 5) {
+                
+                let secondDestination = isChecked[1]['postcode'];
+                let thirdDestination = isChecked[1]['postcode'];
+                let fourthDestination = isChecked[1]['postcode'];
+                let fifthDestination = isChecked[1]['postcode'];
+                setLink(`https://www.google.com/maps/dir/${startLocation}${firstDestination}${secondDestination}${thirdDestination}${fourthDestination}${fifthDestination}/`);
+
+            } else if (length === 6) {
+                
+                let secondDestination = isChecked[1]['postcode'];
+                let thirdDestination = isChecked[1]['postcode'];
+                let fourthDestination = isChecked[1]['postcode'];
+                let fifthDestination = isChecked[1]['postcode'];
+                let sixthDestination = isChecked[1]['postcode'];
+                setLink(`https://www.google.com/maps/dir/${startLocation}${firstDestination}${secondDestination}${thirdDestination}${fourthDestination}${fifthDestination}${sixthDestination}/`);
+
+            } else if (length === 7) {
+                
+                let secondDestination = isChecked[1]['postcode'];
+                let thirdDestination = isChecked[1]['postcode'];
+                let fourthDestination = isChecked[1]['postcode'];
+                let fifthDestination = isChecked[1]['postcode'];
+                let sixthDestination = isChecked[1]['postcode'];
+                let sevethDestination = isChecked[1]['postcode'];
+                setLink(`https://www.google.com/maps/dir/${startLocation}${firstDestination}${secondDestination}${thirdDestination}${fourthDestination}${fifthDestination}${sixthDestination}${sevethDestination}/`);
+
+            } else if (length === 8) {
+                
+                let secondDestination = isChecked[1]['postcode'];
+                let thirdDestination = isChecked[1]['postcode'];
+                let fourthDestination = isChecked[1]['postcode'];
+                let fifthDestination = isChecked[1]['postcode'];
+                let sixthDestination = isChecked[1]['postcode'];
+                let sevethDestination = isChecked[1]['postcode'];
+                let eighthDestination = isChecked[1]['postcode'];
+                setLink(`https://www.google.com/maps/dir/${startLocation}${firstDestination}${secondDestination}${thirdDestination}${fourthDestination}${fifthDestination}${sixthDestination}${sevethDestination}${eighthDestination}/`);
+
+            } else if (length === 9) {
+                
+                let secondDestination = isChecked[1]['postcode'];
+                let thirdDestination = isChecked[1]['postcode'];
+                let fourthDestination = isChecked[1]['postcode'];
+                let fifthDestination = isChecked[1]['postcode'];
+                let sixthDestination = isChecked[1]['postcode'];
+                let sevethDestination = isChecked[1]['postcode'];
+                let eighthDestination = isChecked[1]['postcode'];
+                let ninthDestination = isChecked[1]['postcode'];
+                setLink(`https://www.google.com/maps/dir/${startLocation}${firstDestination}${secondDestination}${thirdDestination}${fourthDestination}${fifthDestination}${sixthDestination}${sevethDestination}${eighthDestination}${ninthDestination}/`);
+
+            } else if (length === 10) {
+                
+                let secondDestination = isChecked[1]['postcode'];
+                let thirdDestination = isChecked[1]['postcode'];
+                let fourthDestination = isChecked[1]['postcode'];
+                let fifthDestination = isChecked[1]['postcode'];
+                let sixthDestination = isChecked[1]['postcode'];
+                let sevethDestination = isChecked[1]['postcode'];
+                let eighthDestination = isChecked[1]['postcode'];
+                let ninthDestination = isChecked[1]['postcode'];
+                let tenthDestination = isChecked[1]['postcode'];
+                setLink(`https://www.google.com/maps/dir/${startLocation}${firstDestination}${secondDestination}${thirdDestination}${fourthDestination}${fifthDestination}${sixthDestination}${sevethDestination}${eighthDestination}${ninthDestination}${tenthDestination}/`);
+
+            }
+            console.log(link)
+        }
+    }
+    
 
     // Recieve Handle
 
@@ -63,26 +201,6 @@ export const RouteModal = ({
         geocodeFinder(address);
     };
 
-    const createRoute = (e, participants) => {
-        e.preventDefault();
-
-        let fulladdress1 = fullAddressHandler(participants[0]['DonorID']['Address1'], participants[0]['DonorID']['Address2'], participants[0]['DonorID']['Address3'], participants[0]['DonorID']['PostCode']);
-        let fulladdress2 = fullAddressHandler(participants[1]['DonorID']['Address1'], participants[1]['DonorID']['Address2'], participants[1]['DonorID']['Address3'], participants[1]['DonorID']['PostCode']);
-        let fulladdress3 = fullAddressHandler(participants[2]['DonorID']['Address1'], participants[2]['DonorID']['Address2'], participants[2]['DonorID']['Address3'], participants[2]['DonorID']['PostCode']);
-
-        //console.log(dayjs().format())
-        routePlanner(fulladdress1, fulladdress2, fulladdress3)
-        // geocodeFinder(fulladdress1)
-        // .then(setAdd1(geocodeResult));
-
-        // geocodeFinder(fulladdress2)
-        // .then(setAdd2(geocodeResult));
-
-        // geocodeFinder(fulladdress3)
-        // .then(setAdd3(geocodeResult));
-        
-        // console.log(add1['lat'], add2['lat'], add3['lat']);
-    };
 
 
 
@@ -102,11 +220,7 @@ export const RouteModal = ({
                 </Modal.Header>
 
                 <Modal.Body>
-                    <Button onClick={(e) =>
-                        {
-                            createRoute(e, postcodeOrder);
-                        }}>
-                    </Button>
+                    <a href={link} target="_blank"><Button/></a>
                     {parRouteLoading ? 
                     <div className="mt-4" style={handleLoadStyle(size.width, modal)}>
                         <div className="loader-container">
@@ -118,7 +232,12 @@ export const RouteModal = ({
                         <Table style={{paddingTop:"0px"}} className="mt-4" striped bordered hover size="sm">
                             <thead>
                                 <tr>
-                                    <th>TEST</th>
+                                    <th>
+                                        <Button className="deleteButton" variant="outline-secondary" onClick={(e) =>{
+                                        handleCreateRoute(e)}}>
+                                        <BsMap className='deleteIcon'/>
+                                        </Button>
+                                    </th>
                                     <th>Name</th>
                                     <th>Address</th>
                                     <th>Collected</th>
@@ -129,13 +248,7 @@ export const RouteModal = ({
                             
                                 {postcodeOrder.map((par)=>
                                         <tr key={par.ParticipationID}>
-                                            <td>
-                                                <Button onClick={(e) =>
-                                                {
-                                                    getGeocode(e, fullAddressHandler(par.DonorID.Address1, par.DonorID.Address2, par.DonorID.Address3, par.DonorID.PostCode));
-                                                }}>
-                                                </Button>
-                                            </td>
+                                            <td><input type="checkbox" value={par.ParticipationID} checked={par.isChecked} onChange={(e) => handleChecked(e, par.DonorID.PostCode)}/></td>
                                             <td>{par.DonorID.FullName} {Bounce(par.Notes)}</td>
                                             <td>{fullAddressHandler(par.DonorID.Address1, par.DonorID.Address2, par.DonorID.Address3, par.DonorID.PostCode)}</td>
                                             <td>

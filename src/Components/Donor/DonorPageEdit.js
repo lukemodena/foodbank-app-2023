@@ -190,6 +190,7 @@ const DonorPage = ({
         const id = e.target.value;
 
         setIsChecked([...isChecked, id]);
+        console.log(isChecked)
     };
     
         

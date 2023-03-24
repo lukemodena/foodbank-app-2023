@@ -40,6 +40,7 @@ const Collection = ({
     searchDonorsEmails,
     sendEmail,
     getParticipantList,
+    editParticipantStatus,
     geocodeFinder,
     routePlanner,
     colls,
@@ -665,4 +666,4 @@ const mapStateToProps = (state) => ({
     routeResult: state.googlemaps.routeResult
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonorsEmails, checkStatusEdit, deleteCollectionsMulti, sendEmail, getParticipantList, geocodeFinder, routePlanner})(Collection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, searchDonorsEmails, checkStatusEdit, deleteCollectionsMulti, sendEmail, getParticipantList, editParticipantStatus, geocodeFinder, routePlanner})(Collection)

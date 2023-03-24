@@ -13,6 +13,8 @@ import {
     PARTICIPATION_LIST_FAIL
 } from '../actions/types';
 
+import { cmp } from '../Components/common/cmpFunc';
+
 const initialState = { 
     pars: [],
     parsList: [
@@ -49,12 +51,19 @@ export default function(state = initialState, action) {
     const { type, payload } = action;
     switch(type) {
         case PARTICIPATION_LIST_SUCCESSFUL:
-            let order = payload.routeData.sort((a, b) => {
-                if (a.DonorID.PostCode > b.DonorID.PostCode) { return 1; }
-                if (b.DonorID.PostCode > a.DonorID.PostCode) { return -1; }
-                return 0;
-                });
+            // let order = payload.routeData.sort((a, b) => {
+            //     if (a.DonorID.PostCode > b.DonorID.PostCode) { return 1; }
+            //     if (b.DonorID.PostCode > a.DonorID.PostCode) { return -1; }
+            //     return 0;
+            //     });
 
+            let order = payload.routeData.sort((a, b) => {
+                return cmp(
+                    [cmp(a.PaymentRecieved, b.PaymentRecieved), cmp(parseInt(a.DonorID.PostCode), parseInt(b.DonorID.PostCode))],
+                    [cmp(b.PaymentRecieved, a.PaymentRecieved), cmp(parseInt(b.DonorID.PostCode), parseInt(a.DonorID.PostCode))]
+                );
+            });
+            
             return {
                 ...state,
                 parsList: payload.data,
