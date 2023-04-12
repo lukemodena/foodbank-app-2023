@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import useWindowSize from '../common/useWindow';
 import { handleLoadStyle } from '../common/handleLoadStyle';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { Bounce } from '../common/bounce';
+import { Bounce, Static } from '../common/bounce';
 
 import { EditParticipationModal } from './EditParticipationModal';
 import SearchBar from './SearchBar';
@@ -35,7 +35,8 @@ const ParticipationPage = ({
     currentPage,
     has_next,
     has_previous,
-    total_number
+    total_number,
+    stats
 }) => {
     
     // Set Default States
@@ -287,14 +288,17 @@ const ParticipationPage = ({
                     <thead>
                         <tr>
                             {(size.width > 760) &&<th>ID</th>}
-                            <th>Options</th>
+                            <th>
+                                {Static(size.width, stats.total, stats.total_recieved, stats.total_remain, stats.total_drop_off, stats.recieved_drop_off, stats.total_collection, stats.recieved_collection, stats.total_online_order, stats.recieved_online_order, stats.total_cash_donation, stats.recieved_cash_donation, stats.cash_donation_total.TotalDonated__sum, stats.cash_donation_recieved.TotalDonated__sum, stats.cash_donation_remain.TotalDonated__sum)}
+                               
+                            </th>
                             {(typeValue === "1" | typeValue === "4") ?<th>Time</th> : null}
                             {(typeValue === "1" | typeValue === "2" | typeValue === "4") ?<th>Received</th> : null}
                             <th>Name</th>
                             {(typeValue === "2") &&<th>Address</th>}
-                            {(typeValue === "") &&<th>Donation Type</th>}
+                            {(typeValue === "") &&<th>Type</th>}
                             {(typeValue === "3") &&<th>Amount</th>}
-                            {(typeValue === "3") &&<th>Received</th>}
+                            {(typeValue !== "1" | typeValue !== "2") &&<th>Received</th>}
                             {(size.width > 760) &&<th>Email</th>}
                         </tr>
                     </thead>
@@ -406,7 +410,7 @@ const ParticipationPage = ({
                                     {(typeValue === "2") &&<td>{fullAddressHandler(par.DonorID.Address1, par.DonorID.Address2, par.DonorID.Address3, par.DonorID.PostCode)}</td>}
                                     {(typeValue === "") &&<td>{handleParticipantType(par.DonationType)}</td>}
                                     {(typeValue === "3") &&<td>£{par.TotalDonated}</td>}
-                                    {(typeValue === "3") &&<td>{handleParticipantPayment(par.PaymentRecieved)}</td>}
+                                    {(typeValue !== "1" | typeValue !== "4") &&<td>{handleParticipantPayment(par.PaymentRecieved)}</td>}
                                     {(size.width > 760) &&<td>{par.DonorID.Email}</td>}
                                     
                                 </tr>)}
@@ -449,7 +453,8 @@ const mapStateToProps = (state) => ({
     currentPage: state.participants.currentPage,
     has_next: state.participants.has_next,
     has_previous: state.participants.has_previous,
-    total_number: state.participants.total_number
+    total_number: state.participants.total_number,
+    stats: state.participants.stats
 });
 
 export default connect(mapStateToProps, { getCollections, getWholesale, getParticipantList, deleteParticipant, editParticipant, editParticipantStatus })(ParticipationPage)
