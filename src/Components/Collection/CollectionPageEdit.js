@@ -58,7 +58,8 @@ const Collection = ({
     par_total_number,
     postcodeOrder,
     geocodeResult, 
-    routeResult
+    routeResult,
+    stats
 }) => {
 
     // Set Default States
@@ -467,6 +468,7 @@ const Collection = ({
                                             par_has_previous={par_has_previous}
                                             par_total_number={par_total_number}
                                             size={size}
+                                            stats={stats}
                                             />
 
                                             <Dropdown.Item 
@@ -657,6 +659,7 @@ const mapStateToProps = (state) => ({
     total_number: state.collections.total_number,
     parTotalLength: state.participants.parTotalLength,
     parsList: state.participants.parsList,
+    stats: state.participants.stats,
     par_currentPage: state.participants.currentPage,
     par_has_next: state.participants.has_next,
     par_has_previous: state.participants.has_previous,

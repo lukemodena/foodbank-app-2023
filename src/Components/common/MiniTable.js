@@ -73,24 +73,18 @@ export const MiniTable = ({
                     <thead>
                         <tr>
                             <th>Name</th>
-                            {(typeValue === "") &&<th>Donation Type</th>}
+                            {(typeValue === "" || typeValue === "notRecieved") &&<th>Donation Type</th>}
                             {(typeValue === "3") &&<th>Amount</th>}
-                            {(typeValue === "3" | typeValue === "1" | typeValue === "4") ?
                             <th>Received</th>
-                            :
-                            null}
                         </tr>
                     </thead>
                     <tbody>
                         {parsList.map((par)=>
                                 <tr key={par.ParticipationID}>
                                     <td>{par.DonorID.FullName} {Bounce(par.Notes)}</td>
-                                    {(typeValue === "") &&<td>{handleParticipantType(par.DonationType)}</td>}
+                                    {(typeValue === "" || typeValue === "notRecieved") &&<td>{handleParticipantType(par.DonationType)}</td>}
                                     {(typeValue === "3") &&<td>£{par.TotalDonated}</td>}
-                                    {(typeValue === "3" | typeValue === "1" | typeValue === "4") ?
                                     <td>{handleParticipantPayment(par.PaymentRecieved)}</td>
-                                    : 
-                                    null}
                                 </tr>)}
                     </tbody>
                 </Table>

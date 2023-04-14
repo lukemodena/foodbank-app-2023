@@ -176,8 +176,9 @@ const DonorPage = ({
 
     // Donor Delete
 
-    const handleDelete = (donId) => {
-        if(window.confirm('Are you sure?')){
+    const handleDelete = (donId, donName) => {
+        let message = `Are you sure you want to delete ${donName}?`;
+        if(window.confirm(message)){
             setLoading(true);
             deleteDonor(donId, page, monthValue, searchValue).then(() => setLoading(false));
             setSuccessDeleteModalShow(true);
@@ -530,7 +531,7 @@ const DonorPage = ({
                                                     setReqStatus(`${don.FullName} deleted`);
                                                     setType("contact");
                                                     setIsAdd(false);
-                                                    handleDelete(don.DonorID);
+                                                    handleDelete(don.DonorID, don.FullName);
                                                 } 
                                             }
                                         >

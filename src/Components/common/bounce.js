@@ -19,9 +19,9 @@ const popoverStats = (parTotal, parTotalRecieved, parTotalRemain, parTotalDropOf
       <Popover.Header as="h3">Collection Stats</Popover.Header>
       <Popover.Body>
             <strong>Overview</strong>
-            <br />Total Confirmed Paticipants: {parTotal}
-            <br />Total Paticipants Recieved: {parTotalRecieved}/{parTotal}
-            <br />Total Paticipants Remaining: {parTotalRemain}/{parTotal}
+            <br />Total Confirmed Participants: {parTotal}
+            <br />Total Participants Recieved: {parTotalRecieved}/{parTotal}
+            <br />Total Participants Remaining: {parTotalRemain}/{parTotal}
             <br /><strong>Drop-Off</strong>
             <br />Total Drop-Off: {parTotalDropOff}
             <br />Recieved Drop-Off: {parRecievedDropOff}/{parTotalDropOff}

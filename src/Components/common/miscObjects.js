@@ -106,6 +106,12 @@ export const participantOptions = [
         type: "Online Order",
         value: "4",
         filter: "Online Order"
+    },
+    {
+        key: 5,
+        type: "Not Recieved",
+        value: "notRecieved",
+        filter: "Not Recieved"
     }
 ];
 
