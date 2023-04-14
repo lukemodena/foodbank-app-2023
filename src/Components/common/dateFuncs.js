@@ -7,6 +7,10 @@ export const handleCollectionDate = (inputValue) => {
         let collectionDate = inputValue;
 
         return collectionDate;
+    } else if (inputValue === null) {
+        let collectionDate = inputValue;
+
+        return collectionDate;
     } else {
         let dateFormat = dayjs(`${inputValue} T00:00:00`);
         let collectionDate = Intl.DateTimeFormat('en-GB', {  month: "short", day: "numeric", year: "numeric" }).format(dateFormat);

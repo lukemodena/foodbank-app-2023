@@ -299,6 +299,7 @@ const ParticipationPage = ({
                             {(typeValue === "") &&<th>Type</th>}
                             {(typeValue === "3") &&<th>Amount</th>}
                             {(typeValue !== "1" | typeValue !== "2") &&<th>Received</th>}
+                            {(typeValue === "3") &&<th>Date Received</th>}
                             {(size.width > 760) &&<th>Email</th>}
                         </tr>
                     </thead>
@@ -411,6 +412,7 @@ const ParticipationPage = ({
                                     {(typeValue === "") &&<td>{handleParticipantType(par.DonationType)}</td>}
                                     {(typeValue === "3") &&<td>£{par.TotalDonated}</td>}
                                     {(typeValue !== "1" | typeValue !== "4") &&<td>{handleParticipantPayment(par.PaymentRecieved)}</td>}
+                                    {(typeValue === "3") &&<td>{handleCollectionDate(par.DateRecieved)}</td>}
                                     {(size.width > 760) &&<td>{par.DonorID.Email}</td>}
                                     
                                 </tr>)}

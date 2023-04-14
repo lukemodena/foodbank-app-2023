@@ -330,6 +330,7 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, notes, donId, co
         const body = {
             "ParticipationID":null,
             "PaymentRecieved":`${payRec}`,
+            "DateRecieved":null,
             "DonationType":`${donTyp}`,
             "TotalDonated":`${totDon}`,
             "DropOffTime":`${droTim}`,
@@ -379,6 +380,7 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
         const body = {
             "ParticipationID":`${ParticipantID}`,
             "PaymentRecieved":`${PaymentRecieved}`,
+            "DateRecieved":null,
             "DonationType":`${DonationType}`,
             "TotalDonated":`${TotalDonated}`,
             "DropOffTime":`${DropOffTime}`,
@@ -450,6 +452,7 @@ export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, Paym
         const body = {
             "ParticipationID":`${ParticipantID}`,
             "PaymentRecieved":`${PaymentRecieved}`,
+            "DateRecieved":null,
             "DonationType":`${DonationType}`,
             "TotalDonated":`${TotalDonated}`,
             "DropOffTime":`${DropOffTime}`,
