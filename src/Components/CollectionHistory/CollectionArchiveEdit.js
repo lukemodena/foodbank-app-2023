@@ -182,8 +182,9 @@ const CollectionArchive = ({
         let perParPage = "5";
         let parSearchInput = "";
         let parType = "";
+        let isRec =""
         getWholesale(collid);
-        getParticipantList(parPage, perParPage, collid, parSearchInput, parType);
+        getParticipantList(parPage, perParPage, collid, parSearchInput, parType, isRec);
     };
 
     return(

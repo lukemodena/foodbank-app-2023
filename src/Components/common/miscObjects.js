@@ -106,11 +106,28 @@ export const participantOptions = [
         type: "Online Order",
         value: "4",
         filter: "Online Order"
+    }
+];
+
+// Participant Recieved (for dropdown filter)
+
+export const recievedOptions = [
+    {
+        key: 0,
+        type: "Both",
+        value: "",
+        filter: "Both"
     },
     {
-        key: 5,
+        key: 1,
+        type: "Recieved",
+        value: "&recieved=true",
+        filter: "Recieved"
+    },
+    {
+        key: 2,
         type: "Not Recieved",
-        value: "notRecieved",
+        value: "&recieved=false",
         filter: "Not Recieved"
     }
 ];

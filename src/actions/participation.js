@@ -27,7 +27,7 @@ import {
 
 // GET PARTICIPANT LIST
 
-export const getParticipantList = (page, perPage, CollectionID, FullName, Type) => async dispatch => {
+export const getParticipantList = (page, perPage, CollectionID, FullName, Type, IsRecieved) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config ={
             headers: {
@@ -40,13 +40,13 @@ export const getParticipantList = (page, perPage, CollectionID, FullName, Type) 
             if (CollectionID === "" | CollectionID === null ){
                 if (Type === "" | Type === null ) {
                     if (FullName === "" | FullName === null ) {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}${IsRecieved}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
                         });
                     } else {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&fullname=${FullName}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&fullname=${FullName}${IsRecieved}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
@@ -54,13 +54,13 @@ export const getParticipantList = (page, perPage, CollectionID, FullName, Type) 
                     } 
                 } else {
                     if (FullName === "" | FullName === null ) {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&type=${Type}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&type=${Type}${IsRecieved}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
                         });
                     } else {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&fullname=${FullName}&type=${Type}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&fullname=${FullName}&type=${Type}${IsRecieved}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
@@ -71,13 +71,13 @@ export const getParticipantList = (page, perPage, CollectionID, FullName, Type) 
             } else {
                 if (Type === "" | Type === null ) {
                     if (FullName === "" | FullName === null ) {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}${IsRecieved}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
                         });
                     } else {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}&fullname=${FullName}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}&fullname=${FullName}${IsRecieved}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
@@ -85,13 +85,13 @@ export const getParticipantList = (page, perPage, CollectionID, FullName, Type) 
                     } 
                 } else {
                     if (FullName === "" | FullName === null ) {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}&type=${Type}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}&type=${Type}${IsRecieved}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
                         });
                     } else {
-                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}&fullname=${FullName}&type=${Type}`, config);
+                        const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?page=${page}&per_page=${perPage}&collid=${CollectionID}&fullname=${FullName}&type=${Type}${IsRecieved}`, config);
                         dispatch({
                             type: PARTICIPATION_LIST_SUCCESSFUL,
                             payload: res.data
@@ -366,7 +366,7 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, notes, donId, co
 
 // EDIT PARTICIPANTS
 
-export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, page, perPage, type, searchInput) => async dispatch => {
+export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, page, perPage, type, searchInput, paymentRecievedVal) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -399,7 +399,7 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
                 payload: res.data
             });
 
-            dispatch(getParticipantList(page, perPage, CollectionID, searchInput, type));
+            dispatch(getParticipantList(page, perPage, CollectionID, searchInput, type, paymentRecievedVal));
 
             if (DonationType === "3") {
                 if (OriginalPaymentRecieved === PaymentRecieved) {
@@ -438,7 +438,7 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
 
 // EDIT PARTICIPANTS STATUS
 
-export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, Notes, WholesaleID, page, perPage, FullName, Type) => async dispatch => {
+export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, Notes, WholesaleID, page, perPage, FullName, Type, paymentRecievedVal) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -468,7 +468,7 @@ export const editParticipantStatus = (CollectionID, DonorID, ParticipantID, Paym
                 type: EDIT_PARTICIPATION_SUCCESS,
                 payload: res.data
             });
-            dispatch(getParticipantList(page, perPage, CollectionID, FullName, Type));
+            dispatch(getParticipantList(page, perPage, CollectionID, FullName, Type, paymentRecievedVal));
         } catch (err) {
             dispatch({
                 type: EDIT_PARTICIPATION_FAIL,
@@ -543,7 +543,7 @@ export const updateWholesaleDelete = (collectionID, wholesaleID, DonationVal) =>
 
 // DELETE PARTICIPANTS
 
-export const deleteParticipant = (participantID, DonationType, DonationVal, PaymentRecieved, collectionID, wholesaleID, page, perPage, searchInput, type) => async dispatch => {
+export const deleteParticipant = (participantID, DonationType, DonationVal, PaymentRecieved, collectionID, wholesaleID, page, perPage, searchInput, type, paymentRecievedVal) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config = {
             headers: {
@@ -561,12 +561,12 @@ export const deleteParticipant = (participantID, DonationType, DonationVal, Paym
             if (DonationType === "3") { 
                 if (PaymentRecieved === "true" | PaymentRecieved === true) {
                     dispatch(updateWholesaleDelete(collectionID, wholesaleID, DonationVal));
-                    dispatch(getParticipantList(page, perPage, collectionID, searchInput, type));
+                    dispatch(getParticipantList(page, perPage, collectionID, searchInput, type, paymentRecievedVal));
                 } else {
-                    dispatch(getParticipantList(page, perPage, collectionID, searchInput, type));
+                    dispatch(getParticipantList(page, perPage, collectionID, searchInput, type, paymentRecievedVal));
                 }
             } else {
-                dispatch(getParticipantList(page, perPage, collectionID, searchInput, type));
+                dispatch(getParticipantList(page, perPage, collectionID, searchInput, type, paymentRecievedVal));
             }
             
         } catch (err) {

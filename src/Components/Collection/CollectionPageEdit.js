@@ -316,8 +316,9 @@ const Collection = ({
         let perParPage = "5";
         let parSearchInput = "";
         let parType = "";
+        let isRec = ""
         getWholesale(collId);
-        getParticipantList(parPage, perParPage, collid, parSearchInput, parType);
+        getParticipantList(parPage, perParPage, collid, parSearchInput, parType, isRec);
         searchDonorsEmails(searchType, donorType, donSearch);
     };
 

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {Table, Dropdown, Row, Form} from 'react-bootstrap';
+import {Table, Dropdown, Row, Form, Button} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import useWindowSize from '../common/useWindow';
 import { handleLoadStyle } from '../common/handleLoadStyle';
+import { BsCheckLg, BsXLg } from "react-icons/bs";
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Bounce, Static } from '../common/bounce';
 
@@ -13,7 +14,7 @@ import { PaginationFooter } from '../common/Pagination';
 
 import { handleCollectionDate } from '../common/dateFuncs';
 import { handleParticipantType, handleDropOffTime } from '../common/typeFuncs';
-import { participantOptions, handleParticipantPayment, collectionDateSelection, fullAddressHandler } from '../common/miscObjects';
+import { participantOptions, handleParticipantPayment, collectionDateSelection, fullAddressHandler, recievedOptions } from '../common/miscObjects';
 
 import { getCollections } from '../../actions/collections';
 import { getParticipantList, editParticipant, deleteParticipant, editParticipantStatus } from '../../actions/participation';
@@ -51,7 +52,8 @@ const ParticipationPage = ({
     const [value, setValue] = useState("N/A");
     const [donationTypeVal, setDonationTypeVal] = useState(null);
     const [totalDonatedVal, setTotalDonatedVal] = useState("0");
-    const [paymentRecievedVal, setPaymentRecievedVal] = useState("false");
+    const [paymentRecievedVal, setPaymentRecievedVal] = useState("");
+    const [paymentRecievedFil, setPaymentRecievedFil] = useState("Both");
     const [showAddButton, setShowAddButton] = useState(false);
     const [searchValue, setSearchValue] = useState("");
     const [typeValue, setTypeValue] = useState("");
@@ -71,7 +73,7 @@ const ParticipationPage = ({
         setCollectionDate(collectionDateSelection(size.width));
         setLoading(true);
         
-        getParticipantList(page, perPage, collection, searchInput, type).then(() => setLoading(false));
+        getParticipantList(page, perPage, collection, searchInput, type, paymentRecievedVal).then(() => setLoading(false));
         getCollections(collPage, collStatus);
         setShowAddButton(true);
       }, []);
@@ -147,7 +149,7 @@ const ParticipationPage = ({
         setPage(filtPage);
 
         getWholesale(collection);
-        getParticipantList(filtPage, perPage, collection, searchInput, type).then(() => setLoading(false));
+        getParticipantList(filtPage, perPage, collection, searchInput, type, paymentRecievedVal).then(() => setLoading(false));
         setCollectionDate(CollectionDate);
         setCollectionID(collection);
         setShowAddButton(true);
@@ -164,10 +166,28 @@ const ParticipationPage = ({
         setLoading(true);
         setPage(filtPage);
         
-        getParticipantList(filtPage, perPage, collection, searchInput, type).then(() => setLoading(false));
+        getParticipantList(filtPage, perPage, collection, searchInput, type, paymentRecievedVal).then(() => setLoading(false));
 
         setTypeValue(type);
         setTypeFilter(filter);
+    };
+
+    // Participant Recieved Filter
+
+    const handleRecievedFilter = (value, filter) => {
+        let isRec = value;
+        let type = typeValue;
+        let collection = collectionID;
+        let searchInput = searchValue;
+        setLoading(true);
+        let filtPage = "1";
+        setLoading(true);
+        setPage(filtPage);
+        
+        getParticipantList(filtPage, perPage, collection, searchInput, type, isRec).then(() => setLoading(false));
+
+        setPaymentRecievedVal(isRec);
+        setPaymentRecievedFil(filter);
     };
 
     // Edit Participant
@@ -178,7 +198,7 @@ const ParticipationPage = ({
         let searchInput = searchValue;
         setLoading(true);
         
-        editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, currentPage, perPage, type, searchInput).then(() => setLoading(false));
+        editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, Notes, WholesaleID, OriginalPaymentRecieved, currentPage, perPage, type, searchInput, paymentRecievedVal).then(() => setLoading(false));
         setEditParticipationShow(false);
     };
 
@@ -189,7 +209,7 @@ const ParticipationPage = ({
             let searchInput = searchValue;
             let type = typeValue;
             setLoading(true);
-            deleteParticipant(parId, parDonTyp, parTotDon, parPayRec, collId, wholId, page, perPage, searchInput, type).then(() => setLoading(false));
+            deleteParticipant(parId, parDonTyp, parTotDon, parPayRec, collId, wholId, page, perPage, searchInput, type, paymentRecievedVal).then(() => setLoading(false));
             setSuccessDeleteModalShow(true);
         }
     };
@@ -206,7 +226,7 @@ const ParticipationPage = ({
         setLoading(true);
         setPage(filtPage);
         
-        getParticipantList(filtPage, perPage, collection, searchInput, type).then(() => setLoading(false));
+        getParticipantList(filtPage, perPage, collection, searchInput, type, paymentRecievedVal).then(() => setLoading(false));
     };
  
 
@@ -220,11 +240,11 @@ const ParticipationPage = ({
         
         if (PayRec === true){
             let newStatus = "false"
-            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, perPage, searchInput, type).then(() => setLoading(false));
+            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, perPage, searchInput, type, paymentRecievedVal).then(() => setLoading(false));
             
         } else if (PayRec === false){
             let newStatus = "true"
-            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, perPage, searchInput, type).then(() => setLoading(false));
+            editParticipantStatus(CollID, DonID, ParID, newStatus, DonTyp, TotDon, DroTim, Notes, WhoID, page, perPage, searchInput, type, paymentRecievedVal).then(() => setLoading(false));
         };
         
     };
@@ -265,8 +285,24 @@ const ParticipationPage = ({
                                 <Dropdown.Item key={option.key} onClick={() => handleTypeFilter(option.value, option.filter)} href="#/participants">{option.type}</Dropdown.Item>
                             ))}
                         </Dropdown.Menu>
+                        
                     </Dropdown>}
+                    {/* Participant Recieved Filter */}
+                    {(showAddButton === true) &&<Dropdown className="participation-recievedFilterButton">
 
+                        <Dropdown.Toggle className="participation-recievedFilter" variant="outline-secondary" size="sm" id="dropdown-basic">
+                            {(paymentRecievedFil === "Both") &&<>Both</>}
+                            {(paymentRecievedFil === "Recieved") &&<BsCheckLg />}
+                            {(paymentRecievedFil === "Not Recieved") &&<BsXLg />}
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                            {recievedOptions.map((option) => (
+                                <Dropdown.Item key={option.key} onClick={() => handleRecievedFilter(option.value, option.filter)} href="#/participants">{option.type}</Dropdown.Item>
+                            ))}
+                        </Dropdown.Menu>
+                        
+                    </Dropdown>}
                     {/* Participant Search */}
 
                     {(showAddButton === true) &&<SearchBar callback={(searchValue) => handleSearch(searchValue)}/>}

@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import {Table, Dropdown} from 'react-bootstrap';
 import { handleLoadStyle } from '../common/handleLoadStyle';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { BsCheckLg, BsXLg } from "react-icons/bs";
 import { Bounce } from '../common/bounce';
 
 import { PaginationFooter } from '../common/Pagination';
 
 import { handleParticipantType } from '../common/typeFuncs';
-import { participantOptions, handleParticipantPayment } from '../common/miscObjects';
+import { participantOptions, handleParticipantPayment, recievedOptions } from '../common/miscObjects';
 
 
 
@@ -32,19 +33,34 @@ export const MiniTable = ({
     const par_perPage = "5";
     const modal = true
     const [parLoading, setParLoading] = useState(false);
+    const [paymentRecievedVal, setPaymentRecievedVal] = useState("");
+    const [paymentRecievedFil, setPaymentRecievedFil] = useState("Both");
 
     // Participant Type Filter
 
     const handleTypeFilter = (value, filter) => {
         setParLoading(true);
         let filtPage = "1";
-        setParLoading(true);
         setParPage(filtPage);
         
-        getParticipantList(filtPage, par_perPage, collid, searchValue, value).then(() => setParLoading(false));
-
+        getParticipantList(filtPage, par_perPage, collid, searchValue, value, paymentRecievedVal).then(() => setParLoading(false));
+        console.log(paymentRecievedVal)
         setTypeValue(value);
         setTypeFilter(filter);
+    };
+
+    // Participant Recieved Filter
+
+    const handleRecievedFilter = (value, filter) => {
+        let isRec = value;
+        setParLoading(true);
+        let filtPage = "1";
+        setParPage(filtPage);
+        
+        getParticipantList(filtPage, par_perPage, collid, searchValue, typeValue, isRec).then(() => setParLoading(false));
+
+        setPaymentRecievedVal(isRec);
+        setPaymentRecievedFil(filter);
     };
 
 
@@ -60,6 +76,19 @@ export const MiniTable = ({
                         <Dropdown.Item key={option.key} onClick={() => handleTypeFilter(option.value, option.filter)}>{option.type}</Dropdown.Item>
                     ))}
                 </Dropdown.Menu>
+            </Dropdown>
+            <Dropdown style={{paddingTop:"10px", paddingBottom:"0px"}}>
+                <Dropdown.Toggle variant="outline-secondary" size="sm" id="dropdown-basic">
+                            {(paymentRecievedFil === "Both") &&<>Both</>}
+                            {(paymentRecievedFil === "Recieved") &&<BsCheckLg />}
+                            {(paymentRecievedFil === "Not Recieved") &&<BsXLg />}
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                            {recievedOptions.map((option) => (
+                                <Dropdown.Item key={option.key} onClick={() => handleRecievedFilter(option.value, option.filter)}>{option.type}</Dropdown.Item>
+                            ))}
+                        </Dropdown.Menu>
             </Dropdown>
             {parLoading ? 
             <div className="mt-4" style={handleLoadStyle(size.width, modal)}>
