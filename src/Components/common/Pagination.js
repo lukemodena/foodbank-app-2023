@@ -23,7 +23,8 @@ export function PaginationFooter(props) {
         has_previous,
         has_next,
         total_number,
-        getNotes
+        getNotes,
+        isRecieved
     } = props
 
     // Handle Page
@@ -41,7 +42,7 @@ export function PaginationFooter(props) {
             searchCollections(newpage, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
         } else if (data === "par") {
             let per_page = perPage
-            getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
+            getParticipantList(newpage, per_page, collectionID, searchValue, typeValue, isRecieved).then(() => setLoading(false));
         } else if (data === "not") {
             getNotes(newpage, collectionID).then(() => setLoading(false));
         }
@@ -61,7 +62,7 @@ export function PaginationFooter(props) {
             searchCollections(newpage, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
         } else if (data === "par") {
             let per_page = perPage
-            getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
+            getParticipantList(newpage, per_page, collectionID, searchValue, typeValue, isRecieved).then(() => setLoading(false));
         } else if (data === "not") {
             getNotes(newpage, collectionID).then(() => setLoading(false));
         }
@@ -81,7 +82,7 @@ export function PaginationFooter(props) {
                 searchCollections(newpage, monthValue, startDate, endDate, pageStatus).then(() => setLoading(false));
             } else if (data === "par") {
                 let per_page = perPage
-                getParticipantList(newpage, per_page, collectionID, searchValue, typeValue).then(() => setLoading(false));
+                getParticipantList(newpage, per_page, collectionID, searchValue, typeValue, isRecieved).then(() => setLoading(false));
             } else if (data === "not") {
                 getNotes(newpage, collectionID).then(() => setLoading(false));
             }
