@@ -473,7 +473,8 @@ const ParticipationPage = ({
                 getParticipantList={getParticipantList}
                 has_previous={has_previous}
                 has_next={has_next}
-                total_number={total_number}/>
+                total_number={total_number}
+                isRecieved={paymentRecievedVal}/>
             </div>}
         </div>
     )
